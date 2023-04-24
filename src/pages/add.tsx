@@ -1,9 +1,8 @@
-import { Game, Region } from "@/types";
-import { Autocomplete, Button, TextField } from "@mui/material";
+import GameForm, { GameFormData } from "@/components/form/game-form";
 import axios from "axios";
 import { styled } from "goober";
 import Head from "next/head";
-import { useForm } from "react-hook-form";
+import { AddGameParameters } from "./api/add-game";
 
 const Wrapper = styled("div")`
   display: flex;
@@ -11,28 +10,9 @@ const Wrapper = styled("div")`
   align-items: center;
 `;
 
-const Form = styled("div")`
-  display: flex;
-  flex-direction: column;
-  width: 50vw;
-
-  > * {
-    margin: 0.3rem;
-  }
-`;
-
 const Add = () => {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<Game>();
-
-  const onSubmit = async (data: Game) => {
-    console.log(data);
-
-    await axios.post("/api/add-game", data);
+  const onSubmit = async (data: GameFormData) => {
+    await axios.post<AddGameParameters>("/api/add-game", data);
   };
 
   return (
@@ -44,38 +24,7 @@ const Add = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Wrapper>
-        <Form>
-          <TextField variant="filled" label="Name" {...register("name")} />
-          <TextField
-            variant="filled"
-            label="Platform"
-            {...register("platform")}
-          />
-          <TextField
-            variant="filled"
-            label="Box Art (URL)"
-            {...register("art")}
-          />
-          <Autocomplete
-            options={Object.values(Region)}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                {...register("region")}
-                variant="filled"
-                label="Region"
-              />
-            )}
-          />
-          <TextField
-            variant="filled"
-            label="Variant(s) (comma separated)"
-            {...register("variant")}
-          />
-          <Button variant="contained" onClick={handleSubmit(onSubmit)}>
-            Add Game
-          </Button>
-        </Form>
+        <GameForm actionText="Add Game" onSubmit={onSubmit} />
       </Wrapper>
     </>
   );

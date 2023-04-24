@@ -12,3 +12,6 @@ export type Game = {
   variant?: string[];
   art?: string;
 };
+
+export type Override<T1, T2> = Omit<T1, keyof T2> & T2;
+export type WithId<T> = { id: string } & T;

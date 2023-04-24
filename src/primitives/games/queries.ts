@@ -4,7 +4,10 @@ import db from "../db";
 
 export const fetchGames = async (): Promise<Game[]> => {
   const response = await db.collection("games").get();
-  const games = response.docs.map((entry) => entry.data() as Game);
+  const games = response.docs.map((entry) => ({
+    id: entry.id,
+    ...(entry.data() as Omit<Game, "id">),
+  }));
 
   return games;
 };
