@@ -1,18 +1,8 @@
 import { Game, WithId } from "@/types";
-import { REGION_LABEL_MAP } from "@/utils";
 
-import {
-  Art,
-  DetailsWrapper,
-  Header,
-  HeaderDetailsWrapper,
-  Platform,
-  Region,
-  Title,
-  Wrapper,
-} from "./layout";
-import Variants from "./variants";
 import { styled } from "goober";
+import Variant from "./variant";
+import Header from "./header";
 
 const Button = styled("button")`
   background: none;
@@ -24,26 +14,52 @@ const Button = styled("button")`
   outline: inherit;
 `;
 
+type WrapperProps = {
+  $color: string;
+  children: React.ReactNode;
+};
+
+const Wrapper = styled<WrapperProps>("div")`
+  width: fit-content;
+  color: white;
+  min-width: 250px;
+  height: 310px;
+  background-color: ${({ $color }) => $color ?? "#eeeeee"};
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+
+  > * {
+    margin: 0.6rem 0.8rem;
+  }
+`;
+
+const DetailsWrapper = styled("div")`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Art = styled("img")`
+  height: 210px;
+`;
+
 type Props = {
   game: WithId<Game>;
   onClick: (game: WithId<Game>) => void;
 };
 
 const GameEntry = ({ game, onClick }: Props) => {
-  const { name, platform, region, art, variant } = game;
+  const { name, platform, region, art, variant, color } = game;
+
   return (
     <Button onClick={() => onClick(game)}>
-      <Wrapper>
-        <Header>
-          <Title>{name}</Title>
-          <HeaderDetailsWrapper>
-            <Platform>{platform}</Platform>
-            <Region>({REGION_LABEL_MAP[region]})</Region>
-          </HeaderDetailsWrapper>
-        </Header>
+      <Wrapper $color={color}>
+        <Header name={name} platform={platform} region={region} />
         <DetailsWrapper>
           <Art src={art} />
-          {variant && <Variants variants={variant} />}
+          {variant && <Variant variant={variant} />}
         </DetailsWrapper>
       </Wrapper>
     </Button>

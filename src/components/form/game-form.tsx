@@ -1,5 +1,4 @@
-import { AddGameParameters } from "@/pages/api/add-game";
-import { Game, Region } from "@/types";
+import { Platform, Region } from "@/types";
 import { Autocomplete, Button, TextField } from "@mui/material";
 import { styled } from "goober";
 import { useForm } from "react-hook-form";
@@ -16,7 +15,7 @@ const Form = styled("div")`
 
 export type GameFormData = {
   name: string;
-  platform: string;
+  platform: Platform;
   art: string;
   region: Region;
   variant: string;
@@ -36,7 +35,18 @@ const GameForm = ({ actionText, defaultValues, onSubmit }: Props) => {
   return (
     <Form>
       <TextField variant="filled" label="Name" {...register("name")} />
-      <TextField variant="filled" label="Platform" {...register("platform")} />
+      <Autocomplete
+        options={Object.values(Platform)}
+        defaultValue={defaultValues?.platform}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            variant="filled"
+            label="Platform"
+            {...register("platform")}
+          />
+        )}
+      />
       <TextField variant="filled" label="Box Art (URL)" {...register("art")} />
       <Autocomplete
         options={Object.values(Region)}
@@ -50,11 +60,7 @@ const GameForm = ({ actionText, defaultValues, onSubmit }: Props) => {
           />
         )}
       />
-      <TextField
-        variant="filled"
-        label="Variant(s) (comma separated)"
-        {...register("variant")}
-      />
+      <TextField variant="filled" label="Variant" {...register("variant")} />
       <Button variant="contained" onClick={handleSubmit(onSubmit)}>
         {actionText}
       </Button>

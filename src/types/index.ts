@@ -5,12 +5,33 @@ export enum Region {
   AUNZ = "AUNZ",
 }
 
+export enum Platform {
+  NES = "NES",
+  SNES = "SNES",
+  N64 = "N64",
+  GC = "GameCube",
+  WII = "Wii",
+  WIIU = "Wii U",
+  SWITCH = "Nintendo Switch",
+  GBA = "GameBoy Advanced",
+  NDS = "Nintendo DS",
+  N3DS = "Nintendo 3DS",
+  XBOX = "Xbox",
+  XBOX360 = "Xbox 360",
+  PS2 = "Playstation 2",
+  PS3 = "Playstation 3",
+  PS4 = "Playstation 4",
+  PS5 = "Playstation 5",
+  PC = "PC",
+}
+
 export type Game = {
   name: string;
   region: Region;
-  platform: string;
-  variant?: string[];
-  art?: string;
+  platform: Platform;
+  art: string;
+  color: string;
+  variant?: string;
 };
 
 export type Override<T1, T2> = Omit<T1, keyof T2> & T2;
