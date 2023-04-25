@@ -25,6 +25,15 @@ export enum Platform {
   PC = "PC",
 }
 
+export enum PALETTE {
+  VIBRANT = "Vibrant",
+  MUTED = "Muted",
+  LIGHT_VIBRANT = "LightVibrant",
+  DARK_VIBRANT = "DarkVibrant",
+  LIGHT_MUTED = "LightMuted",
+  DARK_MUTED = "DarkMuted",
+}
+
 export type Game = {
   name: string;
   region: Region;

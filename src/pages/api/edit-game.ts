@@ -2,6 +2,8 @@ import { GameFormData } from "@/components/form/game-form";
 import { editGame } from "@/primitives/games/mutations";
 import { Game, Override, WithId } from "@/types";
 import { NextApiRequest, NextApiResponse } from "next";
+import { getServerSession } from "next-auth";
+import { options as authOptions } from "./auth/[...nextauth]";
 
 export type EditGameParameters = {
   id: string;
@@ -11,8 +13,15 @@ type Request = Override<NextApiRequest, { body: EditGameParameters }>;
 
 const handler = async (
   request: Request,
-  response: NextApiResponse<WithId<Game>>
+  response: NextApiResponse<WithId<Game> | string>
 ) => {
+  const session = await getServerSession(request, response, authOptions);
+
+  if (!session) {
+    response.status(403).json("Access Denied");
+    return;
+  }
+
   const { id, gameData } = request.body;
 
   try {

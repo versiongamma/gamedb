@@ -1,7 +1,8 @@
 import { Platform, Region } from "@/types";
-import { Autocomplete, Button, TextField } from "@mui/material";
+import { Autocomplete, TextField } from "@mui/material";
 import { styled } from "goober";
 import { useForm } from "react-hook-form";
+import Button from "../button";
 
 const Form = styled("div")`
   display: flex;
@@ -61,9 +62,7 @@ const GameForm = ({ actionText, defaultValues, onSubmit }: Props) => {
         )}
       />
       <TextField variant="filled" label="Variant" {...register("variant")} />
-      <Button variant="contained" onClick={handleSubmit(onSubmit)}>
-        {actionText}
-      </Button>
+      <Button onClick={handleSubmit(onSubmit)}>{actionText}</Button>
     </Form>
   );
 };

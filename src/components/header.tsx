@@ -1,40 +1,59 @@
-import { AppBar, Tab, Tabs, Toolbar } from "@mui/material";
+import { AppBar, Tab, Tabs, Toolbar, Button } from "@mui/material";
 import Link from "next/link";
 import { styled } from "goober";
 import { useRouter } from "next/router";
+import Login from "./login";
+import { useSession } from "next-auth/react";
+
+const StyledToolbar = styled(Toolbar)`
+  display: flex;
+  justify-content: space-between;
+`;
 
 const StyledTabs = styled(Tabs)`
   .MuiTabs-scroller {
     .MuiTabs-indicator {
       height: 0.15rem;
-      background-color: black;
+      background-color: white;
     }
   }
 `;
 
-const StyledTab = styled(Tab)`
+const StyledTab = styled(Button)`
   margin: 0;
   width: 10rem;
-  color: black;
   height: 64px;
+  color: white;
+  font-weight: 600;
 `;
 
 const routes = ["/", "/platform"];
 
 const Header = () => {
   const { pathname } = useRouter();
+  const { data: session } = useSession();
 
   return (
-    <Toolbar sx={{ backgroundColor: "rgba(0,0,0,0.2)" }}>
-      <StyledTabs value={routes.indexOf(pathname)}>
-        <Link href="/" passHref>
-          <StyledTab label="Games List" value="/" />
-        </Link>
-        <Link href="/platform" passHref>
-          <StyledTab label="By Platform" value="/platform" />
-        </Link>
-      </StyledTabs>
-    </Toolbar>
+    <StyledToolbar
+      sx={{
+        backgroundColor: "rgba(0,0,0,0.2)",
+        position: "fixed",
+        width: "100vw",
+        backdropFilter: "blur(1rem)",
+      }}
+    >
+      {session && (
+        <StyledTabs value={routes.indexOf(pathname)}>
+          <Link href="/" passHref>
+            <StyledTab value="/">Games List</StyledTab>
+          </Link>
+          <Link href="/platform" passHref>
+            <StyledTab value="/platform">By Platform</StyledTab>
+          </Link>
+        </StyledTabs>
+      )}
+      <Login />
+    </StyledToolbar>
   );
 };
 
