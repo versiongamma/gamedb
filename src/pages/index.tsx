@@ -18,7 +18,7 @@ const StyledFab = styled(Fab)`
 const Home = () => {
   const [addGameDialogOpen, setAddGameDialogOpen] = useState(false);
   const [selectedGame, setSelectedGame] = useState<WithId<Game> | null>(null);
-  const { games, updateSingleGame, addGame } = useGamesCache();
+  const { games, updateSingleGame, addGame } = useGamesCache("games");
 
   const handleGameClick = (game: WithId<Game>) => {
     setSelectedGame(game);
@@ -44,6 +44,7 @@ const Home = () => {
           game={selectedGame}
           onClose={() => setSelectedGame(null)}
           updateSingleGame={updateSingleGame}
+          collection="games"
         />
       )}
       <StyledFab
@@ -57,6 +58,7 @@ const Home = () => {
         open={addGameDialogOpen}
         onClose={() => setAddGameDialogOpen(false)}
         addGame={addGame}
+        collection="games"
       />
     </>
   );

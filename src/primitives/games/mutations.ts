@@ -4,30 +4,36 @@ import { getColorFromUrl } from "@/utils/color";
 import { GameFormData } from "@/components/form/game-form";
 
 export const addGame = async (
-  gameData: GameFormData
+  gameData: GameFormData,
+  collection: string
 ): Promise<WithId<Game>> => {
-  const artDominantColor = await getColorFromUrl(gameData.art);
+  const artDominantColor = gameData.art
+    ? await getColorFromUrl(gameData.art)
+    : undefined;
 
   const game: Game = {
     ...gameData,
-    color: artDominantColor ?? "#ffffff",
+    color: artDominantColor ?? "#000000",
   };
 
-  const result = await db.collection("games").add(game);
+  const result = await db.collection(collection).add(game);
   return (await result.get()).data() as WithId<Game>;
 };
 
 export const editGame = async (
   id: string,
-  gameData: GameFormData
+  gameData: GameFormData,
+  collection: string
 ): Promise<WithId<Game>> => {
-  const artDominantColor = await getColorFromUrl(gameData.art);
+  const artDominantColor = gameData.art
+    ? await getColorFromUrl(gameData.art)
+    : undefined;
 
   const updatedGame: Game = {
     ...gameData,
-    color: artDominantColor ?? "#ffffff",
+    color: artDominantColor ?? "#000000",
   };
 
-  await db.collection("games").doc(id).update(updatedGame);
+  await db.collection(collection).doc(id).update(updatedGame);
   return { id, ...updatedGame };
 };

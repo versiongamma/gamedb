@@ -8,7 +8,7 @@ const Wrapper = styled("div")`
   flex-direction: column;
   align-items: flex-start;
 
-  padding-left: 0.8rem;
+  padding: 0 0.6rem;
 `;
 
 const TitleBody = styled("span")`

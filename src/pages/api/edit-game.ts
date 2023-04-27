@@ -8,6 +8,7 @@ import { options as authOptions } from "./auth/[...nextauth]";
 export type EditGameParameters = {
   id: string;
   gameData: GameFormData;
+  collection: string;
 };
 type Request = Override<NextApiRequest, { body: EditGameParameters }>;
 
@@ -22,10 +23,10 @@ const handler = async (
     return;
   }
 
-  const { id, gameData } = request.body;
+  const { id, gameData, collection } = request.body;
 
   try {
-    const updatedGame = await editGame(id, gameData);
+    const updatedGame = await editGame(id, gameData, collection);
     response.status(200).json(updatedGame);
   } catch (error) {
     console.log("Error when editing game: ", error);

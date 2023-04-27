@@ -18,15 +18,22 @@ type Props = {
   game: WithId<Game>;
   onClose: () => void;
   updateSingleGame: (game: WithId<Game>) => void;
+  collection: string;
 };
 
-const EditGameDialog = ({ game, onClose, updateSingleGame }: Props) => {
+const EditGameDialog = ({
+  game,
+  onClose,
+  updateSingleGame,
+  collection,
+}: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const onSubmit = async (data: GameFormData) => {
     const result = await axios.post<WithId<Game>>("/api/edit-game", {
       id: game.id,
       gameData: data,
+      collection,
     });
 
     updateSingleGame(result.data);

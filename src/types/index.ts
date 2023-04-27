@@ -38,7 +38,7 @@ export type Game = {
   name: string;
   region: Region;
   platform: Platform;
-  art: string;
+  art?: string;
   color: string;
   variant?: string;
 };

@@ -2,8 +2,8 @@ import { Game } from "@/types";
 
 import db from "../db";
 
-export const fetchGames = async (): Promise<Game[]> => {
-  const response = await db.collection("games").get();
+export const fetchGames = async (collection: string): Promise<Game[]> => {
+  const response = await db.collection(collection).get();
   const games = response.docs.map((entry) => ({
     id: entry.id,
     ...(entry.data() as Omit<Game, "id">),

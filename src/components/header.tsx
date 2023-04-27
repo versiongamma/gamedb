@@ -27,7 +27,7 @@ const StyledTab = styled(Button)`
   font-weight: 600;
 `;
 
-const routes = ["/", "/platform"];
+const routes = ["/", "/platform", "/wishlist"];
 
 const Header = () => {
   const { pathname } = useRouter();
@@ -49,6 +49,9 @@ const Header = () => {
           </Link>
           <Link href="/platform" passHref>
             <StyledTab value="/platform">By Platform</StyledTab>
+          </Link>
+          <Link href="/wishlist" passHref>
+            <StyledTab value="/wishlist">Wishlist</StyledTab>
           </Link>
         </StyledTabs>
       )}

@@ -6,7 +6,10 @@ import { getServerSession } from "next-auth";
 import { options as authOptions } from "./auth/[...nextauth]";
 
 export type AddGameParameters = GameFormData;
-type Request = Override<NextApiRequest, { body: AddGameParameters }>;
+type Request = Override<
+  NextApiRequest,
+  { body: { data: AddGameParameters; collection: string } }
+>;
 
 const handler = async (
   request: Request,
@@ -19,9 +22,9 @@ const handler = async (
     return;
   }
 
-  const gameData = request.body;
+  const { data, collection } = request.body;
   try {
-    const newGame = await addGame(gameData);
+    const newGame = await addGame(data, collection);
     response.status(200).json(newGame);
   } catch (error) {
     console.log("Error when adding game: ", error);

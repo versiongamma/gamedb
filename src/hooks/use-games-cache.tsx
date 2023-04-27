@@ -5,12 +5,14 @@ import { useEffect, useState } from "react";
 
 const sortGameFn = (a: Game, b: Game) => a.name.localeCompare(b.name);
 
-const useGamesCache = () => {
+const useGamesCache = (collection: string) => {
   const [games, setGames] = useState<WithId<Game>[]>([]);
 
   useEffect(() => {
     const get = async () => {
-      const response = await axios.get<WithId<Game>[]>("/api/fetch-games");
+      const response = await axios.post<WithId<Game>[]>("/api/fetch-games", {
+        collection,
+      });
       updateGames(response.data);
     };
 
