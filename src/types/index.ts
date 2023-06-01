@@ -35,7 +35,9 @@ export enum PALETTE {
 }
 
 export type Game = {
+  id: string;
   name: string;
+  year: number;
   region: Region;
   platform: Platform;
   art?: string;

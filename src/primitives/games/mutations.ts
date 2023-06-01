@@ -6,7 +6,7 @@ import { GameFormData } from "@/components/form/game-form";
 export const addGame = async (
   gameData: GameFormData,
   collection: string
-): Promise<WithId<Game>> => {
+): Promise<Game> => {
   const artDominantColor = gameData.art
     ? await getColorFromUrl(gameData.art)
     : undefined;
@@ -17,14 +17,16 @@ export const addGame = async (
   };
 
   const result = await db.collection(collection).add(game);
-  return (await result.get()).data() as WithId<Game>;
+  const snapshot = await result.get();
+  const id = snapshot.id;
+  return { id, ...(snapshot.data() as Game) };
 };
 
 export const editGame = async (
   id: string,
   gameData: GameFormData,
   collection: string
-): Promise<WithId<Game>> => {
+): Promise<Game> => {
   const artDominantColor = gameData.art
     ? await getColorFromUrl(gameData.art)
     : undefined;
@@ -36,4 +38,8 @@ export const editGame = async (
 
   await db.collection(collection).doc(id).update(updatedGame);
   return { id, ...updatedGame };
+};
+
+export const deleteGame = async (id: string, collection: string) => {
+  await db.collection(collection).doc(id).delete();
 };

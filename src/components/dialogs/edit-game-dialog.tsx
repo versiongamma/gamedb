@@ -12,25 +12,21 @@ import {
   StyledDialogTitle,
 } from "./layout";
 import { useState } from "react";
-import Button from "../button";
+import Button from "../input/button";
+import useGamesCache from "@/hooks/use-games-cache";
 
 type Props = {
-  game: WithId<Game>;
+  game: Game;
   onClose: () => void;
-  updateSingleGame: (game: WithId<Game>) => void;
   collection: string;
 };
 
-const EditGameDialog = ({
-  game,
-  onClose,
-  updateSingleGame,
-  collection,
-}: Props) => {
+const EditGameDialog = ({ game, onClose, collection }: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const { updateSingleGame, removeGame } = useGamesCache(collection);
 
   const onSubmit = async (data: GameFormData) => {
-    const result = await axios.post<WithId<Game>>("/api/edit-game", {
+    const result = await axios.post<Game>("/api/edit-game", {
       id: game.id,
       gameData: data,
       collection,
@@ -40,7 +36,15 @@ const EditGameDialog = ({
     onClose();
   };
 
-  const onDelete = () => {};
+  const onDelete = async (id: string) => {
+    await axios.post("/api/delete-game", {
+      id: id,
+      collection,
+    });
+
+    removeGame(id);
+    onClose();
+  };
 
   return (
     <StyledDialog open>
@@ -66,7 +70,7 @@ const EditGameDialog = ({
         <StyledDialogContents>
           <p>Are you sure you want to delete this entry?</p>
           <span>
-            <Button onClick={onDelete}>Yes</Button>
+            <Button onClick={() => onDelete(game.id)}>Yes</Button>
             <Button onClick={() => setDeleteDialogOpen(false)}>No</Button>
           </span>
         </StyledDialogContents>

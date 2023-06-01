@@ -1,52 +1,35 @@
-import { Game, Platform, WithId } from "@/types";
-import { PLATFORMS_BY_YEAR } from "@/utils/types";
+import { Game } from "@/types";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const sortGameFn = (a: Game, b: Game) => a.name.localeCompare(b.name);
-
 const useGamesCache = (collection: string) => {
-  const [games, setGames] = useState<WithId<Game>[]>([]);
+  const [games, setGames] = useState<Game[]>([]);
 
   useEffect(() => {
     const get = async () => {
-      const response = await axios.post<WithId<Game>[]>("/api/fetch-games", {
+      const response = await axios.post<Game[]>("/api/fetch-games", {
         collection,
       });
-      updateGames(response.data);
+      setGames(response.data);
     };
 
     get().catch((error) => console.log(error));
-  }, []);
+  }, [collection]);
 
-  const updateSingleGame = (game: WithId<Game>) => {
+  const updateSingleGame = (game: Game) => {
     const withoutUpdated = games.filter(({ id }) => id !== game.id);
-    updateGames([...withoutUpdated, game]);
+    setGames([...withoutUpdated, game]);
   };
 
-  const updateGames = (games: WithId<Game>[]) => {
-    const sortedGames = PLATFORMS_BY_YEAR.reduce<WithId<Game>[]>(
-      (memo, platform) => {
-        games
-          .filter((game) => game.platform === platform)
-          .sort(sortGameFn)
-          .forEach((game) => {
-            memo.push(game);
-          });
-
-        return memo;
-      },
-      []
-    );
-
-    setGames(sortedGames);
+  const addGame = (game: Game) => {
+    setGames([...games, game]);
   };
 
-  const addGame = (game: WithId<Game>) => {
-    updateGames([...games, game]);
+  const removeGame = (id: string) => {
+    setGames(games.filter((game) => game.id !== id));
   };
 
-  return { games, updateSingleGame, updateGames, addGame };
+  return { games, updateSingleGame, addGame, removeGame };
 };
 
 export default useGamesCache;

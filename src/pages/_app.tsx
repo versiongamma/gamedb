@@ -1,12 +1,13 @@
 import Header from "@/components/header";
 import theme from "@/theme";
+import { Game, WithId } from "@/types";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { setup, styled } from "goober";
 import { shouldForwardProp } from "goober/should-forward-prop";
 import { SessionProvider, useSession } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { Assistant } from "next/font/google";
-import { createElement } from "react";
+import { createContext, createElement } from "react";
 
 const DEFAULT_BACKGROUND_IMAGE = "https://i.imgur.com/5pHkLhw.jpg";
 

@@ -23,14 +23,14 @@ const StyledDivider = styled(Divider)`
 
 const Home = () => {
   const [addGameDialogOpen, setAddGameDialogOpen] = useState(false);
-  const [selectedGame, setSelectedGame] = useState<WithId<Game> | null>(null);
+  const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const { games, updateSingleGame, addGame } = useGamesCache("wishlist");
 
-  const handleGameClick = (game: WithId<Game>) => {
+  const handleGameClick = (game: Game) => {
     setSelectedGame(game);
   };
 
-  const gamesByPlatform = games.reduce<{ [key: string]: WithId<Game>[] }>(
+  const gamesByPlatform = games.reduce<{ [key: string]: Game[] }>(
     (memo, game) => {
       if (Object.keys(memo).includes(game.platform)) {
         memo[game.platform].push(game);

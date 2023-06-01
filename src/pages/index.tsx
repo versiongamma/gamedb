@@ -1,13 +1,19 @@
+import AddGameDialog from "@/components/dialogs/add-game-dialog";
 import EditGameDialog from "@/components/dialogs/edit-game-dialog";
-import GameEntry from "@/components/game-entry/game-entry";
+import ByPlatform from "@/components/display/by-platform";
+import List from "@/components/display/list";
 import useGamesCache from "@/hooks/use-games-cache";
 import { Game, WithId } from "@/types";
-import { Fab, Grid } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { Fab } from "@mui/material";
+import { styled } from "goober";
 import Head from "next/head";
 import { useState } from "react";
-import { styled } from "goober";
-import AddGameDialog from "@/components/dialogs/add-game-dialog";
+
+enum DisplayMethod {
+  BY_PLATFORM,
+  LIST,
+}
 
 const StyledFab = styled(Fab)`
   position: fixed;
@@ -15,14 +21,14 @@ const StyledFab = styled(Fab)`
   right: 1rem;
 `;
 
-const Home = () => {
-  const [addGameDialogOpen, setAddGameDialogOpen] = useState(false);
-  const [selectedGame, setSelectedGame] = useState<WithId<Game> | null>(null);
-  const { games, updateSingleGame, addGame } = useGamesCache("games");
+type PageProps = {
+  children: React.ReactNode;
+  selectedGame: Game | null;
+  setSelectedGame: React.Dispatch<React.SetStateAction<Game | null>>;
+};
 
-  const handleGameClick = (game: WithId<Game>) => {
-    setSelectedGame(game);
-  };
+const Page = ({ children, selectedGame, setSelectedGame }: PageProps) => {
+  const [addGameDialogOpen, setAddGameDialogOpen] = useState(false);
 
   return (
     <>
@@ -32,18 +38,11 @@ const Home = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Grid container>
-        {games.map((game) => (
-          <Grid item key={game.id}>
-            <GameEntry game={game} onClick={handleGameClick} />
-          </Grid>
-        ))}
-      </Grid>
+      {children}
       {selectedGame && (
         <EditGameDialog
           game={selectedGame}
           onClose={() => setSelectedGame(null)}
-          updateSingleGame={updateSingleGame}
           collection="games"
         />
       )}
@@ -57,11 +56,40 @@ const Home = () => {
       <AddGameDialog
         open={addGameDialogOpen}
         onClose={() => setAddGameDialogOpen(false)}
-        addGame={addGame}
         collection="games"
       />
     </>
   );
+};
+
+const Home = () => {
+  const { games } = useGamesCache("games");
+  const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+  const [displayMethod, setDisplayMethod] = useState<DisplayMethod>(
+    DisplayMethod.BY_PLATFORM
+  );
+
+  const handleGameClick = (game: Game) => {
+    setSelectedGame(game);
+  };
+
+  if (displayMethod === DisplayMethod.BY_PLATFORM) {
+    return (
+      <Page selectedGame={selectedGame} setSelectedGame={setSelectedGame}>
+        <ByPlatform games={games} handleGameClick={handleGameClick} />
+      </Page>
+    );
+  }
+
+  if (displayMethod === DisplayMethod.LIST) {
+    return (
+      <Page selectedGame={selectedGame} setSelectedGame={setSelectedGame}>
+        <List games={games} handleGameClick={handleGameClick} />
+      </Page>
+    );
+  }
+
+  return null;
 };
 
 export default Home;

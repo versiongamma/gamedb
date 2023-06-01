@@ -41,8 +41,8 @@ const Art = styled("img")`
 `;
 
 type Props = {
-  game: WithId<Game>;
-  onClick: (game: WithId<Game>) => void;
+  game: Game;
+  onClick: (game: Game) => void;
 };
 
 const WishlistEntry = ({ game, onClick }: Props) => {

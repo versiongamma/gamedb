@@ -14,7 +14,7 @@ type Request = Override<NextApiRequest, { body: EditGameParameters }>;
 
 const handler = async (
   request: Request,
-  response: NextApiResponse<WithId<Game> | string>
+  response: NextApiResponse<Game | string>
 ) => {
   const session = await getServerSession(request, response, authOptions);
 

@@ -1,21 +1,20 @@
 import { Platform, Region } from "@/types";
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete } from "@mui/material";
 import { styled } from "goober";
 import { useForm } from "react-hook-form";
-import Button from "../button";
+import Button from "../input/button";
+import TextField from "../input/text-field";
 
 const Form = styled("div")`
   display: flex;
   flex-direction: column;
   width: 500px;
-
-  > * {
-    margin: 0.3rem;
-  }
+  overflow-x: hidden;
 `;
 
 export type GameFormData = {
   name: string;
+  year: number;
   platform: Platform;
   art: string;
   region: Region;
@@ -29,13 +28,24 @@ type Props = {
 };
 
 const GameForm = ({ actionText, defaultValues, onSubmit }: Props) => {
-  const { register, handleSubmit } = useForm<GameFormData>({
+  const { register, handleSubmit, watch } = useForm<GameFormData>({
     defaultValues,
   });
 
   return (
     <Form>
-      <TextField variant="filled" label="Name" {...register("name")} />
+      <TextField
+        variant="filled"
+        label="Name"
+        {...register("name")}
+        fullWidth
+      />
+      <TextField
+        variant="filled"
+        label="Year"
+        {...register("year")}
+        fullWidth
+      />
       <Autocomplete
         options={Object.values(Platform)}
         defaultValue={defaultValues?.platform}
@@ -45,10 +55,16 @@ const GameForm = ({ actionText, defaultValues, onSubmit }: Props) => {
             variant="filled"
             label="Platform"
             {...register("platform")}
+            fullWidth
           />
         )}
       />
-      <TextField variant="filled" label="Box Art (URL)" {...register("art")} />
+      <TextField
+        variant="filled"
+        label="Box Art (URL)"
+        {...register("art")}
+        fullWidth
+      />
       <Autocomplete
         options={Object.values(Region)}
         defaultValue={defaultValues?.region}
@@ -58,10 +74,16 @@ const GameForm = ({ actionText, defaultValues, onSubmit }: Props) => {
             {...register("region")}
             label="Region"
             variant="filled"
+            fullWidth
           />
         )}
       />
-      <TextField variant="filled" label="Variant" {...register("variant")} />
+      <TextField
+        variant="filled"
+        label="Variant"
+        {...register("variant")}
+        fullWidth
+      />
       <Button onClick={handleSubmit(onSubmit)}>{actionText}</Button>
     </Form>
   );

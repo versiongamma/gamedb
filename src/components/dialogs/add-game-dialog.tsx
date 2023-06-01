@@ -5,17 +5,18 @@ import axios from "axios";
 
 import GameForm, { GameFormData } from "../form/game-form";
 import { StyledDialog, StyledDialogTitle } from "./layout";
+import useGamesCache from "@/hooks/use-games-cache";
 
 type Props = {
   open: boolean;
   onClose: () => void;
-  addGame: (game: WithId<Game>) => void;
   collection: string;
 };
 
-const AddGameDialog = ({ open, onClose, addGame, collection }: Props) => {
+const AddGameDialog = ({ open, onClose, collection }: Props) => {
+  const { addGame } = useGamesCache(collection);
   const onSubmit = async (data: GameFormData) => {
-    const result = await axios.post<WithId<Game>>("/api/add-game", {
+    const result = await axios.post<Game>("/api/add-game", {
       data,
       collection,
     });
