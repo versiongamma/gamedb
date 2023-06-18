@@ -44,7 +44,9 @@ const Index = ({ Component, ...pageProps }: AppProps) => {
   return (
     <ApolloProvider client={client}>
       <Header />
-      <PageWrapper><Component {...pageProps} />}</PageWrapper>
+      <PageWrapper>
+        <Component {...pageProps} />
+      </PageWrapper>
     </ApolloProvider>
   );
 };
