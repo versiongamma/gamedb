@@ -15,7 +15,9 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@primitives/*": ["./src/primitives/*"],
+      "@auth/*": ["./src/pages/api/auth/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/dialogs"],

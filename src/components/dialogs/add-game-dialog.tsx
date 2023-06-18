@@ -1,11 +1,9 @@
-import { Game, WithId } from "@/types";
 import CloseIcon from "@mui/icons-material/Close";
 import { DialogContent, IconButton } from "@mui/material";
-import axios from "axios";
 
 import GameForm, { GameFormData } from "../form/game-form";
 import { StyledDialog, StyledDialogTitle } from "./layout";
-import useGamesCache from "@/hooks/use-games-cache";
+import useAddGameMutation from "./use-add-game-mutation";
 
 type Props = {
   open: boolean;
@@ -14,14 +12,9 @@ type Props = {
 };
 
 const AddGameDialog = ({ open, onClose, collection }: Props) => {
-  const { addGame } = useGamesCache(collection);
+  const [addGame] = useAddGameMutation();
   const onSubmit = async (data: GameFormData) => {
-    const result = await axios.post<Game>("/api/add-game", {
-      data,
-      collection,
-    });
-
-    addGame(result.data);
+    await addGame(data, collection);
     onClose();
   };
   return (

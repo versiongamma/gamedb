@@ -1,8 +1,9 @@
 import AddGameDialog from "@/components/dialogs/add-game-dialog";
 import EditGameDialog from "@/components/dialogs/edit-game-dialog";
 import WishlistEntry from "@/components/game-entry/wishlist-entry";
-import useGamesCache from "@/hooks/use-games-cache";
-import { Game, WithId } from "@/types";
+import { FETCH_GAMES, FetchGamesResponse } from "@/graphql/types/fetch-games";
+import { GraphQLGame } from "@/types";
+import { useQuery } from "@apollo/client";
 import AddIcon from "@mui/icons-material/Add";
 import { Chip, Divider, Fab, Grid } from "@mui/material";
 import { styled } from "goober";
@@ -22,15 +23,19 @@ const StyledDivider = styled(Divider)`
 `;
 
 const Home = () => {
-  const [addGameDialogOpen, setAddGameDialogOpen] = useState(false);
-  const [selectedGame, setSelectedGame] = useState<Game | null>(null);
-  const { games, updateSingleGame, addGame } = useGamesCache("wishlist");
+  const { data } = useQuery<FetchGamesResponse>(FETCH_GAMES, {
+    variables: { collection: "wishlist" },
+  });
 
-  const handleGameClick = (game: Game) => {
+  const games = data?.FetchGames ?? [];
+
+  const [addGameDialogOpen, setAddGameDialogOpen] = useState(false);
+  const [selectedGame, setSelectedGame] = useState<GraphQLGame | null>(null);
+  const handleGameClick = (game: GraphQLGame) => {
     setSelectedGame(game);
   };
 
-  const gamesByPlatform = games.reduce<{ [key: string]: Game[] }>(
+  const gamesByPlatform = [...games].reduce<{ [key: string]: GraphQLGame[] }>(
     (memo, game) => {
       if (Object.keys(memo).includes(game.platform)) {
         memo[game.platform].push(game);
@@ -72,7 +77,6 @@ const Home = () => {
         <EditGameDialog
           game={selectedGame}
           onClose={() => setSelectedGame(null)}
-          updateSingleGame={updateSingleGame}
           collection="wishlist"
         />
       )}
@@ -86,7 +90,6 @@ const Home = () => {
       <AddGameDialog
         open={addGameDialogOpen}
         onClose={() => setAddGameDialogOpen(false)}
-        addGame={addGame}
         collection="wishlist"
       />
     </>

@@ -28,7 +28,7 @@ type Props = {
 };
 
 const GameForm = ({ actionText, defaultValues, onSubmit }: Props) => {
-  const { register, handleSubmit, watch } = useForm<GameFormData>({
+  const { register, handleSubmit } = useForm<GameFormData>({
     defaultValues,
   });
 

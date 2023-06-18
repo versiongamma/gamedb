@@ -1,4 +1,4 @@
-import { Game } from "@/types";
+import { Game, GraphQLGame } from "@/types";
 import { PLATFORMS_BY_YEAR } from "@/utils/types";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -17,8 +17,8 @@ const StyledDivider = styled(Divider)`
 
 type PlatformDisplayProps = {
   platform: string;
-  games: Game[];
-  handleGameClick: (game: Game) => void;
+  games: GraphQLGame[];
+  handleGameClick: (game: GraphQLGame) => void;
 };
 
 const PlatformDisplay = ({
@@ -51,14 +51,14 @@ const PlatformDisplay = ({
 };
 
 type Props = {
-  games: Game[];
-  handleGameClick: (game: Game) => void;
+  games: GraphQLGame[];
+  handleGameClick: (game: GraphQLGame) => void;
 };
 
 const ByPlatform = ({ games, handleGameClick }: Props) => {
-  const gamesByPlatform = games
+  const gamesByPlatform = [...games]
     .sort(sortGamesByYearThenName)
-    .reduce<{ [key: string]: Game[] }>((memo, game) => {
+    .reduce<{ [key: string]: GraphQLGame[] }>((memo, game) => {
       if (Object.keys(memo).includes(game.platform)) {
         memo[game.platform].push(game);
         return memo;

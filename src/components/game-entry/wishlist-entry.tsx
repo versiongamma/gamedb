@@ -1,4 +1,4 @@
-import { Game, WithId } from "@/types";
+import { GraphQLGame } from "@/types";
 
 import { styled } from "goober";
 import Variant from "./variant";
@@ -41,8 +41,8 @@ const Art = styled("img")`
 `;
 
 type Props = {
-  game: Game;
-  onClick: (game: Game) => void;
+  game: GraphQLGame;
+  onClick: (game: GraphQLGame) => void;
 };
 
 const WishlistEntry = ({ game, onClick }: Props) => {

@@ -2,8 +2,9 @@ import AddGameDialog from "@/components/dialogs/add-game-dialog";
 import EditGameDialog from "@/components/dialogs/edit-game-dialog";
 import ByPlatform from "@/components/display/by-platform";
 import List from "@/components/display/list";
-import useGamesCache from "@/hooks/use-games-cache";
-import { Game, WithId } from "@/types";
+import { FETCH_GAMES, FetchGamesResponse } from "@/graphql/types/fetch-games";
+import { GraphQLGame } from "@/types";
+import { useQuery } from "@apollo/client";
 import AddIcon from "@mui/icons-material/Add";
 import { Fab } from "@mui/material";
 import { styled } from "goober";
@@ -23,8 +24,8 @@ const StyledFab = styled(Fab)`
 
 type PageProps = {
   children: React.ReactNode;
-  selectedGame: Game | null;
-  setSelectedGame: React.Dispatch<React.SetStateAction<Game | null>>;
+  selectedGame: GraphQLGame | null;
+  setSelectedGame: React.Dispatch<React.SetStateAction<GraphQLGame | null>>;
 };
 
 const Page = ({ children, selectedGame, setSelectedGame }: PageProps) => {
@@ -63,13 +64,17 @@ const Page = ({ children, selectedGame, setSelectedGame }: PageProps) => {
 };
 
 const Home = () => {
-  const { games } = useGamesCache("games");
-  const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+  const { data } = useQuery<FetchGamesResponse>(FETCH_GAMES, {
+    variables: { collection: "games" },
+  });
+  const games = data?.FetchGames ?? [];
+
+  const [selectedGame, setSelectedGame] = useState<GraphQLGame | null>(null);
   const [displayMethod, setDisplayMethod] = useState<DisplayMethod>(
     DisplayMethod.BY_PLATFORM
   );
 
-  const handleGameClick = (game: Game) => {
+  const handleGameClick = (game: GraphQLGame) => {
     setSelectedGame(game);
   };
 

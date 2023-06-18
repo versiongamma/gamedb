@@ -1,13 +1,13 @@
 import Header from "@/components/header";
 import theme from "@/theme";
-import { Game, WithId } from "@/types";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { setup, styled } from "goober";
 import { shouldForwardProp } from "goober/should-forward-prop";
 import { SessionProvider, useSession } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { Assistant } from "next/font/google";
-import { createContext, createElement } from "react";
+import { createElement } from "react";
 
 const DEFAULT_BACKGROUND_IMAGE = "https://i.imgur.com/5pHkLhw.jpg";
 
@@ -27,13 +27,20 @@ const PageWrapper = styled("div")`
 const assistant = Assistant({ subsets: ["latin"] });
 
 const Index = ({ Component, ...pageProps }: AppProps) => {
+  const { NEXT_PUBLIC_ENV, NEXT_PUBLIC_GRAPHQL_ENDPOINT } = process.env;
+  console.log(NEXT_PUBLIC_GRAPHQL_ENDPOINT);
   const { data: session } = useSession();
+  const client = new ApolloClient({
+    uri: NEXT_PUBLIC_GRAPHQL_ENDPOINT,
+    cache: new InMemoryCache(),
+    connectToDevTools: NEXT_PUBLIC_ENV !== "prod",
+  });
 
   return (
-    <>
+    <ApolloProvider client={client}>
       <Header />
       <PageWrapper>{session && <Component {...pageProps} />}</PageWrapper>
-    </>
+    </ApolloProvider>
   );
 };
 

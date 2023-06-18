@@ -1,9 +1,9 @@
-import { Game, WithId } from "@/types";
+import { GraphQLGame } from "@/types";
 
-import { styled } from "goober";
-import Variant from "./variant";
-import Header from "./header";
 import useScreenResolution from "@/hooks/use-screen-resolution";
+import { styled } from "goober";
+import Header from "./header";
+import Variant from "./variant";
 
 const Button = styled("button")`
   background: none;
@@ -52,8 +52,8 @@ const Art = styled<ArtProps>("img")`
 `;
 
 type Props = {
-  game: Game;
-  onClick: (game: Game) => void;
+  game: GraphQLGame;
+  onClick: (game: GraphQLGame) => void;
 };
 
 const GameEntry = ({ game, onClick }: Props) => {

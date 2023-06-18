@@ -1,10 +1,10 @@
 import { GameFormData } from "@/components/form/game-form";
-import { Game, WithId } from "@/types";
+import { Game, GraphQLGame, WithId } from "@/types";
 
-export const getFormInputValuesFromGame = (game: Game): GameFormData => {
-  const { id, ...gameWithoutId } = game;
+export const getFormInputValuesFromGame = (game: GraphQLGame): GameFormData => {
+  const { id, __typename, ...gameWithoutIdOrTypename } = game;
   return {
-    ...gameWithoutId,
+    ...gameWithoutIdOrTypename,
     variant: !!game.variant ? game.variant : "",
     art: game.art ?? "",
   };

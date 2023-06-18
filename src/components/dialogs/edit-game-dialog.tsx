@@ -1,4 +1,4 @@
-import { Game, WithId } from "@/types";
+import { Game, GraphQLGame, WithId } from "@/types";
 import { getFormInputValuesFromGame } from "@/utils/form";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -13,26 +13,20 @@ import {
 } from "./layout";
 import { useState } from "react";
 import Button from "../input/button";
-import useGamesCache from "@/hooks/use-games-cache";
+import useUpdateGameMutation from "./use-update-game-mutation";
 
 type Props = {
-  game: Game;
+  game: GraphQLGame;
   onClose: () => void;
   collection: string;
 };
 
 const EditGameDialog = ({ game, onClose, collection }: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const { updateSingleGame, removeGame } = useGamesCache(collection);
+  const [updateGame] = useUpdateGameMutation();
 
   const onSubmit = async (data: GameFormData) => {
-    const result = await axios.post<Game>("/api/edit-game", {
-      id: game.id,
-      gameData: data,
-      collection,
-    });
-
-    updateSingleGame(result.data);
+    await updateGame(game.id, data, collection);
     onClose();
   };
 
@@ -42,7 +36,7 @@ const EditGameDialog = ({ game, onClose, collection }: Props) => {
       collection,
     });
 
-    removeGame(id);
+    // removeGame(id);
     onClose();
   };
 
