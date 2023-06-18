@@ -11,7 +11,7 @@ export const options: AuthOptions = {
       clientSecret: GOOGLE_CLIENT_SECRET,
     }),
   ],
-  debug: ENV === "prod" ? false : true,
+  debug: ENV !== "prod",
 };
 
 const auth = (request: NextApiRequest, response: NextApiResponse) =>

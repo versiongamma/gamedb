@@ -1,4 +1,5 @@
 import Header from "@/components/header";
+import useEnv from "@/hooks/use-env";
 import theme from "@/theme";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -27,19 +28,23 @@ const PageWrapper = styled("div")`
 const assistant = Assistant({ subsets: ["latin"] });
 
 const Index = ({ Component, ...pageProps }: AppProps) => {
-  const { NEXT_PUBLIC_ENV, NEXT_PUBLIC_GRAPHQL_ENDPOINT } = process.env;
-  console.log(NEXT_PUBLIC_GRAPHQL_ENDPOINT);
+  const { ENV, GRAPHQL_URL } = useEnv();
   const { data: session } = useSession();
+
+  if (!session || !GRAPHQL_URL) {
+    return <Header />;
+  }
+
   const client = new ApolloClient({
-    uri: NEXT_PUBLIC_GRAPHQL_ENDPOINT,
+    uri: GRAPHQL_URL,
     cache: new InMemoryCache(),
-    connectToDevTools: NEXT_PUBLIC_ENV !== "prod",
+    connectToDevTools: ENV !== "prod",
   });
 
   return (
     <ApolloProvider client={client}>
       <Header />
-      <PageWrapper>{session && <Component {...pageProps} />}</PageWrapper>
+      <PageWrapper><Component {...pageProps} />}</PageWrapper>
     </ApolloProvider>
   );
 };
