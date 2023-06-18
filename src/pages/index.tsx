@@ -39,13 +39,6 @@ const Page = ({ children, selectedGame, setSelectedGame }: PageProps) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {children}
-      {selectedGame && (
-        <EditGameDialog
-          game={selectedGame}
-          onClose={() => setSelectedGame(null)}
-          collection="games"
-        />
-      )}
       <StyledFab
         color="primary"
         aria-label="add"
@@ -53,6 +46,13 @@ const Page = ({ children, selectedGame, setSelectedGame }: PageProps) => {
       >
         <AddIcon />
       </StyledFab>
+      {selectedGame && (
+        <EditGameDialog
+          game={selectedGame}
+          onClose={() => setSelectedGame(null)}
+          collection="games"
+        />
+      )}
       <AddGameDialog
         open={addGameDialogOpen}
         onClose={() => setAddGameDialogOpen(false)}

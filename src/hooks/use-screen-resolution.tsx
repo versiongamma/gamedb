@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 const useScreenResolution = () => {
-  const [windowWidth, setWindowWidth] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     const handleWindowResize = () => {

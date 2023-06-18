@@ -24,13 +24,13 @@ type WrapperProps = {
 const Wrapper = styled<WrapperProps>("div")`
   width: fit-content;
   color: white;
-  ${({ $isMobile }) => ($isMobile ? "width: 90px" : "min-width: 250px")};
-  height: ${({ $isMobile }) => ($isMobile ? "180px" : "310px")};
+  ${({ $isMobile }) => ($isMobile ? "min-width: 90px" : "min-width: 250px")};
+  ${({ $isMobile }) => ($isMobile ? "" : "min-height: 310px")};
   background-color: ${({ $color }) => $color ?? "#eeeeee"};
   border-radius: 1rem;
   display: flex;
   flex-direction: column;
-  margin: 1rem;
+  margin: ${({ $isMobile }) => ($isMobile ? "0.6rem" : "1rem")};
 
   > * {
     margin: 0.6rem 0.8rem;
@@ -48,7 +48,7 @@ type ArtProps = {
 } & React.ImgHTMLAttributes<HTMLImageElement>;
 
 const Art = styled<ArtProps>("img")`
-  height: ${({ $isMobile }) => ($isMobile ? "80px" : "210px")};
+  height: ${({ $isMobile }) => ($isMobile ? "100px" : "210px")};
 `;
 
 type Props = {
@@ -63,10 +63,12 @@ const GameEntry = ({ game, onClick }: Props) => {
   return (
     <Button onClick={() => onClick(game)}>
       <Wrapper $color={color} $isMobile={isMobileResolution}>
-        <Header name={name} platform={platform} region={region} />
+        {!isMobileResolution && (
+          <Header name={name} platform={platform} region={region} />
+        )}
         <DetailsWrapper>
           <Art src={art} $isMobile={isMobileResolution} />
-          {variant && <Variant variant={variant} />}
+          {variant && !isMobileResolution && <Variant variant={variant} />}
         </DetailsWrapper>
       </Wrapper>
     </Button>
