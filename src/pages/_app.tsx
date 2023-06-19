@@ -8,6 +8,7 @@ import { shouldForwardProp } from "goober/should-forward-prop";
 import { SessionProvider, useSession } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { Assistant } from "next/font/google";
+import Head from "next/head";
 import { createElement, useMemo } from "react";
 
 const DEFAULT_BACKGROUND_IMAGE = "https://i.imgur.com/5pHkLhw.jpg";
@@ -42,7 +43,7 @@ const Index = ({ Component, ...pageProps }: AppProps) => {
   );
 
   if (!session || !GRAPHQL_URL) {
-    return <Header />;
+    return null;
   }
 
   return (
@@ -56,23 +57,36 @@ const Index = ({ Component, ...pageProps }: AppProps) => {
 };
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
-  <SessionProvider session={session}>
-    <ThemeProvider theme={theme}>
-      <div
-        className={assistant.className}
-        style={{
-          width: "100vw",
-          height: "100vh",
-          backgroundImage: `url(${DEFAULT_BACKGROUND_IMAGE})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center center",
-        }}
-      >
-        <CssBaseline />
-        <Index Component={Component} {...pageProps} />
-      </div>
-    </ThemeProvider>
-  </SessionProvider>
+  <>
+    <Head>
+      <title>GameDB</title>
+      <meta
+        name="description"
+        content="Version Gamma's Game Collection Database"
+      />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <meta name="apple-mobile-web-app-capable" content="yes"></meta>
+      <link rel="apple-touch-icon" href="/favicon.ico"></link>
+      <link rel="icon" href="/favicon.ico" />
+    </Head>
+    <SessionProvider session={session}>
+      <ThemeProvider theme={theme}>
+        <div
+          className={assistant.className}
+          style={{
+            width: "100vw",
+            height: "100vh",
+            backgroundImage: `url(${DEFAULT_BACKGROUND_IMAGE})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center center",
+          }}
+        >
+          <CssBaseline />
+          <Index Component={Component} {...pageProps} />
+        </div>
+      </ThemeProvider>
+    </SessionProvider>
+  </>
 );
 
 export default App;

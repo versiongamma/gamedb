@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 
-import Button from "./input/button";
+import Button from "../input/button";
 
 const Login = () => {
   const [providerId, setProviderId] = useState("");
