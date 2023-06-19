@@ -2,8 +2,8 @@ import { GraphQLGame } from "@/types";
 import { gql } from "@apollo/client";
 
 export const FETCH_GAMES = gql`
-  query FetchGames($collection: String!) {
-    FetchGames(collection: $collection) {
+  query FetchGames {
+    FetchGames {
       id
       name
       platform
@@ -11,6 +11,14 @@ export const FETCH_GAMES = gql`
       art
       region
       color
+      colorOptions {
+        Vibrant
+        Muted
+        LightVibrant
+        DarkVibrant
+        LightMuted
+        DarkMuted
+      }
       variant
     }
   }

@@ -6,14 +6,16 @@ import { Chip, Collapse, Divider, Grid } from "@mui/material";
 import { styled } from "goober";
 import { useState } from "react";
 
-import GameEntry from "../game-entry/game-entry";
-import { sortGamesByYearThenName } from "@/utils/games";
+import GameEntry from "../../entry/game-entry";
+import { getGamesByPlatform, sortGamesByYearThenName } from "@/utils/sort";
 
 const StyledDivider = styled(Divider)`
   &.MuiDivider-root::before {
     width: 1%;
   }
 `;
+
+const StyledChip = styled(Chip)``;
 
 type PlatformDisplayProps = {
   platform: string;
@@ -31,10 +33,11 @@ const PlatformDisplay = ({
     <>
       <br />
       <StyledDivider textAlign="left">
-        <Chip
+        <StyledChip
           label={platform}
           deleteIcon={open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           onDelete={() => setOpen(!open)}
+          onClick={() => setOpen(!open)}
         />
       </StyledDivider>
       <Collapse in={open}>
@@ -56,18 +59,7 @@ type Props = {
 };
 
 const ByPlatform = ({ games, handleGameClick }: Props) => {
-  const gamesByPlatform = [...games]
-    .sort(sortGamesByYearThenName)
-    .reduce<{ [key: string]: GraphQLGame[] }>((memo, game) => {
-      if (Object.keys(memo).includes(game.platform)) {
-        memo[game.platform].push(game);
-        return memo;
-      }
-
-      memo[game.platform] = [game];
-      return memo;
-    }, {});
-
+  const gamesByPlatform = getGamesByPlatform([...games]);
   const shownPlatforms = Object.keys(gamesByPlatform);
   const platforms = PLATFORMS_BY_YEAR.filter((platform) =>
     shownPlatforms.includes(platform)

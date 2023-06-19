@@ -5,7 +5,11 @@ import MuiTextField, {
 import { styled } from "goober";
 import React from "react";
 
-const TextField = styled<MuiTextFieldProps>(MuiTextField, React.forwardRef)`
+type Props = {
+  $background?: string;
+} & MuiTextFieldProps;
+
+const TextField = styled<Props>(MuiTextField, React.forwardRef)`
   && {
     margin: 0.8rem;
     padding-right: 1.6rem;
@@ -31,6 +35,8 @@ const TextField = styled<MuiTextFieldProps>(MuiTextField, React.forwardRef)`
 
     .MuiInputBase-root {
       border-radius: 2.4rem;
+      ${({ $background }) =>
+        $background ? `background-color: ${$background};` : ""}
 
       &::before {
         border-bottom: none;

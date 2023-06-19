@@ -1,44 +1,27 @@
-import { Game, GraphQLGame, WithId } from "@/types";
-import { getFormInputValuesFromGame } from "@/utils/form";
+import { GraphQLGame } from "@/types";
+import { getFormInputValuesFromGame } from "@/components/form/get-values";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DialogContent, IconButton } from "@mui/material";
-import axios from "axios";
 
-import GameForm, { GameFormData } from "../form/game-form";
+import { useState } from "react";
+import AddGameForm, { GameFormData } from "../form/add-game-form";
+import Button from "../input/button";
 import {
   StyledDialog,
   StyledDialogContents,
   StyledDialogTitle,
 } from "./layout";
-import { useState } from "react";
-import Button from "../input/button";
-import useUpdateGameMutation from "./use-update-game-mutation";
 
 type Props = {
   game: GraphQLGame;
   onClose: () => void;
-  collection: string;
+  onDelete: () => Promise<void>;
+  FormElement: React.ReactNode;
 };
 
-const EditGameDialog = ({ game, onClose, collection }: Props) => {
+const EditDialog = ({ game, onClose, onDelete, FormElement }: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [updateGame] = useUpdateGameMutation();
-
-  const onSubmit = async (data: GameFormData) => {
-    await updateGame(game.id, data, collection);
-    onClose();
-  };
-
-  const onDelete = async (id: string) => {
-    await axios.post("/api/delete-game", {
-      id: id,
-      collection,
-    });
-
-    // removeGame(id);
-    onClose();
-  };
 
   return (
     <StyledDialog open>
@@ -53,18 +36,12 @@ const EditGameDialog = ({ game, onClose, collection }: Props) => {
           </IconButton>
         </span>
       </StyledDialogTitle>
-      <DialogContent>
-        <GameForm
-          actionText="Save"
-          onSubmit={onSubmit}
-          defaultValues={getFormInputValuesFromGame(game)}
-        />
-      </DialogContent>
+      <DialogContent>{FormElement}</DialogContent>
       <StyledDialog open={deleteDialogOpen}>
         <StyledDialogContents>
           <p>Are you sure you want to delete this entry?</p>
           <span>
-            <Button onClick={() => onDelete(game.id)}>Yes</Button>
+            <Button onClick={onDelete}>Yes</Button>
             <Button onClick={() => setDeleteDialogOpen(false)}>No</Button>
           </span>
         </StyledDialogContents>
@@ -73,4 +50,4 @@ const EditGameDialog = ({ game, onClose, collection }: Props) => {
   );
 };
 
-export default EditGameDialog;
+export default EditDialog;

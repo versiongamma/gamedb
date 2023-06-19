@@ -1,3 +1,6 @@
+export type Override<T1, T2> = Omit<T1, keyof T2> & T2;
+export type WithId<T> = { id: string } & T;
+
 export enum Region {
   US = "US",
   EU = "EU",
@@ -25,7 +28,7 @@ export enum Platform {
   PC = "PC",
 }
 
-export enum PALETTE {
+export enum Palette {
   VIBRANT = "Vibrant",
   MUTED = "Muted",
   LIGHT_VIBRANT = "LightVibrant",
@@ -40,12 +43,20 @@ export type Game = {
   year: number;
   region: Region;
   platform: Platform;
-  art?: string;
+  art: string;
   color: string;
+  colorOptions: Record<Palette, string>;
   variant?: string;
 };
 
 export type GraphQLGame = Game & { __typename: string };
 
-export type Override<T1, T2> = Omit<T1, keyof T2> & T2;
-export type WithId<T> = { id: string } & T;
+export type WishlistItem = {
+  id: string;
+  name: string;
+  region?: Region;
+  platform: Platform;
+  variant?: string;
+};
+
+export type GraphQLWishlistItem = WishlistItem & { __typename: string };

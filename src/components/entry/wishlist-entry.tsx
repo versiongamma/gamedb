@@ -1,8 +1,10 @@
-import { GraphQLGame } from "@/types";
+import { GraphQLGame, GraphQLWishlistItem } from "@/types";
 
 import { styled } from "goober";
 import Variant from "./variant";
 import Header from "./header";
+
+const WISHLIST_ITEM_COLOR = "#53365c";
 
 const Button = styled("button")`
   background: none;
@@ -17,13 +19,12 @@ const Button = styled("button")`
 const Wrapper = styled("div")`
   width: fit-content;
   color: white;
-  min-width: 250px;
   height: 100px;
-  background-color: #303030;
+  background-color: ${WISHLIST_ITEM_COLOR};
   border-radius: 1rem;
   display: flex;
   flex-direction: column;
-  margin: 1rem;
+  margin: 0.4rem;
 
   > * {
     margin: 0.6rem 0.8rem;
@@ -36,13 +37,9 @@ const DetailsWrapper = styled("div")`
   align-items: center;
 `;
 
-const Art = styled("img")`
-  height: 210px;
-`;
-
 type Props = {
-  game: GraphQLGame;
-  onClick: (game: GraphQLGame) => void;
+  game: GraphQLWishlistItem;
+  onClick: (game: GraphQLWishlistItem) => void;
 };
 
 const WishlistEntry = ({ game, onClick }: Props) => {
@@ -51,7 +48,7 @@ const WishlistEntry = ({ game, onClick }: Props) => {
   return (
     <Button onClick={() => onClick(game)}>
       <Wrapper>
-        <Header name={name} platform={platform} region={region} />
+        <Header name={name} region={region} />
         <DetailsWrapper>
           {variant && <Variant variant={variant} />}
         </DetailsWrapper>

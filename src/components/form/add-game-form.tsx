@@ -14,7 +14,7 @@ const Form = styled("div")`
 
 export type GameFormData = {
   name: string;
-  year: number;
+  year: string;
   platform: Platform;
   art: string;
   region: Region;
@@ -23,14 +23,11 @@ export type GameFormData = {
 
 type Props = {
   actionText: string;
-  defaultValues?: GameFormData;
   onSubmit: (data: GameFormData) => Promise<void>;
 };
 
-const GameForm = ({ actionText, defaultValues, onSubmit }: Props) => {
-  const { register, handleSubmit } = useForm<GameFormData>({
-    defaultValues,
-  });
+const AddGameForm = ({ actionText, onSubmit }: Props) => {
+  const { register, handleSubmit } = useForm<GameFormData>();
 
   return (
     <Form>
@@ -48,7 +45,6 @@ const GameForm = ({ actionText, defaultValues, onSubmit }: Props) => {
       />
       <Autocomplete
         options={Object.values(Platform)}
-        defaultValue={defaultValues?.platform}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -67,7 +63,6 @@ const GameForm = ({ actionText, defaultValues, onSubmit }: Props) => {
       />
       <Autocomplete
         options={Object.values(Region)}
-        defaultValue={defaultValues?.region}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -89,4 +84,4 @@ const GameForm = ({ actionText, defaultValues, onSubmit }: Props) => {
   );
 };
 
-export default GameForm;
+export default AddGameForm;

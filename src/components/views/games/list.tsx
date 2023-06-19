@@ -1,7 +1,7 @@
 import { Game, GraphQLGame } from "@/types";
 import { Grid } from "@mui/material";
-import GameEntry from "../game-entry/game-entry";
-import { sortGamesByYearThenName } from "@/utils/games";
+import GameEntry from "../../entry/game-entry";
+import { sortGamesByYearThenName } from "@/utils/sort";
 
 type Props = {
   games: GraphQLGame[];

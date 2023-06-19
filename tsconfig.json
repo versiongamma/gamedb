@@ -16,7 +16,7 @@
     "incremental": true,
     "paths": {
       "@/*": ["./src/*"],
-      "@primitives/*": ["./src/primitives/*"],
+      "@primitives/*": ["src/api/primitives/*"],
       "@auth/*": ["./src/pages/api/auth/*"]
     }
   },

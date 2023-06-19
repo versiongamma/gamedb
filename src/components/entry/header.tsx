@@ -38,16 +38,16 @@ const RegionBody = styled("span")`
 
 type Props = {
   name: string;
-  platform: Platform;
-  region: Region;
+  platform?: Platform;
+  region?: Region;
 };
 
 const Header = ({ name, platform, region }: Props) => (
   <Wrapper>
     <TitleBody>{name}</TitleBody>
     <HeaderDetailsWrapper>
-      <PlatformBody>{platform}</PlatformBody>
-      <RegionBody>({REGION_LABEL_MAP[region]})</RegionBody>
+      {platform && <PlatformBody>{platform}</PlatformBody>}
+      {region && <RegionBody>({REGION_LABEL_MAP[region]})</RegionBody>}
     </HeaderDetailsWrapper>
   </Wrapper>
 );

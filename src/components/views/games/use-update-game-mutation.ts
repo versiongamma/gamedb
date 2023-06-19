@@ -1,11 +1,12 @@
 import { GraphQLGame } from "@/types";
 import { gql, useMutation } from "@apollo/client";
 
-import { GameFormData } from "../form/game-form";
+import { GameFormData } from "../../form/add-game-form";
+import { EditGameArguments } from "@/api/graphql/games";
 
 const UPDATE_GAME = gql`
-  mutation EditGame($id: String!, $gameData: GameData!, $collection: String!) {
-    EditGame(id: $id, gameData: $gameData, collection: $collection) {
+  mutation EditGame($id: String!, $gameData: EditGameData!) {
+    EditGame(id: $id, gameData: $gameData) {
       id
       name
       platform
@@ -13,6 +14,14 @@ const UPDATE_GAME = gql`
       art
       region
       color
+      colorOptions {
+        Vibrant
+        Muted
+        LightVibrant
+        DarkVibrant
+        LightMuted
+        DarkMuted
+      }
       variant
     }
   }
@@ -26,13 +35,9 @@ const useUpdateGameMutation = () => {
   const [mutationFunc, mutationResult] =
     useMutation<UpdateGameMutationResponse>(UPDATE_GAME);
 
-  const updateGame = async (
-    id: string,
-    gameData: GameFormData,
-    collection: string
-  ) => {
+  const updateGame = async (variables: EditGameArguments) => {
     await mutationFunc({
-      variables: { id, gameData, collection },
+      variables,
     });
   };
 

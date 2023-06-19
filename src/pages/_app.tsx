@@ -8,7 +8,7 @@ import { shouldForwardProp } from "goober/should-forward-prop";
 import { SessionProvider, useSession } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { Assistant } from "next/font/google";
-import { createElement } from "react";
+import { createElement, useMemo } from "react";
 
 const DEFAULT_BACKGROUND_IMAGE = "https://i.imgur.com/5pHkLhw.jpg";
 
@@ -31,15 +31,19 @@ const Index = ({ Component, ...pageProps }: AppProps) => {
   const { ENV, GRAPHQL_URL } = useEnv();
   const { data: session } = useSession();
 
+  const client = useMemo(
+    () =>
+      new ApolloClient({
+        uri: GRAPHQL_URL,
+        cache: new InMemoryCache(),
+        connectToDevTools: ENV !== "prod",
+      }),
+    [GRAPHQL_URL, ENV]
+  );
+
   if (!session || !GRAPHQL_URL) {
     return <Header />;
   }
-
-  const client = new ApolloClient({
-    uri: GRAPHQL_URL,
-    cache: new InMemoryCache(),
-    connectToDevTools: ENV !== "prod",
-  });
 
   return (
     <ApolloProvider client={client}>

@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 const StyledToolbar = styled(Toolbar)`
   display: flex;
   justify-content: space-between;
+  z-index: 1;
 `;
 
 const StyledTabs = styled(Tabs)`

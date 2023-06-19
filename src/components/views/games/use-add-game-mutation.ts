@@ -1,12 +1,12 @@
 import { GraphQLGame } from "@/types";
 import { gql, useMutation } from "@apollo/client";
 
-import { GameFormData } from "../form/game-form";
-import { FETCH_GAMES, FetchGamesResponse } from "@/graphql/types/fetch-games";
+import { GameFormData } from "../../form/add-game-form";
+import { FETCH_GAMES, FetchGamesResponse } from "@/graphql/fetch-games";
 
 const ADD_GAME = gql`
-  mutation AddGame($gameData: GameData!, $collection: String!) {
-    AddGame(gameData: $gameData, collection: $collection) {
+  mutation AddGame($gameData: AddGameData!) {
+    AddGame(gameData: $gameData) {
       id
       name
       platform
@@ -14,31 +14,36 @@ const ADD_GAME = gql`
       art
       region
       color
+      colorOptions {
+        Vibrant
+        Muted
+        LightVibrant
+        DarkVibrant
+        LightMuted
+        DarkMuted
+      }
       variant
     }
   }
 `;
 
 export type AddGameMutationResponse = {
-  UpdateGame: GraphQLGame;
+  AddGame: GraphQLGame;
 };
 
 const useAddGameMutation = () => {
   const [mutationFunc, mutationResult] =
     useMutation<AddGameMutationResponse>(ADD_GAME);
 
-  const addGame = async (gameData: GameFormData, collection: string) => {
+  const addGame = async (gameData: GameFormData) => {
     await mutationFunc({
-      variables: { gameData, collection },
+      variables: { gameData },
       update: (cache, { data }) => {
         if (!data) {
           return;
         }
 
-        const newGame = data.UpdateGame;
-
-        console.log(newGame);
-
+        const newGame = data.AddGame;
         const { FetchGames: games } =
           cache.readQuery<FetchGamesResponse>({
             query: FETCH_GAMES,
@@ -47,8 +52,6 @@ const useAddGameMutation = () => {
         if (!games) {
           return;
         }
-
-        console.log(games);
 
         cache.writeQuery({
           query: FETCH_GAMES,
