@@ -43,7 +43,7 @@ const Index = ({ Component, ...pageProps }: AppProps) => {
   );
 
   if (!session || !GRAPHQL_URL) {
-    return null;
+    return <Header />;
   }
 
   return (
