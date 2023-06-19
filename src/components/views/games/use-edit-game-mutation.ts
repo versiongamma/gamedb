@@ -4,7 +4,7 @@ import { gql, useMutation } from "@apollo/client";
 import { GameFormData } from "../../form/add-game-form";
 import { EditGameArguments } from "@/api/graphql/games";
 
-const UPDATE_GAME = gql`
+const EDIT_GAME = gql`
   mutation EditGame($id: String!, $gameData: EditGameData!) {
     EditGame(id: $id, gameData: $gameData) {
       id
@@ -27,21 +27,21 @@ const UPDATE_GAME = gql`
   }
 `;
 
-export type UpdateGameMutationResponse = {
+export type EditGameMutationResponse = {
   UpdateGame: GraphQLGame;
 };
 
 const useUpdateGameMutation = () => {
   const [mutationFunc, mutationResult] =
-    useMutation<UpdateGameMutationResponse>(UPDATE_GAME);
+    useMutation<EditGameMutationResponse>(EDIT_GAME);
 
-  const updateGame = async (variables: EditGameArguments) => {
+  const editGame = async (variables: EditGameArguments) => {
     await mutationFunc({
       variables,
     });
   };
 
-  return [updateGame];
+  return [editGame, mutationResult] as const;
 };
 
 export default useUpdateGameMutation;

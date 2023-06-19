@@ -1,7 +1,5 @@
 import { useQuery } from "@apollo/client";
 import AddIcon from "@mui/icons-material/Add";
-import { styled } from "goober";
-import Head from "next/head";
 import { useState } from "react";
 
 import AddDialog from "@/components/dialogs/add-dialog";
@@ -10,14 +8,16 @@ import AddGameForm, { GameFormData } from "@/components/form/add-game-form";
 import EditGameForm, {
   EditGameFormData,
 } from "@/components/form/edit-game-form";
+import Fab from "@/components/input/fab";
 import ByPlatform from "@/components/views/games/by-platform";
 import List from "@/components/views/games/list";
 import useAddGameMutation from "@/components/views/games/use-add-game-mutation";
 import useDeleteGameMutation from "@/components/views/games/use-delete-game-mutation";
-import useUpdateGameMutation from "@/components/views/games/use-update-game-mutation";
+import useUpdateGameMutation from "@/components/views/games/use-edit-game-mutation";
 import { FETCH_GAMES, FetchGamesResponse } from "@/graphql/fetch-games";
 import { GraphQLGame } from "@/types";
-import Fab from "@/components/input/fab";
+import Progress from "@/components/progress";
+import { styled } from "goober";
 
 enum DisplayMethod {
   BY_PLATFORM,
@@ -33,8 +33,10 @@ type PageProps = {
 const Page = ({ children, selectedGame, setSelectedGame }: PageProps) => {
   const [addGameDialogOpen, setAddGameDialogOpen] = useState(false);
   const [addGame] = useAddGameMutation();
-  const [editGame] = useUpdateGameMutation();
+  const [editGame, editGameResult] = useUpdateGameMutation();
   const [deleteGame] = useDeleteGameMutation();
+
+  const { loading: editGameLoading } = editGameResult;
 
   const onAddGameClose = () => setAddGameDialogOpen(false);
   const onEditGameClose = () => setSelectedGame(null);
@@ -74,6 +76,7 @@ const Page = ({ children, selectedGame, setSelectedGame }: PageProps) => {
               actionText="Save"
               game={selectedGame}
               onSubmit={onEditGameSubmit}
+              loading={editGameLoading}
             />
           }
         />
@@ -89,10 +92,14 @@ const Page = ({ children, selectedGame, setSelectedGame }: PageProps) => {
   );
 };
 
+const StyledProgress = styled(Progress)`
+  position: absolute;
+  top: 50%;
+  right: 50%;
+`;
+
 const Home = () => {
-  const { data } = useQuery<FetchGamesResponse>(FETCH_GAMES, {
-    variables: { collection: "games" },
-  });
+  const { data, loading } = useQuery<FetchGamesResponse>(FETCH_GAMES);
   const games = data?.FetchGames ?? [];
 
   const [selectedGame, setSelectedGame] = useState<GraphQLGame | null>(null);
@@ -103,6 +110,10 @@ const Home = () => {
   const handleGameClick = (game: GraphQLGame) => {
     setSelectedGame(game);
   };
+
+  if (loading) {
+    return <StyledProgress size="5rem" />;
+  }
 
   if (displayMethod === DisplayMethod.BY_PLATFORM) {
     return (

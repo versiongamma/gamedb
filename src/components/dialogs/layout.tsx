@@ -11,6 +11,11 @@ export const StyledDialog = styled(Dialog)`
 export const StyledDialogTitle = styled(DialogTitle)`
   display: flex;
   justify-content: space-between;
+  align-items: center;
+
+  @media screen and (max-width: 900px) {
+    font-size: 0.8rem;
+  }
 `;
 
 export const StyledDialogContents = styled(DialogContent)`

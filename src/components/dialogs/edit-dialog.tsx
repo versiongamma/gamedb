@@ -1,11 +1,9 @@
 import { GraphQLGame } from "@/types";
-import { getFormInputValuesFromGame } from "@/components/form/get-values";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DialogContent, IconButton } from "@mui/material";
 
 import { useState } from "react";
-import AddGameForm, { GameFormData } from "../form/add-game-form";
 import Button from "../input/button";
 import {
   StyledDialog,

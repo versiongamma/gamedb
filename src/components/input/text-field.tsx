@@ -11,10 +11,8 @@ type Props = {
 
 const TextField = styled<Props>(MuiTextField, React.forwardRef)`
   && {
-    margin: 0.8rem;
+    margin: 1rem;
     padding-right: 1.6rem;
-
-    font-weight: 400;
     color: ${button.color};
 
     label {
@@ -30,6 +28,10 @@ const TextField = styled<Props>(MuiTextField, React.forwardRef)`
 
       &.MuiAutocomplete-input {
         padding-left: 12px;
+      }
+
+      @media screen and (max-width: 900px) {
+        font-size: 0.8rem;
       }
     }
 
@@ -49,6 +51,10 @@ const TextField = styled<Props>(MuiTextField, React.forwardRef)`
       &:hover::before {
         border-bottom: none;
       }
+    }
+
+    .MuiFormHelperText-root {
+      margin-bottom: -1.4rem; /* Yes negative margins as bad, but doing it this way is a decent quick fix for the error text pushing the inputs down */
     }
   }
 `;

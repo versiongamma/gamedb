@@ -1,19 +1,12 @@
-import AddDialog from "@/components/dialogs/add-dialog";
-import EditDialog from "@/components/dialogs/edit-dialog";
 import WishlistEntry from "@/components/entry/wishlist-entry";
-import { FETCH_GAMES, FetchGamesResponse } from "@/graphql/fetch-games";
 import {
   FETCH_WISHLIST,
   FetchWishlistResponse,
 } from "@/graphql/fetch-wishlist";
-import { GraphQLGame } from "@/types";
 import { getSortedWishlistItems } from "@/utils/sort";
 import { useQuery } from "@apollo/client";
-import AddIcon from "@mui/icons-material/Add";
 import { Chip, Divider, Fab, Grid } from "@mui/material";
 import { styled } from "goober";
-import Head from "next/head";
-import { useState } from "react";
 
 const StyledFab = styled(Fab)`
   position: fixed;

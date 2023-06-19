@@ -1,17 +1,17 @@
 import { GraphQLGame, Palette, Platform, Region } from "@/types";
 import { Autocomplete } from "@mui/material";
 import { styled } from "goober";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import Button from "../input/button";
 import TextField from "../input/text-field";
-import { getEditFormInputValuesFromGame } from "./get-values";
-
-const Form = styled("div")`
-  display: flex;
-  flex-direction: column;
-  width: 500px;
-  overflow-x: hidden;
-`;
+import Progress from "../progress";
+import {
+  EditFormErrorType,
+  getEditFormInputValuesFromGame,
+  validateEditFormData,
+} from "./get-values";
+import { Form } from "./layout";
 
 type StyledOptionProps = {
   $color: string;
@@ -55,94 +55,159 @@ type Props = {
   actionText: string;
   game: GraphQLGame;
   onSubmit: (data: EditGameFormData) => Promise<void>;
+  loading: boolean;
 };
 
-const EditGameForm = ({ actionText, game, onSubmit }: Props) => {
+const EditGameForm = ({ actionText, game, onSubmit, loading }: Props) => {
+  const [errors, setErrors] = useState<EditFormErrorType[]>([]);
   const defaultValues = getEditFormInputValuesFromGame(game);
-  const { register, handleSubmit, watch, setValue } = useForm<EditGameFormData>(
-    {
-      defaultValues,
-    }
-  );
+  const {
+    register,
+    control,
+    handleSubmit,
+    watch,
+    formState: { isDirty },
+  } = useForm<EditGameFormData>({
+    defaultValues,
+  });
 
   const colorWatch = watch("color");
-  console.log(colorWatch);
-
   const { colorOptions } = game;
 
-  const onColorAutocompleteChange = (
-    _event: React.SyntheticEvent<Element, Event>,
-    value: Palette | null
-  ) => {
-    if (value) {
-      setValue("color", value);
-    }
-  };
+  // Input change callback event
+  useEffect(() => {
+    const subscription = watch((value) => {
+      setErrors(validateEditFormData(value));
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
+
+  const nameErrors = errors
+    .filter(({ input }) => input === "name")
+    .map(({ message }) => message);
+
+  const yearErrors = errors
+    .filter(({ input }) => input === "year")
+    .map(({ message }) => message);
+
+  const platformErrors = errors
+    .filter(({ input }) => input === "platform")
+    .map(({ message }) => message);
+
+  const artErrors = errors
+    .filter(({ input }) => input === "art")
+    .map(({ message }) => message);
+
+  const colorErrors = errors
+    .filter(({ input }) => input === "color")
+    .map(({ message }) => message);
+
+  const regionErrors = errors
+    .filter(({ input }) => input === "color")
+    .map(({ message }) => message);
+
+  const disableSave = !isDirty || !!errors.length;
 
   return (
     <Form>
       <TextField
         variant="filled"
         label="Name"
+        error={!!nameErrors.length}
         {...register("name")}
+        helperText={nameErrors.join(", ")}
         fullWidth
       />
       <TextField
         variant="filled"
         label="Year"
+        error={!!yearErrors.length}
         {...register("year")}
+        helperText={yearErrors.join(", ")}
         fullWidth
       />
-      <Autocomplete
-        options={Object.values(Platform)}
-        defaultValue={defaultValues?.platform}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            variant="filled"
-            label="Platform"
-            {...register("platform")}
-            fullWidth
+      <Controller
+        name="platform"
+        control={control}
+        render={({ field: { onChange, value } }) => (
+          <Autocomplete
+            options={Object.values(Platform)}
+            defaultValue={defaultValues.platform}
+            onChange={(_event, data) => onChange(data)}
+            disableClearable
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                error={!!platformErrors.length}
+                variant="filled"
+                label="Platform"
+                value={value}
+                helperText={platformErrors.join(", ")}
+                fullWidth
+              />
+            )}
           />
         )}
       />
       <TextField
         variant="filled"
         label="Box Art (URL)"
+        error={!!artErrors.length}
         {...register("art")}
+        helperText={artErrors.join(", ")}
         fullWidth
       />
+
       {/** Input for selecting box art palette color */}
-      <Autocomplete
-        options={Object.values(Palette)}
-        defaultValue={defaultValues?.color}
-        onChange={onColorAutocompleteChange}
-        renderOption={(props, option) => (
-          <StyledOption {...props} $color={colorOptions[option]}>
-            {option}
-          </StyledOption>
-        )}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            {...register("color")}
-            label="Colour"
-            variant="filled"
-            fullWidth
-            $background={colorOptions[colorWatch]}
+      <Controller
+        name="color"
+        control={control}
+        render={({ field: { onChange, value } }) => (
+          <Autocomplete
+            options={Object.values(Palette)}
+            defaultValue={defaultValues.color}
+            onChange={(_event, data) => onChange(data)}
+            disableClearable
+            renderOption={(props, option) => (
+              <StyledOption {...props} $color={colorOptions[option]}>
+                {option}
+              </StyledOption>
+            )}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                value={value}
+                label="Colour"
+                variant="filled"
+                error={!!colorErrors.length}
+                helperText={colorErrors.join(", ")}
+                fullWidth
+                $background={colorOptions[colorWatch]}
+              />
+            )}
           />
         )}
       />
-      <Autocomplete
-        options={Object.values(Region)}
-        defaultValue={defaultValues?.region}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            {...register("region")}
-            label="Region"
-            variant="filled"
-            fullWidth
+      <Controller
+        name="region"
+        control={control}
+        render={({ field: { onChange, value } }) => (
+          <Autocomplete
+            options={Object.values(Region)}
+            defaultValue={defaultValues?.region}
+            onChange={(_event, data) => onChange(data)}
+            disableClearable
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                value={value}
+                label="Region"
+                variant="filled"
+                error={!!regionErrors.length}
+                helperText={regionErrors.join(", ")}
+                fullWidth
+              />
+            )}
           />
         )}
       />
@@ -152,7 +217,12 @@ const EditGameForm = ({ actionText, game, onSubmit }: Props) => {
         {...register("variant")}
         fullWidth
       />
-      <Button onClick={handleSubmit(onSubmit)}>{actionText}</Button>
+      <Button
+        onClick={handleSubmit(onSubmit)}
+        disabled={disableSave || loading}
+      >
+        {loading ? <Progress size="1.5rem" /> : actionText}
+      </Button>
     </Form>
   );
 };

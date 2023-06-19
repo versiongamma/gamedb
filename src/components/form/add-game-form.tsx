@@ -4,13 +4,7 @@ import { styled } from "goober";
 import { useForm } from "react-hook-form";
 import Button from "../input/button";
 import TextField from "../input/text-field";
-
-const Form = styled("div")`
-  display: flex;
-  flex-direction: column;
-  width: 500px;
-  overflow-x: hidden;
-`;
+import { Form } from "./layout";
 
 export type GameFormData = {
   name: string;
