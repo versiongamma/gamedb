@@ -9,9 +9,19 @@ export default function Document() {
           name="description"
           content="Version Gamma's Game Collection Database"
         />
-        <meta name="apple-mobile-web-app-capable" content="yes"></meta>
-        <link rel="apple-touch-icon" href="/favicon.ico"></link>
-        <link rel="icon" href="/favicon.ico" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta content="yes" name="mobile-web-app-capable" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover"
+        ></meta>
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.ico?v=2" />
       </Head>
       <body>
         <Main />

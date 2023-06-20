@@ -13,7 +13,13 @@ const StyledToolbar = styled(Toolbar)`
     width: 100vw;
     background-color: rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(1rem);
+    -webkit-backdrop-filter: blur(1rem);
     z-index: 1;
+
+    /* This extra padding is for iOS devices as they have the status bar inside the header */
+    @supports (-webkit-touch-callout: none) {
+      padding-top: 12px;
+    }
   }
 `;
 

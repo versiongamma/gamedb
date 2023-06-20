@@ -84,14 +84,6 @@ const Page = () => {
     }
   };
 
-  if (loadingGames) {
-    return (
-      <PageLoadWrapper>
-        <Progress size="5rem" />
-      </PageLoadWrapper>
-    );
-  }
-
   return (
     <>
       <Head>
@@ -99,11 +91,18 @@ const Page = () => {
       </Head>
       <Header />
       <PageWrapper>
-        <Collection
-          games={games}
-          handleGamesClick={handleGameClick}
-          displayMethod={displayMethod}
-        />
+        {loadingGames ? (
+          <PageLoadWrapper>
+            <Progress size="5rem" />
+          </PageLoadWrapper>
+        ) : (
+          <Collection
+            games={games}
+            handleGamesClick={handleGameClick}
+            displayMethod={displayMethod}
+          />
+        )}
+
         <Fab aria-label="add" onClick={() => setAddGameDialogOpen(true)}>
           <AddIcon />
         </Fab>
