@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import Login from "./login";
+import Login from "../login";
 import { ROUTES } from "./routes";
 
 const StyledTabs = styled(Tabs)`

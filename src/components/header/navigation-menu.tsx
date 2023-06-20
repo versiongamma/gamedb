@@ -3,7 +3,7 @@ import { IconButton, Popover } from "@mui/material";
 import Button, { ButtonProps as MuiButtonProps } from "@mui/material/Button";
 import { useState } from "react";
 
-import Login from "./login";
+import Login from "../login";
 import Link from "next/link";
 import { ROUTES } from "./routes";
 import { useRouter } from "next/router";

@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import Button from "../input/button";
 import TextField from "../input/text-field";
 import { Form } from "./layout";
+import Progress from "../progress";
 
 export type GameFormData = {
   name: string;
@@ -18,9 +19,10 @@ export type GameFormData = {
 type Props = {
   actionText: string;
   onSubmit: (data: GameFormData) => Promise<void>;
+  loading: boolean;
 };
 
-const AddGameForm = ({ actionText, onSubmit }: Props) => {
+const AddGameForm = ({ actionText, onSubmit, loading }: Props) => {
   const { register, handleSubmit } = useForm<GameFormData>();
 
   return (
@@ -73,7 +75,9 @@ const AddGameForm = ({ actionText, onSubmit }: Props) => {
         {...register("variant")}
         fullWidth
       />
-      <Button onClick={handleSubmit(onSubmit)}>{actionText}</Button>
+      <Button onClick={handleSubmit(onSubmit)} disabled={loading}>
+        {loading ? <Progress size="1.5rem" /> : actionText}
+      </Button>
     </Form>
   );
 };

@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
+import Head from "next/head";
 
 import AddDialog from "@/components/dialogs/add-dialog";
 import EditDialog from "@/components/dialogs/edit-dialog";
@@ -8,19 +9,16 @@ import AddGameForm, { GameFormData } from "@/components/form/add-game-form";
 import EditGameForm, {
   EditGameFormData,
 } from "@/components/form/edit-game-form";
+import Header from "@/components/header";
 import Fab from "@/components/input/fab";
+import Progress from "@/components/progress";
 import ByPlatform from "@/components/views/games/by-platform";
-import List from "@/components/views/games/list";
 import useAddGameMutation from "@/components/views/games/use-add-game-mutation";
 import useDeleteGameMutation from "@/components/views/games/use-delete-game-mutation";
 import useUpdateGameMutation from "@/components/views/games/use-edit-game-mutation";
+import { PageLoadWrapper, PageWrapper } from "@/components/views/layout";
 import { FETCH_GAMES, FetchGamesResponse } from "@/graphql/fetch-games";
 import { GraphQLGame } from "@/types";
-import Progress from "@/components/progress";
-import { styled } from "goober";
-import Head from "next/head";
-import Header from "@/components/header";
-import { PageWrapper } from "@/components/views/layout";
 
 enum DisplayMethod {
   BY_PLATFORM,
@@ -56,10 +54,9 @@ const Page = () => {
     useQuery<FetchGamesResponse>(FETCH_GAMES);
   const games = data?.FetchGames ?? [];
 
-  const [addGame] = useAddGameMutation();
-  const [editGame, editGameResult] = useUpdateGameMutation();
-  const { loading: editGameLoading } = editGameResult;
-  const [deleteGame] = useDeleteGameMutation();
+  const [addGame, { loading: addGameLoading }] = useAddGameMutation();
+  const [editGame, { loading: editGameLoading }] = useUpdateGameMutation();
+  const [deleteGame, { loading: deleteGameLoading }] = useDeleteGameMutation();
 
   const handleGameClick = (game: GraphQLGame) => {
     setSelectedGame(game);
@@ -88,7 +85,11 @@ const Page = () => {
   };
 
   if (loadingGames) {
-    return <Progress size="5rem" />;
+    return (
+      <PageLoadWrapper>
+        <Progress size="5rem" />
+      </PageLoadWrapper>
+    );
   }
 
   return (
@@ -111,6 +112,7 @@ const Page = () => {
             game={selectedGame}
             onClose={onEditGameClose}
             onDelete={onDeleteGame}
+            deleteLoading={deleteGameLoading}
             FormElement={
               <EditGameForm
                 actionText="Save"
@@ -125,7 +127,11 @@ const Page = () => {
           open={addGameDialogOpen}
           onClose={onAddGameClose}
           FormElement={
-            <AddGameForm actionText="Add Game" onSubmit={onAddGameSubmit} />
+            <AddGameForm
+              actionText="Add Game"
+              onSubmit={onAddGameSubmit}
+              loading={addGameLoading}
+            />
           }
         />
       </PageWrapper>

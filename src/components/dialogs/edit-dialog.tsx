@@ -10,15 +10,23 @@ import {
   StyledDialogContents,
   StyledDialogTitle,
 } from "./layout";
+import Progress from "../progress";
 
 type Props = {
   game: GraphQLGame;
   onClose: () => void;
   onDelete: () => Promise<void>;
+  deleteLoading: boolean;
   FormElement: React.ReactNode;
 };
 
-const EditDialog = ({ game, onClose, onDelete, FormElement }: Props) => {
+const EditDialog = ({
+  game,
+  onClose,
+  onDelete,
+  deleteLoading,
+  FormElement,
+}: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   return (
@@ -38,10 +46,16 @@ const EditDialog = ({ game, onClose, onDelete, FormElement }: Props) => {
       <StyledDialog open={deleteDialogOpen}>
         <StyledDialogContents>
           <p>Are you sure you want to delete this entry?</p>
-          <span>
-            <Button onClick={onDelete}>Yes</Button>
-            <Button onClick={() => setDeleteDialogOpen(false)}>No</Button>
-          </span>
+          {deleteLoading ? (
+            <Progress />
+          ) : (
+            <span>
+              <Button onClick={onDelete} disabled={deleteLoading}>
+                Yes
+              </Button>
+              <Button onClick={() => setDeleteDialogOpen(false)}>No</Button>{" "}
+            </span>
+          )}
         </StyledDialogContents>
       </StyledDialog>
     </StyledDialog>

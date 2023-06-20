@@ -61,7 +61,7 @@ const useAddGameMutation = () => {
     });
   };
 
-  return [addGame];
+  return [addGame, mutationResult] as const;
 };
 
 export default useAddGameMutation;

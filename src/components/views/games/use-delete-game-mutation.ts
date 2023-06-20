@@ -49,7 +49,7 @@ const useDeleteGameMutation = () => {
     });
   };
 
-  return [deleteGame];
+  return [deleteGame, mutationResult] as const;
 };
 
 export default useDeleteGameMutation;

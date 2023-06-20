@@ -30,8 +30,6 @@ const handler = async (
     {}
   );
 
-  console.log(envVars);
-
   try {
     response.status(200).json(envVars);
   } catch (error) {
