@@ -23,24 +23,18 @@ const StyledTab = styled(Button)`
   font-weight: 600;
 `;
 
-const DesktopNav = () => {
+const NavigationTabs = () => {
   const { pathname } = useRouter();
-  const { data: session } = useSession();
 
   return (
-    <>
-      {session && (
-        <StyledTabs value={pathname}>
-          {ROUTES.map(({ name, path }) => (
-            <StyledTab key={path} value={path} href={path} LinkComponent={Link}>
-              {name}
-            </StyledTab>
-          ))}
-        </StyledTabs>
-      )}
-      <Login />
-    </>
+    <StyledTabs value={pathname}>
+      {ROUTES.map(({ name, path }) => (
+        <StyledTab key={path} value={path} href={path} LinkComponent={Link}>
+          {name}
+        </StyledTab>
+      ))}
+    </StyledTabs>
   );
 };
 
-export default DesktopNav;
+export default NavigationTabs;

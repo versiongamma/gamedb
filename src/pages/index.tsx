@@ -18,25 +18,52 @@ import { FETCH_GAMES, FetchGamesResponse } from "@/graphql/fetch-games";
 import { GraphQLGame } from "@/types";
 import Progress from "@/components/progress";
 import { styled } from "goober";
+import Head from "next/head";
+import Header from "@/components/header";
+import { PageWrapper } from "@/components/views/layout";
 
 enum DisplayMethod {
   BY_PLATFORM,
   LIST,
 }
 
-type PageProps = {
-  children: React.ReactNode;
-  selectedGame: GraphQLGame | null;
-  setSelectedGame: React.Dispatch<React.SetStateAction<GraphQLGame | null>>;
+type CollectionProps = {
+  games: GraphQLGame[];
+  handleGamesClick: (game: GraphQLGame) => void;
+  displayMethod: DisplayMethod;
 };
 
-const Page = ({ children, selectedGame, setSelectedGame }: PageProps) => {
+const Collection = ({
+  games,
+  handleGamesClick,
+  displayMethod,
+}: CollectionProps) => {
+  if (displayMethod === DisplayMethod.BY_PLATFORM) {
+    return <ByPlatform games={games} handleGameClick={handleGamesClick} />;
+  }
+
+  return null;
+};
+
+const Page = () => {
+  const [selectedGame, setSelectedGame] = useState<GraphQLGame | null>(null);
   const [addGameDialogOpen, setAddGameDialogOpen] = useState(false);
+  const [displayMethod, setDisplayMethod] = useState<DisplayMethod>(
+    DisplayMethod.BY_PLATFORM
+  );
+
+  const { data, loading: loadingGames } =
+    useQuery<FetchGamesResponse>(FETCH_GAMES);
+  const games = data?.FetchGames ?? [];
+
   const [addGame] = useAddGameMutation();
   const [editGame, editGameResult] = useUpdateGameMutation();
+  const { loading: editGameLoading } = editGameResult;
   const [deleteGame] = useDeleteGameMutation();
 
-  const { loading: editGameLoading } = editGameResult;
+  const handleGameClick = (game: GraphQLGame) => {
+    setSelectedGame(game);
+  };
 
   const onAddGameClose = () => setAddGameDialogOpen(false);
   const onEditGameClose = () => setSelectedGame(null);
@@ -60,78 +87,50 @@ const Page = ({ children, selectedGame, setSelectedGame }: PageProps) => {
     }
   };
 
+  if (loadingGames) {
+    return <Progress size="5rem" />;
+  }
+
   return (
     <>
-      {children}
-      <Fab aria-label="add" onClick={() => setAddGameDialogOpen(true)}>
-        <AddIcon />
-      </Fab>
-      {selectedGame && (
-        <EditDialog
-          game={selectedGame}
-          onClose={onEditGameClose}
-          onDelete={onDeleteGame}
+      <Head>
+        <title>GameDB</title>
+      </Head>
+      <Header />
+      <PageWrapper>
+        <Collection
+          games={games}
+          handleGamesClick={handleGameClick}
+          displayMethod={displayMethod}
+        />
+        <Fab aria-label="add" onClick={() => setAddGameDialogOpen(true)}>
+          <AddIcon />
+        </Fab>
+        {selectedGame && (
+          <EditDialog
+            game={selectedGame}
+            onClose={onEditGameClose}
+            onDelete={onDeleteGame}
+            FormElement={
+              <EditGameForm
+                actionText="Save"
+                game={selectedGame}
+                onSubmit={onEditGameSubmit}
+                loading={editGameLoading}
+              />
+            }
+          />
+        )}
+        <AddDialog
+          open={addGameDialogOpen}
+          onClose={onAddGameClose}
           FormElement={
-            <EditGameForm
-              actionText="Save"
-              game={selectedGame}
-              onSubmit={onEditGameSubmit}
-              loading={editGameLoading}
-            />
+            <AddGameForm actionText="Add Game" onSubmit={onAddGameSubmit} />
           }
         />
-      )}
-      <AddDialog
-        open={addGameDialogOpen}
-        onClose={onAddGameClose}
-        FormElement={
-          <AddGameForm actionText="Add Game" onSubmit={onAddGameSubmit} />
-        }
-      />
+      </PageWrapper>
     </>
   );
 };
 
-const StyledProgress = styled(Progress)`
-  position: absolute;
-  top: 50%;
-  right: 50%;
-`;
-
-const Home = () => {
-  const { data, loading } = useQuery<FetchGamesResponse>(FETCH_GAMES);
-  const games = data?.FetchGames ?? [];
-
-  const [selectedGame, setSelectedGame] = useState<GraphQLGame | null>(null);
-  const [displayMethod, setDisplayMethod] = useState<DisplayMethod>(
-    DisplayMethod.BY_PLATFORM
-  );
-
-  const handleGameClick = (game: GraphQLGame) => {
-    setSelectedGame(game);
-  };
-
-  if (loading) {
-    return <StyledProgress size="5rem" />;
-  }
-
-  if (displayMethod === DisplayMethod.BY_PLATFORM) {
-    return (
-      <Page selectedGame={selectedGame} setSelectedGame={setSelectedGame}>
-        <ByPlatform games={games} handleGameClick={handleGameClick} />
-      </Page>
-    );
-  }
-
-  if (displayMethod === DisplayMethod.LIST) {
-    return (
-      <Page selectedGame={selectedGame} setSelectedGame={setSelectedGame}>
-        <List games={games} handleGameClick={handleGameClick} />
-      </Page>
-    );
-  }
-
-  return null;
-};
-
-export default Home;
+export default Page;

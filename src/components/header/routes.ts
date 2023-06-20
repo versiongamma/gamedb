@@ -1,4 +1,4 @@
 export const ROUTES = [
-  { path: "/", name: "Collection" },
-  { path: "/wishlist", name: "Wishlist" },
+  { path: "/", name: "COLLECTION" },
+  { path: "/wishlist", name: "WISHLIST" },
 ];

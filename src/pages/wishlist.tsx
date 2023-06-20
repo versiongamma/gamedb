@@ -1,3 +1,4 @@
+import Header from "@/components/header";
 import WishlistEntry from "@/components/entry/wishlist-entry";
 import {
   FETCH_WISHLIST,
@@ -7,12 +8,8 @@ import { getSortedWishlistItems } from "@/utils/sort";
 import { useQuery } from "@apollo/client";
 import { Chip, Divider, Fab, Grid } from "@mui/material";
 import { styled } from "goober";
-
-const StyledFab = styled(Fab)`
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-`;
+import Head from "next/head";
+import { PageWrapper } from "@/components/views/layout";
 
 const StyledDivider = styled(Divider)`
   &.MuiDivider-root::before {
@@ -36,22 +33,27 @@ const Home = () => {
 
   return (
     <>
-      {platforms.map((platform) => (
-        <>
-          <br />
-          <StyledDivider textAlign="left">
-            <Chip label={platform} />
-          </StyledDivider>
-          <Grid container>
-            {gamesByPlatform[platform].map((game) => (
-              <Grid item key={game.id}>
-                <WishlistEntry game={game} onClick={() => {}} />
-              </Grid>
-            ))}
-          </Grid>
-        </>
-      ))}
-      {/* {selectedGame && (
+      <Head>
+        <title>GameDB</title>
+      </Head>
+      <Header />
+      <PageWrapper>
+        {platforms.map((platform) => (
+          <>
+            <br />
+            <StyledDivider textAlign="left">
+              <Chip label={platform} />
+            </StyledDivider>
+            <Grid container>
+              {gamesByPlatform[platform].map((game) => (
+                <Grid item key={game.id}>
+                  <WishlistEntry game={game} onClick={() => {}} />
+                </Grid>
+              ))}
+            </Grid>
+          </>
+        ))}
+        {/* {selectedGame && (
         <EditDialog game={selectedGame} onClose={() => setSelectedGame(null)} />
       )}
       <StyledFab
@@ -65,6 +67,7 @@ const Home = () => {
         open={addGameDialogOpen}
         onClose={() => setAddGameDialogOpen(false)}
       /> */}
+      </PageWrapper>
     </>
   );
 };

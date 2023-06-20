@@ -1,8 +1,8 @@
 import useScreenResolution from "@/hooks/use-screen-resolution";
 import { Toolbar } from "@mui/material";
 import { styled } from "goober";
-import DesktopNav from "./desktop-nav";
-import MobileNav from "./mobile-nav";
+import NavigationTabs from "./navigation-tabs";
+import NavigationMenu from "./navigation-menu";
 
 const StyledToolbar = styled(Toolbar)`
   display: flex;
@@ -23,8 +23,8 @@ const Header = () => {
         backdropFilter: "blur(1rem)",
       }}
     >
-      {isMobileResolution && <MobileNav />}
-      {!isMobileResolution && <DesktopNav />}
+      {!isMobileResolution && <NavigationTabs />}
+      <NavigationMenu />
     </StyledToolbar>
   );
 };

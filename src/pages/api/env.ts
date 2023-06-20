@@ -18,7 +18,7 @@ const handler = async (
   const session = await getServerSession(request, response, authOptions);
 
   if (!session) {
-    response.status(403).json({ message: "Access Denied" });
+    response.status(200).json({});
     return;
   }
 
