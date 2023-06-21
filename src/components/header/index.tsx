@@ -1,9 +1,9 @@
 import useScreenResolution from "@/hooks/use-screen-resolution";
 import { Toolbar } from "@mui/material";
 import { styled } from "goober";
-import { useSession } from "next-auth/react";
 import NavigationMenu from "./navigation-menu";
 import NavigationTabs from "./navigation-tabs";
+import useDevice from "@/hooks/use-device";
 
 const StyledToolbar = styled(Toolbar)`
   && {
@@ -16,19 +16,27 @@ const StyledToolbar = styled(Toolbar)`
     -webkit-backdrop-filter: blur(1rem);
     z-index: 1;
 
-    /* This extra padding is for iOS devices as they have the status bar inside the header */
-    @supports (-webkit-touch-callout: none) {
-      padding-top: 12px;
+    /** Selects iOS devices with the site open as a PWA*/
+    @supports (-webkit-touch-callout: none) and (display-mode: standalone) {
+      padding-top: 24px;
+
+      @media screen and (max-width: 900px) {
+        padding-top: 12px;
+      }
     }
   }
 `;
 
 const Header = () => {
   const { isMobileResolution } = useScreenResolution();
-  const { data: session } = useSession();
+  const {
+    os: { name: os },
+  } = useDevice();
+
+  console.log(os);
 
   return (
-    <StyledToolbar sx={{}}>
+    <StyledToolbar>
       {!isMobileResolution && <NavigationTabs />}
       <NavigationMenu />
     </StyledToolbar>
