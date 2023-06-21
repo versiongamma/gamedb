@@ -18,7 +18,6 @@ const ENV = process.env.NEXT_PUBLIC_ENV;
 
 const Page = ({ Component, ...pageProps }: AppProps) => {
   const { data: session } = useSession();
-  const { token } = session ?? {};
 
   const client = useMemo(() => {
     const httpLink = new HttpLink({ uri: GRAPHQL_URL });
@@ -26,7 +25,7 @@ const Page = ({ Component, ...pageProps }: AppProps) => {
       return {
         headers: {
           ...headers,
-          authorization: `Bearer ${token}`,
+          authorization: `Bearer ${session?.token}`,
         },
       };
     });
@@ -37,7 +36,7 @@ const Page = ({ Component, ...pageProps }: AppProps) => {
       connectToDevTools: ENV !== "prod",
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [session]);
 
   if (!session) {
     return (
