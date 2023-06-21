@@ -16,7 +16,7 @@ export default function Document() {
           content="black-translucent"
         />
         <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/ios/128.png" />
         <link rel="icon" href="/favicon.ico?v=2" />
       </Head>
       <body>
