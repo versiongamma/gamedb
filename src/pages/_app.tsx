@@ -4,12 +4,10 @@ import { shouldForwardProp } from "goober/should-forward-prop";
 import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
 import { Assistant } from "next/font/google";
-import { createElement, useMemo } from "react";
+import { createElement } from "react";
 
-import useEnv from "@/hooks/use-env";
-import theme from "@/theme";
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import Page from "@/components/page";
+import theme from "@/theme";
 
 const DEFAULT_BACKGROUND_IMAGE = "https://i.imgur.com/5pHkLhw.jpg";
 

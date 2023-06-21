@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -H 192.168.1.237",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -30,6 +30,7 @@
     "firebase-admin": "11.7.0",
     "goober": "2.1.13",
     "graphql": "16.6.0",
+    "jwt-simple": "^0.5.6",
     "next": "13.4.6",
     "next-auth": "4.22.1",
     "node-vibrant": "3.2.1-alpha.1",

@@ -1,25 +1,43 @@
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import {
+  ApolloClient,
+  ApolloProvider,
+  HttpLink,
+  InMemoryCache,
+  from,
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 import { useSession } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { useMemo } from "react";
 
-import useEnv from "@/hooks/use-env";
 import Login from "./login";
 import { PageLoadWrapper } from "./views/layout";
 
-const Page = ({ Component, ...pageProps }: AppProps) => {
-  const { ENV, GRAPHQL_URL } = useEnv();
-  const { data: session } = useSession();
+const GRAPHQL_URL = process.env.NEXT_PUBLIC_GRAPHQL_URL;
+const ENV = process.env.NEXT_PUBLIC_ENV;
 
-  const client = useMemo(
-    () =>
-      new ApolloClient({
-        uri: GRAPHQL_URL,
-        cache: new InMemoryCache(),
-        connectToDevTools: ENV !== "prod",
-      }),
-    [GRAPHQL_URL, ENV]
-  );
+const Page = ({ Component, ...pageProps }: AppProps) => {
+  const { data: session } = useSession();
+  const { token } = session ?? {};
+
+  const client = useMemo(() => {
+    const httpLink = new HttpLink({ uri: GRAPHQL_URL });
+    const authMiddleware = setContext((_operation, { headers }) => {
+      return {
+        headers: {
+          ...headers,
+          authorization: `Bearer ${token}`,
+        },
+      };
+    });
+
+    return new ApolloClient({
+      link: from([authMiddleware, httpLink]),
+      cache: new InMemoryCache(),
+      connectToDevTools: ENV !== "prod",
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!session) {
     return (
