@@ -2,14 +2,14 @@ import { styled } from "goober";
 
 export const PageWrapper = styled("div")`
   && {
-    padding-top: 64px;
+    padding-top: calc(env(safe-area-inset-top) + 64px);
     height: 100vh;
     overflow-y: auto;
     -ms-overflow-style: none;
     scrollbar-width: none;
 
     @media screen and (max-width: 900px) {
-      padding-top: 40px;
+      padding-top: calc(env(safe-area-inset-top) + 30px);
     }
 
     ::-webkit-scrollbar {

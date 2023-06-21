@@ -12,7 +12,7 @@ type Props = {
 
 const AddDialog = ({ open, onClose, FormElement }: Props) => {
   return (
-    <StyledDialog open={open}>
+    <StyledDialog open={open} onClose={onClose}>
       <StyledDialogTitle>
         Add Game
         <IconButton onClick={onClose}>

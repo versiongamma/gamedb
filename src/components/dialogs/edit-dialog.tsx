@@ -1,7 +1,7 @@
 import { GraphQLGame } from "@/types";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { DialogContent, IconButton } from "@mui/material";
+import { ClickAwayListener, DialogContent, IconButton } from "@mui/material";
 
 import { useState } from "react";
 import Button from "../input/button";
@@ -30,7 +30,7 @@ const EditDialog = ({
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   return (
-    <StyledDialog open>
+    <StyledDialog open onClose={onClose}>
       <StyledDialogTitle>
         {game.id}
         <span>

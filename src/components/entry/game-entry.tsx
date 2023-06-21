@@ -43,12 +43,13 @@ const DetailsWrapper = styled("div")`
   align-items: center;
 `;
 
-type ArtProps = {
-  $isMobile?: boolean;
-} & React.ImgHTMLAttributes<HTMLImageElement>;
+const Art = styled("img")`
+  height: 210px;
 
-const Art = styled<ArtProps>("img")`
-  height: ${({ $isMobile }) => ($isMobile ? "100px" : "210px")};
+  @media screen and (max-width: 900px) {
+    height: 100px;
+    border-radius: 0.3rem;
+  }
 `;
 
 type Props = {
@@ -67,7 +68,7 @@ const GameEntry = ({ game, onClick }: Props) => {
           <Header name={name} platform={platform} region={region} />
         )}
         <DetailsWrapper>
-          <Art src={art} $isMobile={isMobileResolution} />
+          <Art src={art} />
           {variant && !isMobileResolution && <Variant variant={variant} />}
         </DetailsWrapper>
       </Wrapper>
