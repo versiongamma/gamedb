@@ -1,9 +1,9 @@
-import { signIn, getProviders, useSession, signOut } from "next-auth/react";
-import { useEffect, useState } from "react";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { getProviders, signIn, signOut, useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 
-import Button from "./button";
+import Button from "./input/button";
 
 const Login = () => {
   const [providerId, setProviderId] = useState("");
