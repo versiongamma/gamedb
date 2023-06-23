@@ -3,13 +3,12 @@ import { IconButton, Popover } from "@mui/material";
 import Button, { ButtonProps as MuiButtonProps } from "@mui/material/Button";
 import { useState } from "react";
 
-import Login from "../login";
-import Link from "next/link";
-import { ROUTES } from "./routes";
-import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
-import { styled } from "goober";
 import useScreenResolution from "@/hooks/use-screen-resolution";
+import { styled } from "goober";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import Login from "../login";
+import { ROUTES } from "./routes";
 
 const StyledPopover = styled(Popover)`
   && {
@@ -45,7 +44,6 @@ const NavigationMenu = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const { pathname } = useRouter();
-  const { data: session } = useSession();
   const { isMobileResolution } = useScreenResolution();
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
