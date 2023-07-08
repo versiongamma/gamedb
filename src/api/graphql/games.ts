@@ -119,3 +119,24 @@ export const deleteGame = async (args: DeleteGameArguments) => {
     success: !!result,
   };
 };
+
+export type UpdateGameOrderArguments = {
+  order: {
+    id: string;
+    index: number;
+  }[];
+};
+
+export const updateGameOrder = async (args: UpdateGameOrderArguments) => {
+  const { order } = args;
+  const batch = db.batch();
+  await Promise.all(
+    order.map(async ({ id, index }) => {
+      const game = await db.collection(GAME_COLLECTION_PATH).doc(id);
+      batch.update(game, { indexInPlatform: index });
+    })
+  );
+
+  await batch.commit();
+  return { order };
+};

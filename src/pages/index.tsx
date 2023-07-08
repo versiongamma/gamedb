@@ -19,6 +19,7 @@ import useUpdateGameMutation from "@/components/views/games/use-edit-game-mutati
 import { PageLoadWrapper, PageWrapper } from "@/components/views/layout";
 import { FETCH_GAMES, FetchGamesResponse } from "@/graphql/fetch-games";
 import { GraphQLGame } from "@/types";
+import useGames from "@/hooks/use-games";
 
 enum DisplayMethod {
   BY_PLATFORM,
@@ -26,18 +27,13 @@ enum DisplayMethod {
 }
 
 type CollectionProps = {
-  games: GraphQLGame[];
   handleGamesClick: (game: GraphQLGame) => void;
   displayMethod: DisplayMethod;
 };
 
-const Collection = ({
-  games,
-  handleGamesClick,
-  displayMethod,
-}: CollectionProps) => {
+const Collection = ({ handleGamesClick, displayMethod }: CollectionProps) => {
   if (displayMethod === DisplayMethod.BY_PLATFORM) {
-    return <ByPlatform games={games} handleGameClick={handleGamesClick} />;
+    return <ByPlatform handleGameClick={handleGamesClick} />;
   }
 
   return null;
@@ -49,10 +45,6 @@ const Page = () => {
   const [displayMethod, setDisplayMethod] = useState<DisplayMethod>(
     DisplayMethod.BY_PLATFORM
   );
-
-  const { data, loading: loadingGames } =
-    useQuery<FetchGamesResponse>(FETCH_GAMES);
-  const games = data?.FetchGames ?? [];
 
   const [addGame, { loading: addGameLoading }] = useAddGameMutation();
   const [editGame, { loading: editGameLoading }] = useUpdateGameMutation();
@@ -84,6 +76,8 @@ const Page = () => {
     }
   };
 
+  const { loading } = useGames();
+
   return (
     <>
       <Head>
@@ -91,13 +85,12 @@ const Page = () => {
       </Head>
       <Header />
       <PageWrapper>
-        {loadingGames ? (
+        {loading ? (
           <PageLoadWrapper>
             <Progress size="5rem" />
           </PageLoadWrapper>
         ) : (
           <Collection
-            games={games}
             handleGamesClick={handleGameClick}
             displayMethod={displayMethod}
           />

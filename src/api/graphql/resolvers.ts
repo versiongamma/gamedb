@@ -3,10 +3,12 @@ import {
   AddGameArguments,
   DeleteGameArguments,
   EditGameArguments,
+  UpdateGameOrderArguments,
   addGame,
   deleteGame,
   editGame,
   fetchGames,
+  updateGameOrder,
 } from "@/api/graphql/games";
 import { fetchWishlist } from "@/api/graphql/wishlist";
 import { Game } from "@/types";
@@ -24,6 +26,8 @@ const resolvers = {
       _parent: DeleteGameMutationResponse,
       args: DeleteGameArguments
     ) => deleteGame(args),
+    UpdateGameOrder: (_parent: boolean, args: UpdateGameOrderArguments) =>
+      updateGameOrder(args),
   },
 };
 

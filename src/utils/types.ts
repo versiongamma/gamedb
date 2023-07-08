@@ -1,7 +1,7 @@
 import { Platform, Region } from "@/types";
 
 export const REGION_LABEL_MAP: Record<Region, string> = {
-  [Region.AUNZ]: "PAL (AU/NZ)",
+  [Region.AUNZ]: "PAL-AU/NZ",
   [Region.EU]: "PAL",
   [Region.JA]: "NTSC-J",
   [Region.US]: "NTSC-U",

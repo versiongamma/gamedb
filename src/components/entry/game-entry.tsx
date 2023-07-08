@@ -1,11 +1,13 @@
-import { GraphQLGame } from "@/types";
-
 import useScreenResolution from "@/hooks/use-screen-resolution";
+import { GraphQLGame } from "@/types";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { styled } from "goober";
+import React from "react";
 import Header from "./header";
 import Variant from "./variant";
 
-const Button = styled("button")`
+const Button = styled("div", React.forwardRef)`
   background: none;
   color: inherit;
   border: none;
@@ -54,25 +56,61 @@ const Art = styled("img")`
 
 type Props = {
   game: GraphQLGame;
+  index?: number;
   onClick: (game: GraphQLGame) => void;
+  moveTo?: (fromIndex: number, toIndex: number) => void;
+  style?: Record<string, string | number | undefined>;
 };
 
-const GameEntry = ({ game, onClick }: Props) => {
-  const { name, platform, region, art, variant, color } = game;
-  const { isMobileResolution } = useScreenResolution();
+const GameEntry = React.forwardRef<HTMLDivElement, Props>(
+  ({ game, index, onClick, moveTo, style, ...props }: Props, ref) => {
+    const { name, platform, region, art, variant, color } = game;
+    const { isMobileResolution } = useScreenResolution();
+
+    return (
+      <div ref={ref} style={style} {...props}>
+        <Button onClick={() => onClick(game)}>
+          <Wrapper $color={color} $isMobile={isMobileResolution}>
+            {!isMobileResolution && (
+              <Header name={name} platform={platform} region={region} />
+            )}
+            <DetailsWrapper>
+              <Art src={art} />
+              {variant && !isMobileResolution && <Variant variant={variant} />}
+            </DetailsWrapper>
+          </Wrapper>
+        </Button>
+      </div>
+    );
+  }
+);
+GameEntry.displayName = "GameEntry";
+
+export const SortableGameEntry = (props: Props) => {
+  const { game } = props;
+  const {
+    attributes,
+    setNodeRef,
+    listeners,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: game.id });
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    opacity: isDragging ? 0.5 : undefined,
+    transition,
+  };
 
   return (
-    <Button onClick={() => onClick(game)}>
-      <Wrapper $color={color} $isMobile={isMobileResolution}>
-        {!isMobileResolution && (
-          <Header name={name} platform={platform} region={region} />
-        )}
-        <DetailsWrapper>
-          <Art src={art} />
-          {variant && !isMobileResolution && <Variant variant={variant} />}
-        </DetailsWrapper>
-      </Wrapper>
-    </Button>
+    <GameEntry
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      {...props}
+    />
   );
 };
 

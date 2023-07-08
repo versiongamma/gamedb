@@ -17,8 +17,9 @@ const useScreenResolution = () => {
   }, []);
 
   const isMobileResolution = windowWidth < 900;
+  const isTabletResolution = windowWidth < 1200;
 
-  return { isMobileResolution };
+  return { isMobileResolution, isTabletResolution };
 };
 
 export default useScreenResolution;

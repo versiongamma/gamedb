@@ -1,11 +1,10 @@
 import { GraphQLGame } from "@/types";
 import { gql, useMutation } from "@apollo/client";
 
-import { GameFormData } from "../../form/add-game-form";
 import { EditGameArguments } from "@/api/graphql/games";
 
 const EDIT_GAME = gql`
-  mutation EditGame($id: String!, $gameData: EditGameData!) {
+  mutation EditGame($id: String!, $gameData: EditGameDataInput!) {
     EditGame(id: $id, gameData: $gameData) {
       id
       name
