@@ -9,8 +9,6 @@ import { createElement } from "react";
 import Page from "@/components/page";
 import theme from "@/theme";
 import Head from "next/head";
-import { HTML5toTouch } from "rdndmb-html5-to-touch";
-import { DndProvider } from "react-dnd-multi-backend";
 
 const DEFAULT_BACKGROUND_IMAGE = "https://i.imgur.com/5pHkLhw.jpg";
 

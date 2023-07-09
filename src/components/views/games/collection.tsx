@@ -1,28 +1,24 @@
-import { GraphQLGame } from "@/types";
-import { PLATFORMS_BY_YEAR } from "@/utils/types";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Chip, Collapse, Divider } from "@mui/material";
-import { styled } from "goober";
-import { useState } from "react";
 import {
   DndContext,
   DragOverEvent,
   DragOverlay,
-  KeyboardSensor,
+  DragStartEvent,
   PointerSensor,
   pointerWithin,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import {
-  SortableContext,
-  arrayMove,
-  sortableKeyboardCoordinates,
-} from "@dnd-kit/sortable";
+import { SortableContext, arrayMove } from "@dnd-kit/sortable";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Chip, Collapse, Divider } from "@mui/material";
+import { styled } from "goober";
+import { useState } from "react";
 
 import useGames from "@/hooks/use-games";
+import { GraphQLGame } from "@/types";
 import { getGamesByPlatform } from "@/utils/sort";
+import { PLATFORMS_BY_YEAR } from "@/utils/types";
 import GameEntry, { SortableGameEntry } from "../../entry/game-entry";
 import useUpdateGameOrderMutation from "./use-update-game-order";
 
@@ -52,12 +48,11 @@ const PlatformDisplay = ({
   const [open, setOpen] = useState(true);
   const [updateGameOrder] = useUpdateGameOrderMutation();
 
-  const moveTo = async (fromIndex: number, toIndex: number) => {
-    updateGameOrder(
-      sortedGames.map(({ id }) => id),
-      fromIndex,
-      toIndex
-    );
+  const sensors = useSensors(useSensor(PointerSensor));
+
+  const handleDragStart = (event: DragStartEvent) => {
+    const { active } = event;
+    setActiveGame(games.find(({ id }) => id === active.id) ?? null);
   };
 
   const handleDragOver = (event: DragOverEvent) => {
@@ -67,18 +62,20 @@ const PlatformDisplay = ({
       setSortedGames((games) => {
         const oldIndex = games.findIndex(({ id }) => id === active.id);
         const newIndex = games.findIndex(({ id }) => id === over.id);
-
         return arrayMove(games, oldIndex, newIndex);
       });
     }
   };
 
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
+  const handleDragCancel = () => {
+    setActiveGame(null);
+  };
+
+  const handleDragEnd = () => {
+    const order = sortedGames.map(({ id }, index) => ({ id, index }));
+    updateGameOrder({ order });
+    handleDragCancel();
+  };
 
   return (
     <>
@@ -94,7 +91,10 @@ const PlatformDisplay = ({
       <Collapse in={open}>
         <DndContext
           sensors={sensors}
+          onDragStart={handleDragStart}
           onDragOver={handleDragOver}
+          onDragEnd={handleDragEnd}
+          onDragCancel={handleDragCancel}
           collisionDetection={pointerWithin}
         >
           <div style={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
@@ -103,9 +103,7 @@ const PlatformDisplay = ({
                 <SortableGameEntry
                   key={game.id}
                   game={game}
-                  index={game.indexInPlatform ?? 0}
                   onClick={handleGameClick}
-                  moveTo={moveTo}
                 />
               ))}
               <DragOverlay>
@@ -125,7 +123,7 @@ type Props = {
   handleGameClick: (game: GraphQLGame) => void;
 };
 
-const ByPlatform = ({ handleGameClick }: Props) => {
+const Collection = ({ handleGameClick }: Props) => {
   const { games: cache } = useGames();
   const games = [...(cache ?? [])];
 
@@ -153,4 +151,4 @@ const ByPlatform = ({ handleGameClick }: Props) => {
   );
 };
 
-export default ByPlatform;
+export default Collection;
