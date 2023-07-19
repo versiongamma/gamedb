@@ -21,20 +21,24 @@ const Login = () => {
     get();
   });
 
-  if (!providerId) {
-    return null;
-  }
-
   if (session) {
     return (
-      <Button onClick={() => signOut()} endIcon={<LogoutIcon />}>
+      <Button
+        onClick={() => signOut()}
+        endIcon={<LogoutIcon />}
+        disabled={!providerId}
+      >
         Logout
       </Button>
     );
   }
 
   return (
-    <Button onClick={() => signIn(providerId)} endIcon={<LoginIcon />}>
+    <Button
+      onClick={() => signIn(providerId)}
+      endIcon={<LoginIcon />}
+      disabled={!providerId}
+    >
       Login
     </Button>
   );

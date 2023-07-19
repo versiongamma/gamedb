@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 
+export const SCREEN_MIN_XS = 900;
+export const SCREEN_MIN_MD = 1200;
+
 const useScreenResolution = () => {
   const [windowWidth, setWindowWidth] = useState(900);
 
@@ -16,9 +19,10 @@ const useScreenResolution = () => {
     };
   }, []);
 
-  const isMobileResolution = windowWidth < 900;
+  const isMobileResolution = windowWidth < SCREEN_MIN_XS;
+  const isTabletResolution = windowWidth < SCREEN_MIN_MD;
 
-  return { isMobileResolution };
+  return { isMobileResolution, isTabletResolution };
 };
 
 export default useScreenResolution;

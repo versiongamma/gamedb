@@ -65,6 +65,7 @@ const NavigationMenu = () => {
           open={open}
           onClose={() => setOpen(false)}
           anchorEl={anchorEl}
+          keepMounted
           anchorOrigin={{
             vertical: "bottom",
             horizontal: "right",

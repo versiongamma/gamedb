@@ -11,13 +11,14 @@ const typeDefs = `#graphql
     type Game {
       id: String!
       name: String!
-      year: Float!
+      year: Int!
       region: String!
       platform: String!
       art: String
       color: String!
       colorOptions: Palette
       variant: String
+      indexInPlatform: Int
     }
 
     type WishlistItem {
@@ -28,7 +29,7 @@ const typeDefs = `#graphql
       variant: String
     }
 
-    input AddGameData {
+    input AddGameDataInput {
       name: String!
       year: String!
       platform: String!
@@ -37,7 +38,7 @@ const typeDefs = `#graphql
       variant: String
     }
 
-    input EditGameData {
+    input EditGameDataInput {
       name: String!
       year: String!
       platform: String!
@@ -47,9 +48,23 @@ const typeDefs = `#graphql
       variant: String
     }
 
+    type GameOrder {
+      id: String!
+      indexInPlatform: Int!
+    }
+
+    input GameOrderInput {
+      id: String!
+      indexInPlatform: Int!
+    }
+
     type DeleteGameResponse {
       id: String!
       success: Boolean!
+    }
+
+    type UpdateGameOrderResponse {
+      order: [GameOrder!]!
     }
 
     type Query {
@@ -58,9 +73,10 @@ const typeDefs = `#graphql
     }
 
     type Mutation {
-      EditGame(id: String!, gameData: EditGameData!): Game!
-      AddGame(gameData: AddGameData!): Game!
+      EditGame(id: String!, gameData: EditGameDataInput!): Game!
+      AddGame(gameData: AddGameDataInput!): Game!
       DeleteGame(id: String!): DeleteGameResponse!
+      UpdateGameOrder(order: [GameOrderInput!]!): UpdateGameOrderResponse!
     }
 `;
 
