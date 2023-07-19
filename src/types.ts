@@ -47,6 +47,7 @@ export type Game = {
   color: string;
   colorOptions: Record<Palette, string>;
   variant?: string;
+  indexInPlatform?: number;
 };
 
 export type GraphQLGame = Game & { __typename: string };

@@ -21,7 +21,7 @@ const Page = ({ Component, ...pageProps }: AppProps) => {
 
   const client = useMemo(() => {
     const httpLink = new HttpLink({ uri: GRAPHQL_URL });
-    const authMiddleware = setContext((_operation, { headers }) => {
+    const authMiddleware = setContext((_, { headers }) => {
       return {
         headers: {
           ...headers,

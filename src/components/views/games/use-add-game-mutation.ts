@@ -5,7 +5,7 @@ import { GameFormData } from "../../form/add-game-form";
 import { FETCH_GAMES, FetchGamesResponse } from "@/graphql/fetch-games";
 
 const ADD_GAME = gql`
-  mutation AddGame($gameData: AddGameData!) {
+  mutation AddGame($gameData: AddGameDataInput!) {
     AddGame(gameData: $gameData) {
       id
       name
