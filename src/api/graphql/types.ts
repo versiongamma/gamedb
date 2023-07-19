@@ -50,12 +50,12 @@ const typeDefs = `#graphql
 
     type GameOrder {
       id: String!
-      index: Int!
+      indexInPlatform: Int!
     }
 
     input GameOrderInput {
       id: String!
-      index: Int!
+      indexInPlatform: Int!
     }
 
     type DeleteGameResponse {

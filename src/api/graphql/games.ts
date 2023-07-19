@@ -123,7 +123,7 @@ export const deleteGame = async (args: DeleteGameArguments) => {
 export type UpdateGameOrderArguments = {
   order: {
     id: string;
-    index: number;
+    indexInPlatform: number;
   }[];
 };
 
@@ -131,9 +131,9 @@ export const updateGameOrder = async (args: UpdateGameOrderArguments) => {
   const { order } = args;
   const batch = db.batch();
   await Promise.all(
-    order.map(async ({ id, index }) => {
+    order.map(async ({ id, indexInPlatform }) => {
       const game = await db.collection(GAME_COLLECTION_PATH).doc(id);
-      batch.update(game, { indexInPlatform: index });
+      batch.update(game, { indexInPlatform });
     })
   );
 

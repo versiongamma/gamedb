@@ -72,7 +72,10 @@ const PlatformDisplay = ({
   };
 
   const handleDragEnd = () => {
-    const order = sortedGames.map(({ id }, index) => ({ id, index }));
+    const order = sortedGames.map(({ id }, index) => ({
+      id,
+      indexInPlatform: index,
+    }));
     updateGameOrder({ order });
     handleDragCancel();
   };

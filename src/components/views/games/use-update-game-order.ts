@@ -7,7 +7,7 @@ const UPDATE_GAME_ORDER = gql`
     UpdateGameOrder(order: $order) {
       order {
         id
-        index
+        indexInPlatform
       }
     }
   }
@@ -17,7 +17,7 @@ export type UpdateGameOrderMutationResponse = {
   UpdateGameOrder: {
     order: {
       id: string;
-      index: number;
+      indexInPlatform: number;
     }[];
   };
 };
