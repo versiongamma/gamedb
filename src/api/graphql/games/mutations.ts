@@ -1,10 +1,9 @@
-import { Game, Palette, Platform, Region } from "@/types";
+import db from "@/api/primitives/db";
 import { GameFormData } from "@/components/form/add-game-form";
-import db from "../primitives/db";
-import Vibrant from "node-vibrant";
+import { Game, Palette, Platform, Region } from "@/types";
 import { Palette as VibrantPalette } from "@vibrant/color";
+import Vibrant from "node-vibrant";
 
-const DEFAULT_GAME_COLLECTION_PATH = "games";
 const DEFAULT_ART_COLOR = "#303030";
 const DEFAULT_PALETTE_SELECTION = Palette.DARK_VIBRANT;
 const DEFAULT_PALETTE = {
@@ -16,18 +15,10 @@ const DEFAULT_PALETTE = {
   DarkMuted: DEFAULT_ART_COLOR,
 };
 
-type GameWithoutId = Omit<Game, "id">;
+const DEFAULT_GAME_COLLECTION_PATH = "games";
 const { GAME_COLLECTION_PATH = DEFAULT_GAME_COLLECTION_PATH } = process.env;
 
-export const fetchGames = async (): Promise<Game[]> => {
-  const response = await db.collection(GAME_COLLECTION_PATH).get();
-  const games = response.docs.map((entry) => ({
-    id: entry.id,
-    ...(entry.data() as Omit<Game, "id">),
-  }));
-
-  return games;
-};
+type GameWithoutId = Omit<Game, "id">;
 
 const getArtPalette = async (art?: string): Promise<VibrantPalette | null> => {
   try {

@@ -1,5 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
-import { DeleteGameArguments } from "@/api/graphql/games";
+import { DeleteGameArguments } from "@/api/graphql/games/mutations";
 import { FETCH_GAMES, FetchGamesResponse } from "@/graphql/fetch-games";
 
 const DELETE_GAME = gql`
