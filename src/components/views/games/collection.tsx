@@ -13,7 +13,7 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Chip, Collapse, Divider } from "@mui/material";
 import { styled } from "goober";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import useGames from "@/hooks/use-games";
 import { GraphQLGame } from "@/types";
@@ -42,11 +42,15 @@ const PlatformDisplay = ({
   handleGameClick,
 }: PlatformDisplayProps) => {
   const [activeGame, setActiveGame] = useState<GraphQLGame | null>(null);
-  const [sortedGames, setSortedGames] = useState(
-    games.sort((a, b) => (a.indexInPlatform ?? 0) - (b.indexInPlatform ?? 0))
-  );
+  const [sortedGames, setSortedGames] = useState<GraphQLGame[]>([]);
   const [open, setOpen] = useState(true);
   const [updateGameOrder] = useUpdateGameOrderMutation();
+
+  useEffect(() => {
+    setSortedGames(
+      games.sort((a, b) => (a.indexInPlatform ?? 0) - (b.indexInPlatform ?? 0))
+    );
+  }, [games]);
 
   const sensors = useSensors(useSensor(PointerSensor));
 

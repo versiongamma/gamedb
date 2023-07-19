@@ -6,7 +6,8 @@ export const YEAR_REGEX = /[0-9]+/;
 export const getEditFormInputValuesFromGame = (
   game: GraphQLGame
 ): EditGameFormData => {
-  const { id, __typename, colorOptions, ...gameWithoutIdOrTypename } = game;
+  const { id, __typename, indexInPlatform, colorOptions, ...gameFormFields } =
+    game;
   const { color } = game;
   const paletteOption = colorOptions
     ? Object.keys(colorOptions)
@@ -18,7 +19,7 @@ export const getEditFormInputValuesFromGame = (
     : Palette.DARK_VIBRANT;
 
   return {
-    ...gameWithoutIdOrTypename,
+    ...gameFormFields,
     year: game.year.toString(),
     variant: game?.variant ?? "",
     color: paletteOption as Palette,

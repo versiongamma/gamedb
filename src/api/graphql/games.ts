@@ -2,10 +2,19 @@ import { Game, Palette, Platform, Region } from "@/types";
 import { GameFormData } from "@/components/form/add-game-form";
 import db from "../primitives/db";
 import Vibrant from "node-vibrant";
+import { Palette as VibrantPalette } from "@vibrant/color";
 
 const DEFAULT_GAME_COLLECTION_PATH = "games";
 const DEFAULT_ART_COLOR = "#303030";
-const DEFAULT_ART_PALETTE = Palette.DARK_VIBRANT;
+const DEFAULT_PALETTE_SELECTION = Palette.DARK_VIBRANT;
+const DEFAULT_PALETTE = {
+  Vibrant: DEFAULT_ART_COLOR,
+  Muted: DEFAULT_ART_COLOR,
+  LightVibrant: DEFAULT_ART_COLOR,
+  DarkVibrant: DEFAULT_ART_COLOR,
+  LightMuted: DEFAULT_ART_COLOR,
+  DarkMuted: DEFAULT_ART_COLOR,
+};
 
 type GameWithoutId = Omit<Game, "id">;
 const { GAME_COLLECTION_PATH = DEFAULT_GAME_COLLECTION_PATH } = process.env;
@@ -20,14 +29,23 @@ export const fetchGames = async (): Promise<Game[]> => {
   return games;
 };
 
+const getArtPalette = async (art?: string): Promise<VibrantPalette | null> => {
+  try {
+    const palette = await Vibrant.from(art ?? "").getPalette();
+    return palette;
+  } catch {
+    return null;
+  }
+};
+
 const getGameFromInput = async (
   gameData: GameFormData,
   paletteOption?: Palette
 ): Promise<GameWithoutId> => {
-  const palette = await Vibrant.from(gameData.art).getPalette();
+  const palette = await getArtPalette(gameData?.art);
   const colorOptions: Record<Palette, string> = Object.values(Palette).reduce(
     (memo, option) => {
-      const color = palette[option]?.hex;
+      const color = palette && palette[option]?.hex;
 
       if (color) {
         memo[option] = color;
@@ -35,21 +53,15 @@ const getGameFromInput = async (
 
       return memo;
     },
-    {
-      Vibrant: DEFAULT_ART_COLOR,
-      Muted: DEFAULT_ART_COLOR,
-      LightVibrant: DEFAULT_ART_COLOR,
-      DarkVibrant: DEFAULT_ART_COLOR,
-      LightMuted: DEFAULT_ART_COLOR,
-      DarkMuted: DEFAULT_ART_COLOR,
-    }
+    DEFAULT_PALETTE
   );
 
   return {
     ...gameData,
     year: Number(gameData.year),
     color:
-      palette[paletteOption ?? DEFAULT_ART_PALETTE]?.hex ?? DEFAULT_ART_COLOR,
+      (palette && palette[paletteOption ?? DEFAULT_PALETTE_SELECTION]?.hex) ??
+      DEFAULT_ART_COLOR,
     colorOptions,
   };
 };
@@ -100,8 +112,10 @@ export const editGame = async (args: EditGameArguments): Promise<Game> => {
     ...game,
   };
 
-  await db.collection(GAME_COLLECTION_PATH).doc(id).update(updatedGame);
-  return { ...updatedGame };
+  const doc = await db.collection(GAME_COLLECTION_PATH).doc(id);
+  await doc.update(updatedGame);
+  const result = await doc.get();
+  return { id: result.id, ...(result.data() as Omit<Game, "id">) };
 };
 
 export type DeleteGameArguments = {
