@@ -2,6 +2,7 @@ import { GraphQLGame } from "@/types";
 import { gql, useMutation } from "@apollo/client";
 
 import { EditGameArguments } from "@/api/graphql/games";
+import { gameFields } from "@/graphql/fetch-games";
 
 const EDIT_GAME = gql`
   mutation EditGame($id: String!, $gameData: EditGameDataInput!) {
@@ -22,12 +23,13 @@ const EDIT_GAME = gql`
         DarkMuted
       }
       variant
+      indexInPlatform
     }
   }
 `;
 
 export type EditGameMutationResponse = {
-  UpdateGame: GraphQLGame;
+  EditGame: GraphQLGame;
 };
 
 const useUpdateGameMutation = () => {
