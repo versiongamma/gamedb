@@ -11,10 +11,10 @@ import EditGameForm, {
 import Header from "@/components/header";
 import Fab from "@/components/input/fab";
 import Progress from "@/components/progress";
-import Collection from "@/components/views/games/collection";
-import useAddGameMutation from "@/components/views/games/use-add-game-mutation";
-import useDeleteGameMutation from "@/components/views/games/use-delete-game-mutation";
-import useUpdateGameMutation from "@/components/views/games/use-edit-game-mutation";
+import Collection from "@/components/views/collection";
+import useAddGameMutation from "@/hooks/games/use-add-game-mutation";
+import useDeleteGameMutation from "@/hooks/games/use-delete-game-mutation";
+import useUpdateGameMutation from "@/hooks/games/use-edit-game-mutation";
 import { PageLoadWrapper, PageWrapper } from "@/components/views/layout";
 import useGames from "@/hooks/use-games";
 import { GraphQLGame } from "@/types";

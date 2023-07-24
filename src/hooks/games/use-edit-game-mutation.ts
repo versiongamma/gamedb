@@ -1,7 +1,7 @@
-import { GraphQLGame } from "@/types";
-import { gql, useMutation } from "@apollo/client";
+import { GraphQLGame } from '@/types';
+import { gql, useMutation } from '@apollo/client';
 
-import { EditGameArguments } from "@/api/graphql/games/mutations";
+import { EditGameArguments } from '@/api/graphql/games/mutations';
 
 const EDIT_GAME = gql`
   mutation EditGame($id: String!, $gameData: EditGameDataInput!) {

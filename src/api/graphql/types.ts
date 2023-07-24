@@ -1,4 +1,4 @@
-import gameTypeDefs from "./games/types";
+import gameTypeDefs from './games/types';
 
 const typeDefs = [...gameTypeDefs];
 

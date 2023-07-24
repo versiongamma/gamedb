@@ -1,40 +1,5 @@
-import { REGION_LABEL_MAP } from "@/utils/types";
 import { Platform, Region } from "@/types";
-import { styled } from "goober";
-
-const Wrapper = styled("div")`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-
-  padding: 0 0.6rem;
-`;
-
-const TitleBody = styled("span")`
-  font-size: 1rem;
-  font-weight: 600;
-`;
-
-const HeaderDetailsWrapper = styled("div")`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  > * {
-    margin-right: 0.3rem;
-  }
-`;
-
-const PlatformBody = styled("span")`
-  font-size: 0.8rem;
-  font-weight: 400;
-`;
-
-const RegionBody = styled("span")`
-  font-size: 0.7rem;
-  font-weight: 400;
-`;
+import { REGION_LABEL_MAP } from "@/utils/types";
 
 type Props = {
   name: string;
@@ -43,13 +8,13 @@ type Props = {
 };
 
 const Header = ({ name, platform, region }: Props) => (
-  <Wrapper>
-    <TitleBody>{name}</TitleBody>
-    <HeaderDetailsWrapper>
-      {platform && <PlatformBody>{platform}</PlatformBody>}
-      {region && <RegionBody>({REGION_LABEL_MAP[region]})</RegionBody>}
-    </HeaderDetailsWrapper>
-  </Wrapper>
+  <div className="w-full flex flex-col items-start py-0 px-2">
+    <span className="font-medium text-base">{name}</span>
+    <div className="flex flex-row items-center space-x-1">
+      {platform && <span className="text-sm">{platform}</span>}
+      {region && <span className="text-xs">({REGION_LABEL_MAP[region]})</span>}
+    </div>
+  </div>
 );
 
 export default Header;

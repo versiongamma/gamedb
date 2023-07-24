@@ -1,21 +1,7 @@
-import { button } from "@/theme";
-import { Fab as MuiFab } from "@mui/material";
-import { styled } from "goober";
+import MuiFab, { FabProps as MuiFabProps } from "@mui/material/Fab";
 
-const Fab = styled(MuiFab)`
-  && {
-    position: fixed;
-    bottom: 1rem;
-    right: 1rem;
-    color: ${button.color};
-    background-color: ${button.background};
-    transition: 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-
-    &:hover {
-      color: ${button.hover.color};
-      background-color: ${button.hover.background};
-    }
-  }
-`;
+const Fab = (props: MuiFabProps) => (
+  <MuiFab {...props} className="button rounded-full fixed bottom-2 right-2" />
+);
 
 export default Fab;

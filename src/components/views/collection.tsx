@@ -7,28 +7,19 @@ import {
   pointerWithin,
   useSensor,
   useSensors,
-} from "@dnd-kit/core";
-import { SortableContext, arrayMove } from "@dnd-kit/sortable";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Chip, Collapse, Divider } from "@mui/material";
-import { styled } from "goober";
-import { useEffect, useState } from "react";
+} from '@dnd-kit/core';
+import { SortableContext, arrayMove } from '@dnd-kit/sortable';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Chip, Collapse, Divider } from '@mui/material';
+import { useState } from 'react';
 
-import useGames from "@/hooks/use-games";
-import { GraphQLGame } from "@/types";
-import { getGamesByPlatform } from "@/utils/sort";
-import { PLATFORMS_BY_YEAR } from "@/utils/types";
-import GameEntry, { SortableGameEntry } from "../../entry/game-entry";
-import useUpdateGameOrderMutation from "./use-update-game-order";
-
-const StyledDivider = styled(Divider)`
-  &.MuiDivider-root::before {
-    width: 1%;
-  }
-`;
-
-const StyledChip = styled(Chip)``;
+import useUpdateGameOrderMutation from '@/hooks/games/use-update-game-order';
+import useGames from '@/hooks/use-games';
+import { GraphQLGame } from '@/types';
+import { getGamesByPlatform } from '@/utils/sort';
+import { PLATFORMS_BY_YEAR } from '@/utils/types';
+import GameEntry, { SortableGameEntry } from '../entry/game-entry';
 
 type PlatformDisplayProps = {
   platform: string;
@@ -42,15 +33,11 @@ const PlatformDisplay = ({
   handleGameClick,
 }: PlatformDisplayProps) => {
   const [activeGame, setActiveGame] = useState<GraphQLGame | null>(null);
-  const [sortedGames, setSortedGames] = useState<GraphQLGame[]>([]);
+  const [sortedGames, setSortedGames] = useState(
+    games.sort((a, b) => (a.indexInPlatform ?? 0) - (b.indexInPlatform ?? 0)),
+  );
   const [open, setOpen] = useState(true);
   const [updateGameOrder] = useUpdateGameOrderMutation();
-
-  useEffect(() => {
-    setSortedGames(
-      games.sort((a, b) => (a.indexInPlatform ?? 0) - (b.indexInPlatform ?? 0))
-    );
-  }, [games]);
 
   const sensors = useSensors(useSensor(PointerSensor));
 
@@ -87,14 +74,15 @@ const PlatformDisplay = ({
   return (
     <>
       <br />
-      <StyledDivider textAlign="left">
-        <StyledChip
+      <Divider textAlign="left" className="before:hidden">
+        <Chip
+          className="m-3 rounded-full bg-primary-200 font-semibold text-white transition hover:bg-primary-100 hover:text-primary-200"
           label={platform}
           deleteIcon={open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           onDelete={() => setOpen(!open)}
           onClick={() => setOpen(!open)}
         />
-      </StyledDivider>
+      </Divider>
       <Collapse in={open}>
         <DndContext
           sensors={sensors}
@@ -104,7 +92,7 @@ const PlatformDisplay = ({
           onDragCancel={handleDragCancel}
           collisionDetection={pointerWithin}
         >
-          <div style={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
+          <div style={{ display: 'flex', width: '100%', flexWrap: 'wrap' }}>
             <SortableContext items={sortedGames} strategy={() => null}>
               {sortedGames.map((game) => (
                 <SortableGameEntry
@@ -141,7 +129,7 @@ const Collection = ({ handleGameClick }: Props) => {
   const gamesByPlatform = getGamesByPlatform(games);
   const shownPlatforms = Object.keys(gamesByPlatform);
   const platforms = PLATFORMS_BY_YEAR.filter((platform) =>
-    shownPlatforms.includes(platform)
+    shownPlatforms.includes(platform),
   );
 
   return (

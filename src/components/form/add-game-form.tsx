@@ -1,11 +1,10 @@
 import { Platform, Region } from "@/types";
 import { Autocomplete } from "@mui/material";
-import { styled } from "goober";
 import { useForm } from "react-hook-form";
 import Button from "../input/button";
 import TextField from "../input/text-field";
-import { Form } from "./layout";
 import Progress from "../progress";
+import { Form } from "./layout";
 
 export type GameFormData = {
   name: string;

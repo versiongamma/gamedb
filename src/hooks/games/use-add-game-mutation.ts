@@ -1,8 +1,8 @@
-import { GraphQLGame } from "@/types";
-import { gql, useMutation } from "@apollo/client";
+import { GraphQLGame } from '@/types';
+import { gql, useMutation } from '@apollo/client';
 
-import { GameFormData } from "../../form/add-game-form";
-import { FETCH_GAMES, FetchGamesResponse } from "@/graphql/fetch-games";
+import { GameFormData } from '../../components/form/add-game-form';
+import { FETCH_GAMES, FetchGamesResponse } from '@/graphql/fetch-games';
 
 const ADD_GAME = gql`
   mutation AddGame($gameData: AddGameDataInput!) {

@@ -1,10 +1,10 @@
-import db from "@/api/primitives/db";
-import { GameFormData } from "@/components/form/add-game-form";
-import { Game, Palette, Platform, Region } from "@/types";
-import { Palette as VibrantPalette } from "@vibrant/color";
-import Vibrant from "node-vibrant";
+import db from '@/api/primitives/db';
+import { GameFormData } from '@/components/form/add-game-form';
+import { Game, Palette, Platform, Region } from '@/types';
+import { Palette as VibrantPalette } from '@vibrant/color';
+import Vibrant from 'node-vibrant';
 
-const DEFAULT_ART_COLOR = "#303030";
+const DEFAULT_ART_COLOR = '#303030';
 const DEFAULT_PALETTE_SELECTION = Palette.DARK_VIBRANT;
 const DEFAULT_PALETTE = {
   Vibrant: DEFAULT_ART_COLOR,
@@ -15,14 +15,14 @@ const DEFAULT_PALETTE = {
   DarkMuted: DEFAULT_ART_COLOR,
 };
 
-const DEFAULT_GAME_COLLECTION_PATH = "games";
+const DEFAULT_GAME_COLLECTION_PATH = 'games';
 const { GAME_COLLECTION_PATH = DEFAULT_GAME_COLLECTION_PATH } = process.env;
 
-type GameWithoutId = Omit<Game, "id">;
+type GameWithoutId = Omit<Game, 'id'>;
 
 const getArtPalette = async (art?: string): Promise<VibrantPalette | null> => {
   try {
-    const palette = await Vibrant.from(art ?? "").getPalette();
+    const palette = await Vibrant.from(art ?? '').getPalette();
     return palette;
   } catch {
     return null;
@@ -31,7 +31,7 @@ const getArtPalette = async (art?: string): Promise<VibrantPalette | null> => {
 
 const getGameFromInput = async (
   gameData: GameFormData,
-  paletteOption?: Palette
+  paletteOption?: Palette,
 ): Promise<GameWithoutId> => {
   const palette = await getArtPalette(gameData?.art);
   const colorOptions: Record<Palette, string> = Object.values(Palette).reduce(
@@ -44,7 +44,7 @@ const getGameFromInput = async (
 
       return memo;
     },
-    DEFAULT_PALETTE
+    DEFAULT_PALETTE,
   );
 
   return {
@@ -106,7 +106,7 @@ export const editGame = async (args: EditGameArguments): Promise<Game> => {
   const doc = await db.collection(GAME_COLLECTION_PATH).doc(id);
   await doc.update(updatedGame);
   const result = await doc.get();
-  return { id: result.id, ...(result.data() as Omit<Game, "id">) };
+  return { id: result.id, ...(result.data() as Omit<Game, 'id'>) };
 };
 
 export type DeleteGameArguments = {
@@ -139,7 +139,7 @@ export const updateGameOrder = async (args: UpdateGameOrderArguments) => {
     order.map(async ({ id, indexInPlatform }) => {
       const game = await db.collection(GAME_COLLECTION_PATH).doc(id);
       batch.update(game, { indexInPlatform });
-    })
+    }),
   );
 
   await batch.commit();

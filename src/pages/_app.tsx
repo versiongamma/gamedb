@@ -1,10 +1,15 @@
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import {
+  CssBaseline,
+  StyledEngineProvider,
+  ThemeProvider,
+} from "@mui/material";
 import { setup } from "goober";
 import { shouldForwardProp } from "goober/should-forward-prop";
 import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
 import { Assistant } from "next/font/google";
 import { createElement } from "react";
+import "../globals.css";
 
 import Page from "@/components/page";
 import theme from "@/theme";
@@ -31,21 +36,23 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
         ></meta>
       </Head>
       <SessionProvider session={session} refetchOnWindowFocus={false}>
-        <ThemeProvider theme={theme}>
-          <div
-            className={assistant.className}
-            style={{
-              width: "100vw",
-              height: "100vh",
-              backgroundImage: `url(${DEFAULT_BACKGROUND_IMAGE})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center center",
-            }}
-          >
-            <CssBaseline />
-            <Page Component={Component} {...pageProps} />
-          </div>
-        </ThemeProvider>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={theme}>
+            <div
+              className={assistant.className}
+              style={{
+                width: "100vw",
+                height: "100vh",
+                backgroundImage: `url(${DEFAULT_BACKGROUND_IMAGE})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center center",
+              }}
+            >
+              <CssBaseline />
+              <Page Component={Component} {...pageProps} />
+            </div>
+          </ThemeProvider>
+        </StyledEngineProvider>
       </SessionProvider>
     </>
   );
