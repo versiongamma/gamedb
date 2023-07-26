@@ -1,75 +1,12 @@
-import useScreenResolution, {
-  SCREEN_MIN_XS,
-} from '@/hooks/use-screen-resolution';
-import { GraphQLGame } from '@/types';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
-import { styled } from 'goober';
 import React from 'react';
-import Header from './header';
 
-type IconButtonProps = { className: string; children: React.ReactNode };
-
-const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
-  ({ className, children, ...props }, ref) => {
-    return (
-      <button
-        ref={ref}
-        {...props}
-        className={`${className} h-10 w-10 cursor-pointer rounded-full border-none bg-transparent p-2 transition hover:bg-slate-100/[0.2]`}
-      >
-        {children}
-      </button>
-    );
-  },
-);
-IconButton.displayName = 'Icon Button';
-
-type WrapperProps = {
-  $color: string;
-  children: React.ReactNode;
-};
-
-const DetailsWrapper = styled('div')`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const Art = styled('img')`
-  height: 210px;
-
-  @media screen and (max-width: ${SCREEN_MIN_XS}px) {
-    height: 100px;
-    border-radius: 0.3rem;
-  }
-`;
-
-const StyledIconButton = styled('div')`
-  && {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    touch-action: none;
-
-    @media screen and (max-width: ${SCREEN_MIN_XS}px) {
-      width: 25px;
-      height: 25px;
-      top: 0;
-
-      svg {
-        width: 16px;
-        height: 16px;
-      }
-
-      &.MuiTouchRipple-root {
-        width: 16px;
-        height: 16px;
-      }
-    }
-  }
-`;
+import useScreenResolution from '@/hooks/use-screen-resolution';
+import { GraphQLGame, Platform, Region } from '@/types';
+import { REGION_LABEL_MAP } from '@/utils/types';
+import IconButton from '../input/icon-button';
 
 type Props = {
   game: GraphQLGame;
@@ -80,7 +17,7 @@ type Props = {
 
 const GameEntry = React.forwardRef<HTMLDivElement, Props>(
   ({ game, index, onClick, style, ...props }: Props, ref) => {
-    const { name, platform, region, art, variant, color } = game;
+    const { name, region, art, variant, color } = game;
     const { isMobileResolution } = useScreenResolution();
 
     return (
@@ -90,25 +27,35 @@ const GameEntry = React.forwardRef<HTMLDivElement, Props>(
           onClick={() => onClick(game)}
         >
           <div
-            className="relative m-4 flex min-h-[310px] w-fit min-w-[250px] flex-col space-y-3 rounded-2xl p-3 text-white sm:m-2 sm:min-h-0 sm:min-w-[90px] sm:p-1"
+            className="relative m-4 flex h-[310px] w-fit min-w-[250px] flex-col items-center space-y-4 rounded-2xl p-3 text-white xs:m-2 xs:h-auto xs:w-[170px] xs:min-w-0 xs:p-1.5"
             style={{ backgroundColor: color }}
           >
-            {!isMobileResolution && (
-              <Header name={name} platform={platform} region={region} />
+            {/* Header */}
+            <div className="flex w-fit flex-col items-center px-2 py-0">
+              <span className="text-l font-medium xs:text-s xs:font-normal">
+                {name}
+              </span>
+              <div className="flex w-full flex-row items-center justify-end xs:hidden">
+                {region && (
+                  <span className="text-xs">({REGION_LABEL_MAP[region]})</span>
+                )}
+              </div>
+            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="h-[210px] rounded-md xs:h-auto xs:w-[100px]"
+              src={art}
+              alt="art"
+            />
+            {variant && !isMobileResolution && (
+              <span className="flex w-full justify-end text-xs">{variant}</span>
             )}
-            <DetailsWrapper>
-              <Art src={art} />
-              {variant && !isMobileResolution && (
-                <span className="mt-2 flex w-full justify-end text-xs">
-                  {variant}
-                </span>
-              )}
-            </DetailsWrapper>
+
             <IconButton
               {...props}
-              className="absolute bottom-0 left-0 m-0 text-white"
+              className="absolute bottom-0 left-0 m-0 text-white xs:bottom-1 xs:left-1 xs:h-5 xs:w-5"
             >
-              <DragIndicatorIcon />
+              <DragIndicatorIcon className="xs:h-4 xs:w-4" />
             </IconButton>
           </div>
         </button>

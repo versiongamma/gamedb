@@ -2,6 +2,7 @@ import { GraphQLGame } from '@/types';
 import { gql, useMutation } from '@apollo/client';
 
 import { EditGameArguments } from '@/api/graphql/games/mutations';
+import { FETCH_GAMES, FetchGamesResponse } from '@/graphql/fetch-games';
 
 const EDIT_GAME = gql`
   mutation EditGame($id: String!, $gameData: EditGameDataInput!) {

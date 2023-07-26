@@ -1,8 +1,8 @@
-import useScreenResolution from "@/hooks/use-screen-resolution";
-import Toolbar from "@mui/material/Toolbar";
-import { styled } from "goober";
-import NavigationMenu from "./navigation-menu";
-import NavigationTabs from "./navigation-tabs";
+import useScreenResolution from '@/hooks/use-screen-resolution';
+import Toolbar from '@mui/material/Toolbar';
+import { styled } from 'goober';
+import NavigationMenu from './navigation-menu';
+import NavigationTabs from './navigation-tabs';
 
 const StyledToolbar = styled(Toolbar)`
   && {

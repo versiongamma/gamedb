@@ -1,6 +1,6 @@
-import { gql, useMutation } from "@apollo/client";
-import { DeleteGameArguments } from "@/api/graphql/games";
-import { FETCH_GAMES, FetchGamesResponse } from "@/graphql/fetch-games";
+import { gql, useMutation } from '@apollo/client';
+import { FETCH_GAMES, FetchGamesResponse } from '@/graphql/fetch-games';
+import { DeleteGameArguments } from '@/api/graphql/games/mutations';
 
 const DELETE_GAME = gql`
   mutation DeleteGame($id: String!) {

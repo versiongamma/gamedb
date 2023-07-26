@@ -1,23 +1,29 @@
-import { GraphQLGame, Palette, Platform, Region } from "@/types";
-import { Autocomplete } from "@mui/material";
-import { styled } from "goober";
-import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import Button from "../input/button";
-import TextField from "../input/text-field";
-import Progress from "../progress";
+import { GraphQLGame, Palette, Platform, Region } from '@/types';
+import FormControl, {
+  FormControlProps,
+  useFormControlContext,
+} from '@mui/base/FormControl';
+import Input from '@mui/base/Input';
+import { Autocomplete } from '@mui/material';
+import { styled } from 'goober';
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+
+import Button from '../input/button';
+import TextField, { TextInput } from '../input/text-field';
+import Progress from '../progress';
 import {
   EditFormErrorType,
   getEditFormInputValuesFromGame,
   validateEditFormData,
-} from "./get-values";
-import { Form } from "./layout";
+} from './get-values';
+import { Form } from './layout';
 
 type StyledOptionProps = {
   $color: string;
 };
 
-const StyledOption = styled<StyledOptionProps>("span")`
+const StyledOption = styled<StyledOptionProps>('span')`
   && {
     background-color: ${({ $color }) => $color};
     transition: 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
@@ -28,7 +34,7 @@ const StyledOption = styled<StyledOptionProps>("span")`
       background-color: ${({ $color }) => $color};
     }
 
-    &.MuiAutocomplete-option[aria-selected="true"] {
+    &.MuiAutocomplete-option[aria-selected='true'] {
       font-weight: 800;
       background-color: ${({ $color }) => $color};
       justify-content: right;
@@ -71,7 +77,7 @@ const EditGameForm = ({ actionText, game, onSubmit, loading }: Props) => {
     defaultValues,
   });
 
-  const colorWatch = watch("color");
+  const colorWatch = watch('color');
   const { colorOptions } = game;
 
   // Input change callback event
@@ -83,48 +89,58 @@ const EditGameForm = ({ actionText, game, onSubmit, loading }: Props) => {
   }, [watch]);
 
   const nameErrors = errors
-    .filter(({ input }) => input === "name")
+    .filter(({ input }) => input === 'name')
     .map(({ message }) => message);
 
   const yearErrors = errors
-    .filter(({ input }) => input === "year")
+    .filter(({ input }) => input === 'year')
     .map(({ message }) => message);
 
   const platformErrors = errors
-    .filter(({ input }) => input === "platform")
+    .filter(({ input }) => input === 'platform')
     .map(({ message }) => message);
 
   const artErrors = errors
-    .filter(({ input }) => input === "art")
+    .filter(({ input }) => input === 'art')
     .map(({ message }) => message);
 
   const colorErrors = errors
-    .filter(({ input }) => input === "color")
+    .filter(({ input }) => input === 'color')
     .map(({ message }) => message);
 
   const regionErrors = errors
-    .filter(({ input }) => input === "color")
+    .filter(({ input }) => input === 'color')
     .map(({ message }) => message);
 
   const disableSave = !isDirty || !!errors.length;
 
   return (
     <Form>
-      <TextField
-        variant="filled"
-        label="Name"
-        error={!!nameErrors.length}
-        {...register("name")}
-        helperText={nameErrors.join(", ")}
-        fullWidth
+      <Controller
+        control={control}
+        name="name"
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            value={value}
+            onChange={onChange}
+            label="Name"
+            error={!!nameErrors.length}
+            helperText={nameErrors.join(', ')}
+          />
+        )}
       />
-      <TextField
-        variant="filled"
-        label="Year"
-        error={!!yearErrors.length}
-        {...register("year")}
-        helperText={yearErrors.join(", ")}
-        fullWidth
+      <Controller
+        control={control}
+        name="year"
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            value={value}
+            onChange={onChange}
+            label="Year"
+            error={!!yearErrors.length}
+            helperText={yearErrors.join(', ')}
+          />
+        )}
       />
       <Controller
         name="platform"
@@ -142,7 +158,7 @@ const EditGameForm = ({ actionText, game, onSubmit, loading }: Props) => {
                 variant="filled"
                 label="Platform"
                 value={value}
-                helperText={platformErrors.join(", ")}
+                helperText={platformErrors.join(', ')}
                 fullWidth
               />
             )}
@@ -153,8 +169,8 @@ const EditGameForm = ({ actionText, game, onSubmit, loading }: Props) => {
         variant="filled"
         label="Box Art (URL)"
         error={!!artErrors.length}
-        {...register("art")}
-        helperText={artErrors.join(", ")}
+        {...register('art')}
+        helperText={artErrors.join(', ')}
         fullWidth
       />
 
@@ -180,7 +196,7 @@ const EditGameForm = ({ actionText, game, onSubmit, loading }: Props) => {
                 label="Colour"
                 variant="filled"
                 error={!!colorErrors.length}
-                helperText={colorErrors.join(", ")}
+                helperText={colorErrors.join(', ')}
                 fullWidth
                 $background={colorOptions[colorWatch]}
               />
@@ -204,7 +220,7 @@ const EditGameForm = ({ actionText, game, onSubmit, loading }: Props) => {
                 label="Region"
                 variant="filled"
                 error={!!regionErrors.length}
-                helperText={regionErrors.join(", ")}
+                helperText={regionErrors.join(', ')}
                 fullWidth
               />
             )}
@@ -214,7 +230,7 @@ const EditGameForm = ({ actionText, game, onSubmit, loading }: Props) => {
       <TextField
         variant="filled"
         label="Variant"
-        {...register("variant")}
+        {...register('variant')}
         fullWidth
       />
       <Button

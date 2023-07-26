@@ -1,8 +1,9 @@
-import CloseIcon from "@mui/icons-material/Close";
-import { DialogContent, IconButton } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
+import { DialogContent } from '@mui/material';
 
-import AddGameForm, { GameFormData } from "../form/add-game-form";
-import { StyledDialog, StyledDialogTitle } from "./layout";
+import AddGameForm, { GameFormData } from '../form/add-game-form';
+import { StyledDialog, StyledDialogTitle } from './layout';
+import IconButton from '../input/icon-button';
 
 type Props = {
   open: boolean;

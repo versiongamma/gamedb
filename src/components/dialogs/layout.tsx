@@ -1,5 +1,5 @@
-import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import { styled } from "goober";
+import { Dialog, DialogContent, DialogTitle } from '@mui/material';
+import { styled } from 'goober';
 
 export const StyledDialog = styled(Dialog)`
   .MuiPaper-root {

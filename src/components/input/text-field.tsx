@@ -1,9 +1,85 @@
-import { button, textField } from "@/theme";
+import { button, textField } from '@/theme';
+import FormControl, { FormControlProps } from '@mui/base/FormControl';
+import useFormControlContext from '@mui/base/FormControl/useFormControlContext';
+import Input from '@mui/base/Input';
 import MuiTextField, {
   TextFieldProps as MuiTextFieldProps,
-} from "@mui/material/TextField";
-import { styled } from "goober";
-import React from "react";
+} from '@mui/material/TextField';
+import { styled } from 'goober';
+import React from 'react';
+
+type TextInputProps = {
+  label: string;
+  background?: string;
+  helperText?: string | null;
+};
+
+export const ControlledTextInput = ({ label, helperText }: TextInputProps) => {
+  const formControlContext = useFormControlContext();
+
+  if (formControlContext === undefined) {
+    return null;
+  }
+
+  const {
+    value,
+    required,
+    onChange,
+    disabled,
+    onFocus,
+    onBlur,
+    focused,
+    filled,
+    error,
+  } = formControlContext;
+
+  const shrinkLabel = filled || focused;
+
+  return (
+    <>
+      <div className=" mx-2 my-3 rounded-3xl bg-stone-600 transition hover:bg-stone-500">
+        <p
+          className={`
+          ${shrinkLabel ? 'translate-y-0 text-s' : 'translate-y-m text-l'} ${
+            error ? 'text-red-600/70' : ''
+          } ${
+            focused ? 'text-primary-100' : ''
+          } absolute translate-x-4 font-normal text-gray-300  transition-all`}
+        >
+          {label}
+        </p>
+        <input
+          value={value as string}
+          required={required}
+          onChange={onChange}
+          disabled={disabled}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          className="w-full rounded-3xl border-none bg-transparent px-4 pb-2 pt-8 text-l font-normal text-white focus-visible:outline-none"
+        />
+      </div>
+      <p
+        className={`${
+          !helperText ? 'hidden' : ''
+        } absolute translate-y-[-20px] pl-5 text-s font-normal text-red-600/70`}
+      >
+        {helperText}
+      </p>
+    </>
+  );
+};
+
+export const TextInput = ({
+  label,
+  helperText,
+  ...props
+}: TextInputProps & FormControlProps) => {
+  return (
+    <FormControl {...props}>
+      <ControlledTextInput label={label} helperText={helperText} />
+    </FormControl>
+  );
+};
 
 type Props = {
   $background?: string;
@@ -38,7 +114,7 @@ const TextField = styled<Props>(MuiTextField, React.forwardRef)`
     .MuiInputBase-root {
       border-radius: 2.4rem;
       ${({ $background }) =>
-        $background ? `background-color: ${$background};` : ""}
+        $background ? `background-color: ${$background};` : ''}
 
       &::before {
         border-bottom: none;

@@ -1,16 +1,17 @@
-import { GraphQLGame } from "@/types";
-import CloseIcon from "@mui/icons-material/Close";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { ClickAwayListener, DialogContent, IconButton } from "@mui/material";
+import { GraphQLGame } from '@/types';
+import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { DialogContent } from '@mui/material';
 
-import { useState } from "react";
-import Button from "../input/button";
+import { useState } from 'react';
+import Button from '../input/button';
 import {
   StyledDialog,
   StyledDialogContents,
   StyledDialogTitle,
-} from "./layout";
-import Progress from "../progress";
+} from './layout';
+import Progress from '../progress';
+import IconButton from '../input/icon-button';
 
 type Props = {
   game: GraphQLGame;
@@ -53,7 +54,7 @@ const EditDialog = ({
               <Button onClick={onDelete} disabled={deleteLoading}>
                 Yes
               </Button>
-              <Button onClick={() => setDeleteDialogOpen(false)}>No</Button>{" "}
+              <Button onClick={() => setDeleteDialogOpen(false)}>No</Button>{' '}
             </span>
           )}
         </StyledDialogContents>

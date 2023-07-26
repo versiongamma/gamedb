@@ -12,7 +12,7 @@ import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Chip, Collapse, Divider } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import useUpdateGameOrderMutation from '@/hooks/games/use-update-game-order';
 import useGames from '@/hooks/use-games';
@@ -33,9 +33,14 @@ const PlatformDisplay = ({
   handleGameClick,
 }: PlatformDisplayProps) => {
   const [activeGame, setActiveGame] = useState<GraphQLGame | null>(null);
-  const [sortedGames, setSortedGames] = useState(
-    games.sort((a, b) => (a.indexInPlatform ?? 0) - (b.indexInPlatform ?? 0)),
-  );
+  const [sortedGames, setSortedGames] = useState<GraphQLGame[]>([]);
+
+  useEffect(() => {
+    setSortedGames(
+      games.sort((a, b) => (a.indexInPlatform ?? 0) - (b.indexInPlatform ?? 0)),
+    );
+  }, [games]);
+
   const [open, setOpen] = useState(true);
   const [updateGameOrder] = useUpdateGameOrderMutation();
 
@@ -74,9 +79,9 @@ const PlatformDisplay = ({
   return (
     <>
       <br />
-      <Divider textAlign="left" className="before:hidden">
+      <Divider textAlign={'left'} className="before:hidden">
         <Chip
-          className="m-3 rounded-full bg-primary-200 font-semibold text-white transition hover:bg-primary-100 hover:text-primary-200"
+          className="button m-3 rounded-full"
           label={platform}
           deleteIcon={open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           onDelete={() => setOpen(!open)}
@@ -92,7 +97,7 @@ const PlatformDisplay = ({
           onDragCancel={handleDragCancel}
           collisionDetection={pointerWithin}
         >
-          <div style={{ display: 'flex', width: '100%', flexWrap: 'wrap' }}>
+          <div className="flex w-full flex-wrap items-center">
             <SortableContext items={sortedGames} strategy={() => null}>
               {sortedGames.map((game) => (
                 <SortableGameEntry
