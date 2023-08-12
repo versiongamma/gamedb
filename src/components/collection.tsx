@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 
 import { FETCH_GAMES, FetchGamesResponse } from '@/graphql/fetch-games';
 import useAddGameMutation from '@/hooks/games/use-add-game-mutation';
@@ -7,7 +7,7 @@ import useDeleteGameMutation from '@/hooks/games/use-delete-game-mutation';
 import useEditGameMutation from '@/hooks/games/use-edit-game-mutation';
 import { List, PAGE_TO_LIST_MAP, Page } from '@/routes';
 import { GraphQLGame } from '@/types';
-import { getGamesByPlatform } from '@/utils/sort';
+import { getFilteredGames, getGamesByPlatform } from '@/utils/sort';
 import { PLATFORMS_BY_YEAR } from '@/utils/types';
 import AddDialog from './dialogs/add-dialog';
 import EditDialog from './dialogs/edit-dialog';
@@ -17,7 +17,7 @@ import { PageLoadWrapper, PageWrapper } from './layout';
 import Progress from './progress';
 import PlatformDisplay from './views/platform-display';
 import useMoveGameMutation from '@/hooks/games/use-move-game-mutation';
-import useHotkey from '@/hooks/use-hotkey';
+import useFilterStore from '@/hooks/use-filter-store';
 
 type Props = {
   page: Page;
@@ -25,12 +25,13 @@ type Props = {
 
 const Collection = ({ page }: Props) => {
   const list = PAGE_TO_LIST_MAP[page];
-
   const [selectedGame, setSelectedGame] = useState<GraphQLGame | null>(null);
   const [addGameDialogOpen, setAddGameDialogOpen] = useState(false);
   const { data, loading } = useQuery<FetchGamesResponse>(FETCH_GAMES, {
     variables: { list },
   });
+
+  const filter = useFilterStore((store) => store.filter);
 
   // useHotkey('a', () => setAddGameDialogOpen(true));
 
@@ -84,7 +85,8 @@ const Collection = ({ page }: Props) => {
     return null;
   }
 
-  const gamesByPlatform = getGamesByPlatform(games);
+  const filteredGames = getFilteredGames(games, filter);
+  const gamesByPlatform = getGamesByPlatform(filteredGames);
   const shownPlatforms = Object.keys(gamesByPlatform);
   const platforms = PLATFORMS_BY_YEAR.filter((platform) =>
     shownPlatforms.includes(platform),

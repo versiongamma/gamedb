@@ -28,3 +28,9 @@ export const getGamesByPlatform = (games: GraphQLGame[]) => {
   const sortedGames = games.sort(sortGamesByYearThenName);
   return getItemsByPlatform(sortedGames);
 };
+
+export const getFilteredGames = (games: GraphQLGame[], filter: string) => {
+  return games.filter(({ name }) =>
+    name.toLowerCase().includes(filter.toLowerCase()),
+  );
+};

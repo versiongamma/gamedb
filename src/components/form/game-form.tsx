@@ -6,8 +6,8 @@ import useHotkey from '@/hooks/use-hotkey';
 import Button from '../input/button';
 import AutocompleteInput, {
   Props as AutocompleteInputProps,
-} from '../input/text/autocomplete-input';
-import TextInput, { Props as TextInputProps } from '../input/text/text-input';
+} from '../input/text/autocomplete-field';
+import TextInput, { Props as TextInputProps } from '../input/text/text-field';
 import {
   EditFormErrorType,
   getFormInputValuesFromGame,
