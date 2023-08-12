@@ -8,13 +8,11 @@ import {
   editGame,
   updateGameOrder,
 } from './mutations';
-import { fetchGames } from './queries';
-import { fetchWishlist } from '@/api/graphql/wishlist';
+import { FetchGamesArgs, fetchGames } from './queries';
 import { Game } from '@/types';
 
 const Query = {
-  FetchGames: () => fetchGames(),
-  FetchWishlist: () => fetchWishlist(),
+  FetchGames: (_parent: Game, args: FetchGamesArgs) => fetchGames(args),
 };
 
 const Mutation = {

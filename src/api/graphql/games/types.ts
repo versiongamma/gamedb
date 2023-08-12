@@ -1,17 +1,16 @@
 const queries = `#graphql
    type Query {
-    FetchGames: [Game!]!
-    FetchWishlist: [WishlistItem!]!
+    FetchGames(list: String!): [Game!]!
   }
 
 `;
 
 const mutations = `#graphql
    type Mutation {
-    EditGame(id: String!, gameData: EditGameDataInput!): Game!
-    AddGame(gameData: AddGameDataInput!): Game!
-    DeleteGame(id: String!): DeleteGameResponse!
-    UpdateGameOrder(order: [GameOrderInput!]!): UpdateGameOrderResponse!
+    EditGame(list: String!, id: String!, gameData: EditGameDataInput!): Game!
+    AddGame(list: String!, gameData: AddGameDataInput!): Game!
+    DeleteGame(list: String!, id: String!): DeleteGameResponse!
+    UpdateGameOrder(list: String!, order: [GameOrderInput!]!): UpdateGameOrderResponse!
   }
 
   input AddGameDataInput {

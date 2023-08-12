@@ -3,8 +3,8 @@ import { gql, useMutation } from '@apollo/client';
 import { UpdateGameOrderArguments } from '@/api/graphql/games/mutations';
 
 const UPDATE_GAME_ORDER = gql`
-  mutation UPDATE_GAME_ORDER($order: [GameOrderInput!]!) {
-    UpdateGameOrder(order: $order) {
+  mutation UPDATE_GAME_ORDER($list: String!, $order: [GameOrderInput!]!) {
+    UpdateGameOrder(list: $list, order: $order) {
       order {
         id
         indexInPlatform

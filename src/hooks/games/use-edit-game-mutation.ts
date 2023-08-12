@@ -2,11 +2,14 @@ import { GraphQLGame } from '@/types';
 import { gql, useMutation } from '@apollo/client';
 
 import { EditGameArguments } from '@/api/graphql/games/mutations';
-import { FETCH_GAMES, FetchGamesResponse } from '@/graphql/fetch-games';
 
 const EDIT_GAME = gql`
-  mutation EditGame($id: String!, $gameData: EditGameDataInput!) {
-    EditGame(id: $id, gameData: $gameData) {
+  mutation EditGame(
+    $list: String!
+    $id: String!
+    $gameData: EditGameDataInput!
+  ) {
+    EditGame(list: $list, id: $id, gameData: $gameData) {
       id
       name
       platform
@@ -32,7 +35,7 @@ export type EditGameMutationResponse = {
   EditGame: GraphQLGame;
 };
 
-const useUpdateGameMutation = () => {
+const useEditGameMutation = () => {
   const [mutationFunc, mutationResult] =
     useMutation<EditGameMutationResponse>(EDIT_GAME);
 
@@ -45,4 +48,4 @@ const useUpdateGameMutation = () => {
   return [editGame, mutationResult] as const;
 };
 
-export default useUpdateGameMutation;
+export default useEditGameMutation;

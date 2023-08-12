@@ -1,5 +1,5 @@
-import { GraphQLGame } from "@/types";
-import { gql } from "@apollo/client";
+import { GraphQLGame } from '@/types';
+import { gql } from '@apollo/client';
 
 export const gameFields = gql`
   fragment gameFields on Game {
@@ -24,8 +24,8 @@ export const gameFields = gql`
 `;
 
 export const FETCH_GAMES = gql`
-  query FetchGames {
-    FetchGames {
+  query FetchGames($list: String!) {
+    FetchGames(list: $list) {
       ...gameFields
     }
   }

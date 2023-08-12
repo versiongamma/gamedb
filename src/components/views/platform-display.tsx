@@ -15,23 +15,18 @@ import { Chip, Collapse, Divider } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 import useUpdateGameOrderMutation from '@/hooks/games/use-update-game-order';
-import useGames from '@/hooks/use-games';
 import { GraphQLGame } from '@/types';
-import { getGamesByPlatform } from '@/utils/sort';
-import { PLATFORMS_BY_YEAR } from '@/utils/types';
-import GameEntry, { SortableGameEntry } from '../entry/game-entry';
+import GameEntry, { SortableGameEntry } from '../game-entry';
+import { List } from '@/routes';
 
-type PlatformDisplayProps = {
+type Props = {
   platform: string;
   games: GraphQLGame[];
   handleGameClick: (game: GraphQLGame) => void;
+  list: List;
 };
 
-const PlatformDisplay = ({
-  platform,
-  games,
-  handleGameClick,
-}: PlatformDisplayProps) => {
+const PlatformDisplay = ({ platform, games, handleGameClick, list }: Props) => {
   const [activeGame, setActiveGame] = useState<GraphQLGame | null>(null);
   const [sortedGames, setSortedGames] = useState<GraphQLGame[]>([]);
 
@@ -72,7 +67,7 @@ const PlatformDisplay = ({
       id,
       indexInPlatform: index,
     }));
-    updateGameOrder({ order });
+    updateGameOrder({ order, list });
     handleDragCancel();
   };
 
@@ -119,36 +114,4 @@ const PlatformDisplay = ({
   );
 };
 
-type Props = {
-  handleGameClick: (game: GraphQLGame) => void;
-};
-
-const Collection = ({ handleGameClick }: Props) => {
-  const { games: cache } = useGames();
-  const games = [...(cache ?? [])];
-
-  if (!games) {
-    return null;
-  }
-
-  const gamesByPlatform = getGamesByPlatform(games);
-  const shownPlatforms = Object.keys(gamesByPlatform);
-  const platforms = PLATFORMS_BY_YEAR.filter((platform) =>
-    shownPlatforms.includes(platform),
-  );
-
-  return (
-    <>
-      {platforms.map((platform) => (
-        <PlatformDisplay
-          key={platform}
-          platform={platform}
-          games={gamesByPlatform[platform]}
-          handleGameClick={handleGameClick}
-        />
-      ))}
-    </>
-  );
-};
-
-export default Collection;
+export default PlatformDisplay;

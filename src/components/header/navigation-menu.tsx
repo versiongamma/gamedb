@@ -1,14 +1,14 @@
-import MenuIcon from "@mui/icons-material/Menu";
-import { IconButton, Popover } from "@mui/material";
-import Button, { ButtonProps as MuiButtonProps } from "@mui/material/Button";
-import { useState } from "react";
+import MenuIcon from '@mui/icons-material/Menu';
+import { IconButton, Popover } from '@mui/material';
+import Button, { ButtonProps as MuiButtonProps } from '@mui/material/Button';
+import { useState } from 'react';
 
-import useScreenResolution from "@/hooks/use-screen-resolution";
-import { styled } from "goober";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import Login from "../login";
-import { ROUTES } from "./routes";
+import useScreenResolution from '@/hooks/use-screen-resolution';
+import { styled } from 'goober';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import Login from '../login';
+import { ROUTES } from '../../routes';
 
 const StyledPopover = styled(Popover)`
   && {
@@ -19,7 +19,7 @@ const StyledPopover = styled(Popover)`
   }
 `;
 
-const MenuWrapper = styled("div")`
+const MenuWrapper = styled('div')`
   display: flex;
   flex-direction: column;
 `;
@@ -35,7 +35,7 @@ const StyledNavButton = styled<StyledNavButtonProps>(Button)`
     font-weight: 600;
 
     ${({ $selected }) =>
-      $selected ? "background-color: rgba(255, 255, 255, 0.2)" : ""};
+      $selected ? 'background-color: rgba(255, 255, 255, 0.2)' : ''};
   }
 `;
 
@@ -52,7 +52,7 @@ const NavigationMenu = () => {
   };
 
   const pathTitle = ROUTES.find(({ path }) => path === pathname)?.name;
-  const title = `GAMEDB${pathTitle ? ` | ${pathTitle}` : ""}`;
+  const title = `GAMEDB${pathTitle ? ` | ${pathTitle}` : ''}`;
 
   return (
     <>
@@ -66,12 +66,12 @@ const NavigationMenu = () => {
           onClose={() => setOpen(false)}
           anchorEl={anchorEl}
           anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "right",
+            vertical: 'bottom',
+            horizontal: 'right',
           }}
           transformOrigin={{
-            vertical: "top",
-            horizontal: "right",
+            vertical: 'top',
+            horizontal: 'right',
           }}
         >
           <MenuWrapper>

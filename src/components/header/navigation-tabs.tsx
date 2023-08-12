@@ -1,10 +1,7 @@
-import { Button, Tabs, styled } from "@mui/material";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-
-import Login from "../login";
-import { ROUTES } from "./routes";
+import { Button, Tabs, styled } from '@mui/material';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { PATHS, Page } from '../../routes';
 
 const StyledTabs = styled(Tabs)`
   .MuiTabs-scroller {
@@ -28,9 +25,14 @@ const NavigationTabs = () => {
 
   return (
     <StyledTabs value={pathname}>
-      {ROUTES.map(({ name, path }) => (
-        <StyledTab key={path} value={path} href={path} LinkComponent={Link}>
-          {name}
+      {Object.values(Page).map((page) => (
+        <StyledTab
+          key={page}
+          value={PATHS[page]}
+          href={PATHS[page]}
+          LinkComponent={Link}
+        >
+          {page}
         </StyledTab>
       ))}
     </StyledTabs>

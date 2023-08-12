@@ -1,16 +1,15 @@
-import Header from "@/components/header";
-import Head from "next/head";
+import Head from 'next/head';
 
-const Home = () => {
-  return (
-    <>
-      {" "}
-      <Head>
-        <title>GameDB</title>
-      </Head>
-      <Header />
-    </>
-  );
-};
+import Collection from '@/components/collection';
+import { Page } from '@/routes';
 
-export default Home;
+const Index = () => (
+  <>
+    <Head>
+      <title>GameDB</title>
+    </Head>
+    <Collection page={Page.Wishlist} />
+  </>
+);
+
+export default Index;

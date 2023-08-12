@@ -1,5 +1,5 @@
 import db from '@/api/primitives/db';
-import { GameFormData } from '@/components/form/add-game-form';
+import { GameFormData } from '@/components/form/game-form';
 import { Game, Palette, Platform, Region } from '@/types';
 import { Palette as VibrantPalette } from '@vibrant/color';
 import Vibrant from 'node-vibrant';
@@ -58,6 +58,7 @@ const getGameFromInput = async (
 };
 
 export type AddGameArguments = {
+  list: string;
   gameData: {
     name: string;
     year: string;
@@ -68,10 +69,12 @@ export type AddGameArguments = {
   };
 };
 
-export const addGame = async (args: AddGameArguments): Promise<Game> => {
-  const { gameData } = args;
+export const addGame = async ({
+  list,
+  gameData,
+}: AddGameArguments): Promise<Game> => {
   const game = await getGameFromInput(gameData);
-  const result = await db.collection(GAME_COLLECTION_PATH).add(game);
+  const result = await db.collection(list).add(game);
   console.log(result);
   const snapshot = await result.get();
   const id = snapshot.id;
@@ -79,6 +82,7 @@ export const addGame = async (args: AddGameArguments): Promise<Game> => {
 };
 
 export type EditGameArguments = {
+  list: string;
   id: string;
   gameData: {
     name: string;
@@ -91,53 +95,53 @@ export type EditGameArguments = {
   };
 };
 
-export const editGame = async (args: EditGameArguments): Promise<Game> => {
-  const {
-    id,
-    gameData: { color, ...gameData },
-  } = args;
-
+export const editGame = async ({
+  list,
+  id,
+  gameData: { color, ...gameData },
+}: EditGameArguments): Promise<Game> => {
   const game = await getGameFromInput(gameData, color);
   const updatedGame: Game = {
     id,
     ...game,
   };
 
-  const doc = await db.collection(GAME_COLLECTION_PATH).doc(id);
+  const doc = await db.collection(list).doc(id);
   await doc.update(updatedGame);
   const result = await doc.get();
   return { id: result.id, ...(result.data() as Omit<Game, 'id'>) };
 };
 
 export type DeleteGameArguments = {
+  list: string;
   id: string;
 };
 
-export const deleteGame = async (args: DeleteGameArguments) => {
-  const result = await db
-    .collection(GAME_COLLECTION_PATH)
-    .doc(args.id)
-    .delete();
+export const deleteGame = async ({ list, id }: DeleteGameArguments) => {
+  const result = await db.collection(list).doc(id).delete();
 
   return {
-    id: args.id,
+    id: id,
     success: !!result,
   };
 };
 
 export type UpdateGameOrderArguments = {
+  list: string;
   order: {
     id: string;
     indexInPlatform: number;
   }[];
 };
 
-export const updateGameOrder = async (args: UpdateGameOrderArguments) => {
-  const { order } = args;
+export const updateGameOrder = async ({
+  list,
+  order,
+}: UpdateGameOrderArguments) => {
   const batch = db.batch();
   await Promise.all(
     order.map(async ({ id, indexInPlatform }) => {
-      const game = await db.collection(GAME_COLLECTION_PATH).doc(id);
+      const game = await db.collection(list).doc(id);
       batch.update(game, { indexInPlatform });
     }),
   );

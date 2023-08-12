@@ -1,14 +1,15 @@
-import db from "@/api/primitives/db";
-import { Game } from "@/types";
+import db from '@/api/primitives/db';
+import { Game } from '@/types';
 
-const DEFAULT_GAME_COLLECTION_PATH = "games";
-const { GAME_COLLECTION_PATH = DEFAULT_GAME_COLLECTION_PATH } = process.env;
+export type FetchGamesArgs = {
+  list: string;
+};
 
-export const fetchGames = async (): Promise<Game[]> => {
-  const response = await db.collection(GAME_COLLECTION_PATH).get();
+export const fetchGames = async ({ list }: FetchGamesArgs): Promise<Game[]> => {
+  const response = await db.collection(list).get();
   const games = response.docs.map((entry) => ({
     id: entry.id,
-    ...(entry.data() as Omit<Game, "id">),
+    ...(entry.data() as Omit<Game, 'id'>),
   }));
 
   return games;

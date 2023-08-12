@@ -1,17 +1,17 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { DialogContent } from '@mui/material';
 
-import AddGameForm, { GameFormData } from '../form/add-game-form';
+import AddGameForm, { GameFormData } from '../form/game-form';
 import { StyledDialog, StyledDialogTitle } from './layout';
 import IconButton from '../input/icon-button';
 
 type Props = {
   open: boolean;
   onClose: () => void;
-  FormElement: React.ReactNode;
+  children: React.ReactNode;
 };
 
-const AddDialog = ({ open, onClose, FormElement }: Props) => {
+const AddDialog = ({ open, onClose, children }: Props) => {
   return (
     <StyledDialog open={open} onClose={onClose}>
       <StyledDialogTitle>
@@ -20,7 +20,7 @@ const AddDialog = ({ open, onClose, FormElement }: Props) => {
           <CloseIcon />
         </IconButton>
       </StyledDialogTitle>
-      <DialogContent>{FormElement}</DialogContent>
+      <DialogContent>{children}</DialogContent>
     </StyledDialog>
   );
 };

@@ -6,7 +6,7 @@ import React from 'react';
 import useScreenResolution from '@/hooks/use-screen-resolution';
 import { GraphQLGame, Platform, Region } from '@/types';
 import { REGION_LABEL_MAP } from '@/utils/types';
-import IconButton from '../input/icon-button';
+import IconButton from './input/icon-button';
 
 type Props = {
   game: GraphQLGame;
@@ -27,7 +27,9 @@ const GameEntry = React.forwardRef<HTMLDivElement, Props>(
           onClick={() => onClick(game)}
         >
           <div
-            className="relative m-4 flex h-[310px] w-fit min-w-[250px] flex-col items-center space-y-4 rounded-2xl p-3 text-white xs:m-2 xs:h-auto xs:w-[170px] xs:min-w-0 xs:p-1.5"
+            className={`relative m-4 flex ${
+              art ? 'h-[310px]' : 'h-[100px]'
+            } w-fit min-w-[250px] flex-col items-center space-y-4 rounded-2xl p-3 text-white xs:m-2 xs:h-auto xs:w-[170px] xs:min-w-0 xs:p-1.5`}
             style={{ backgroundColor: color }}
           >
             {/* Header */}
@@ -41,12 +43,15 @@ const GameEntry = React.forwardRef<HTMLDivElement, Props>(
                 )}
               </div>
             </div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className="h-[210px] rounded-md xs:h-auto xs:w-[100px]"
-              src={art}
-              alt="art"
-            />
+
+            {art && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                className="h-[210px] rounded-md xs:h-auto xs:w-[100px]"
+                src={art}
+                alt="art"
+              />
+            )}
             {variant && !isMobileResolution && (
               <span className="flex w-full justify-end text-xs">{variant}</span>
             )}

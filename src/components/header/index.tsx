@@ -1,35 +1,27 @@
 import useScreenResolution from '@/hooks/use-screen-resolution';
 import Toolbar from '@mui/material/Toolbar';
-import { styled } from 'goober';
-import NavigationMenu from './navigation-menu';
+import Image from 'next/image';
+import Login from '../login';
 import NavigationTabs from './navigation-tabs';
-
-const StyledToolbar = styled(Toolbar)`
-  && {
-    display: flex;
-    position: fixed;
-    justify-content: space-between;
-    padding-top: env(safe-area-inset-top);
-    width: 100vw;
-    background-color: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(1rem);
-    -webkit-backdrop-filter: blur(1rem);
-    z-index: 1;
-
-    @media screen and (max-width: 900px) {
-      margin-bottom: 24px;
-    }
-  }
-`;
 
 const Header = () => {
   const { isMobileResolution } = useScreenResolution();
 
   return (
-    <StyledToolbar>
-      {!isMobileResolution && <NavigationTabs />}
-      <NavigationMenu />
-    </StyledToolbar>
+    <Toolbar
+      className=" fixed z-10 m-0 flex w-screen justify-between bg-black/[0.2] backdrop-blur-xl xs:mb-6"
+      style={{ paddingTop: 'env(safe-area-inset-top)' }}
+    >
+      {!isMobileResolution ? (
+        <span className="flex space-x-2">
+          <Image src="/ico.png" alt="logo" height={64} width={64} />
+          <NavigationTabs />
+        </span>
+      ) : (
+        <span />
+      )}
+      <Login />
+    </Toolbar>
   );
 };
 

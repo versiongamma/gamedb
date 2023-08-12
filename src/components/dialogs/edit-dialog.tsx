@@ -18,7 +18,7 @@ type Props = {
   onClose: () => void;
   onDelete: () => Promise<void>;
   deleteLoading: boolean;
-  FormElement: React.ReactNode;
+  children: React.ReactNode;
 };
 
 const EditDialog = ({
@@ -26,7 +26,7 @@ const EditDialog = ({
   onClose,
   onDelete,
   deleteLoading,
-  FormElement,
+  children,
 }: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
@@ -43,7 +43,7 @@ const EditDialog = ({
           </IconButton>
         </span>
       </StyledDialogTitle>
-      <DialogContent>{FormElement}</DialogContent>
+      <DialogContent>{children}</DialogContent>
       <StyledDialog open={deleteDialogOpen}>
         <StyledDialogContents>
           <p>Are you sure you want to delete this entry?</p>

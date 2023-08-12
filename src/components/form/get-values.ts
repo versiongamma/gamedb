@@ -1,11 +1,15 @@
-import { EditGameFormData } from '@/components/form/edit-game-form';
+import { EditGameFormData } from '@/components/form/game-form';
 import { GraphQLGame, Palette, Platform, Region } from '@/types';
 
 export const YEAR_REGEX = /[0-9]+/;
 
 export const getEditFormInputValuesFromGame = (
-  game: GraphQLGame,
-): EditGameFormData => {
+  game?: GraphQLGame,
+): Partial<EditGameFormData> => {
+  if (!game) {
+    return {};
+  }
+
   const { id, __typename, indexInPlatform, colorOptions, ...gameFormData } =
     game;
   const { color } = game;
@@ -56,10 +60,6 @@ export const validateEditFormData = (data: Partial<EditGameFormData>) => {
       input: 'platform',
       message: `${data.platform} is not a valid platform`,
     });
-  }
-
-  if (!data.art) {
-    errors.push({ input: 'art', message: 'Box art must not be empty' });
   }
 
   if (!data.color) {
