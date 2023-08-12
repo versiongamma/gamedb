@@ -3,17 +3,17 @@ import { Input } from '@mui/base/Input';
 import React from 'react';
 import Field from './field';
 
-type TextInputProps = {
+type InputProps = {
   label: string;
   background?: string;
   helperText?: string | null;
 };
 
 export type Props = {
-  InputProps: TextInputProps;
+  InputProps: InputProps;
 } & FormControlProps;
 
-export const TextInput = ({ InputProps, ...props }: Props) => (
+export const TextField = ({ InputProps, ...props }: Props) => (
   <FormControl {...props}>
     {(formControlContext) => (
       <Field {...InputProps} {...formControlContext}>
@@ -30,4 +30,4 @@ export const TextInput = ({ InputProps, ...props }: Props) => (
   </FormControl>
 );
 
-export default TextInput;
+export default TextField;

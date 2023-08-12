@@ -2,7 +2,7 @@ import { useAutocomplete } from '@mui/base';
 import { FormControl, FormControlProps } from '@mui/base/FormControl';
 
 import Field from './field';
-import { Props as TextInputProps } from './text-input';
+import { Props as TextFieldProps } from './text-field';
 
 export type Props = {
   value: string;
@@ -10,11 +10,11 @@ export type Props = {
   options: string[];
   className?: string;
   backgroundValueMap?: Record<string, string>;
-  InputProps: TextInputProps['InputProps'];
+  InputProps: TextFieldProps['InputProps'];
   FormControlProps: FormControlProps;
 };
 
-const AutocompleteInput = ({
+const AutocompleteField = ({
   value,
   onChange,
   options,
@@ -90,4 +90,4 @@ const AutocompleteInput = ({
   );
 };
 
-export default AutocompleteInput;
+export default AutocompleteField;
