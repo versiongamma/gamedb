@@ -14,7 +14,7 @@ const IconButton = React.forwardRef<HTMLDivElement, IconButtonProps>(
         {...props}
         className={`${
           className ?? ''
-        } inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-none bg-transparent p-2 transition hover:bg-slate-100/[0.2]`}
+        } inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-none bg-transparent p-2 transition hover:bg-secondary/[0.2]`}
       >
         {children}
       </div>

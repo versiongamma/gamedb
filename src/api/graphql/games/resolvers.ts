@@ -2,10 +2,12 @@ import {
   AddGameArguments,
   DeleteGameArguments,
   EditGameArguments,
+  MoveGameArguments,
   UpdateGameOrderArguments,
   addGame,
   deleteGame,
   editGame,
+  moveGame,
   updateGameOrder,
 } from './mutations';
 import { FetchGamesArgs, fetchGames } from './queries';
@@ -21,6 +23,7 @@ const Mutation = {
   DeleteGame: (_parent: unknown, args: DeleteGameArguments) => deleteGame(args),
   UpdateGameOrder: (_parent: unknown, args: UpdateGameOrderArguments) =>
     updateGameOrder(args),
+  MoveGame: (_parent: Game, args: MoveGameArguments) => moveGame(args),
 };
 
 export default {

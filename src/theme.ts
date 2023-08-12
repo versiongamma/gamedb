@@ -1,13 +1,15 @@
-import { createTheme } from "@mui/material";
+import { createTheme } from '@mui/material';
 
 const palette = {
   primary: {
-    main: "#9F3EFF",
-    faded: "#D9C2FD",
+    main: '#9F3EFF',
+    faded: '#D9C2FD',
   },
-  secondary: "#FFAB32",
-  alt: "#22B34B",
-  text: "#FEFEFE",
+  secondary: {
+    main: '#FFAB32',
+  },
+  alt: '#22B34B',
+  text: '#FEFEFE',
 };
 
 export const button = {
@@ -25,7 +27,11 @@ export const textField = {
 
 const theme = createTheme({
   palette: {
-    mode: "dark",
+    mode: 'dark',
+    primary: palette.primary,
+    secondary: {
+      main: palette.primary.faded,
+    },
   },
 });
 

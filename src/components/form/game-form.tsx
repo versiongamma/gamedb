@@ -1,48 +1,19 @@
 import { GraphQLGame, Palette, Platform, Region } from '@/types';
-import { Autocomplete } from '@mui/material';
-import { styled } from 'goober';
 import { useEffect, useState } from 'react';
 import { Control, Controller, ControllerProps, useForm } from 'react-hook-form';
+
+import useHotkey from '@/hooks/use-hotkey';
 import Button from '../input/button';
+import AutocompleteInput, {
+  Props as AutocompleteInputProps,
+} from '../input/text/autocomplete-input';
 import TextInput, { Props as TextInputProps } from '../input/text/text-input';
-import Progress from '../progress';
 import {
   EditFormErrorType,
   getFormInputValuesFromGame,
   validateEditFormData,
 } from './get-values';
 import { Form } from './layout';
-import AutocompleteInput, {
-  Props as AutocompleteInputProps,
-} from '../input/text/autocomplete-input';
-
-type StyledOptionProps = {
-  $color: string;
-};
-
-const StyledOption = styled<StyledOptionProps>('span')`
-  && {
-    background-color: ${({ $color }) => $color};
-    transition: 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    display: flex;
-    justify-content: left;
-
-    &:hover {
-      background-color: ${({ $color }) => $color};
-    }
-
-    &.MuiAutocomplete-option[aria-selected='true'] {
-      font-weight: 800;
-      background-color: ${({ $color }) => $color};
-      justify-content: right;
-    }
-
-    &.Mui-focused {
-      padding-left: 2rem;
-      background-color: ${({ $color }) => $color};
-    }
-  }
-`;
 
 type ControlledInputProps = {
   name: ControllerProps<GameFormData>['name'];
@@ -125,6 +96,14 @@ const GameForm = ({ actionText, game, onSubmit, loading }: Props) => {
   const colorWatch = watch('color');
   const { colorOptions, art } = game ?? {};
 
+  const handleSave = () => {
+    if (!disableSave) {
+      handleSubmit(onSubmit)();
+    }
+  };
+
+  useHotkey('Enter', handleSave);
+
   // Input change callback event
   useEffect(() => {
     const subscription = watch((value) => {
@@ -154,8 +133,6 @@ const GameForm = ({ actionText, game, onSubmit, loading }: Props) => {
     .map(({ message }) => message);
 
   const disableSave = !isDirty || !!errors.length;
-
-  console.log(errors);
 
   return (
     <Form>
@@ -214,11 +191,8 @@ const GameForm = ({ actionText, game, onSubmit, loading }: Props) => {
         control={control}
         InputProps={{ label: 'Variant' }}
       />
-      <Button
-        onClick={handleSubmit(onSubmit)}
-        disabled={disableSave || loading}
-      >
-        {loading ? <Progress size="1.5rem" /> : actionText}
+      <Button onClick={handleSave} disabled={disableSave || loading}>
+        {actionText}
       </Button>
     </Form>
   );

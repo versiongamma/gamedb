@@ -5,7 +5,7 @@ import { FETCH_GAMES, FetchGamesResponse } from '@/graphql/fetch-games';
 import useAddGameMutation from '@/hooks/games/use-add-game-mutation';
 import useDeleteGameMutation from '@/hooks/games/use-delete-game-mutation';
 import useEditGameMutation from '@/hooks/games/use-edit-game-mutation';
-import { PAGE_TO_LIST_MAP, Page } from '@/routes';
+import { List, PAGE_TO_LIST_MAP, Page } from '@/routes';
 import { GraphQLGame } from '@/types';
 import { getGamesByPlatform } from '@/utils/sort';
 import { PLATFORMS_BY_YEAR } from '@/utils/types';
@@ -16,6 +16,8 @@ import Fab from './input/fab';
 import { PageLoadWrapper, PageWrapper } from './layout';
 import Progress from './progress';
 import PlatformDisplay from './views/platform-display';
+import useMoveGameMutation from '@/hooks/games/use-move-game-mutation';
+import useHotkey from '@/hooks/use-hotkey';
 
 type Props = {
   page: Page;
@@ -23,17 +25,21 @@ type Props = {
 
 const Collection = ({ page }: Props) => {
   const list = PAGE_TO_LIST_MAP[page];
+
   const [selectedGame, setSelectedGame] = useState<GraphQLGame | null>(null);
   const [addGameDialogOpen, setAddGameDialogOpen] = useState(false);
   const { data, loading } = useQuery<FetchGamesResponse>(FETCH_GAMES, {
     variables: { list },
   });
 
+  // useHotkey('a', () => setAddGameDialogOpen(true));
+
   const games = [...(data?.FetchGames ?? [])];
 
   const [addGame, { loading: addGameLoading }] = useAddGameMutation();
   const [editGame, { loading: editGameLoading }] = useEditGameMutation();
   const [deleteGame, { loading: deleteGameLoading }] = useDeleteGameMutation();
+  const [moveGame, { loading: moveGameLoading }] = useMoveGameMutation();
 
   const handleGameClick = (game: GraphQLGame) => {
     setSelectedGame(game);
@@ -58,6 +64,18 @@ const Collection = ({ page }: Props) => {
   const onDeleteGame = async () => {
     if (selectedGame) {
       await deleteGame({ id: selectedGame.id, list });
+      onEditGameClose();
+    }
+  };
+
+  const otherList = list === List.Collection ? List.Wishlist : List.Collection;
+  const onMoveGame = async () => {
+    if (selectedGame) {
+      await moveGame({
+        id: selectedGame.id,
+        fromList: list,
+        toList: otherList,
+      });
       onEditGameClose();
     }
   };
@@ -96,7 +114,8 @@ const Collection = ({ page }: Props) => {
             game={selectedGame}
             onClose={onEditGameClose}
             onDelete={onDeleteGame}
-            deleteLoading={deleteGameLoading}
+            onMove={onMoveGame}
+            loading={editGameLoading || deleteGameLoading || moveGameLoading}
           >
             <GameForm
               actionText="Save"

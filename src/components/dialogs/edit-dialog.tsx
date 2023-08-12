@@ -1,23 +1,24 @@
 import { GraphQLGame } from '@/types';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { DialogContent } from '@mui/material';
+import SwapHorizontalCircleIcon from '@mui/icons-material/SwapHorizontalCircle';
+import { DialogContent, LinearProgress } from '@mui/material';
 
 import { useState } from 'react';
 import Button from '../input/button';
+import IconButton from '../input/icon-button';
 import {
   StyledDialog,
   StyledDialogContents,
   StyledDialogTitle,
 } from './layout';
-import Progress from '../progress';
-import IconButton from '../input/icon-button';
 
 type Props = {
   game: GraphQLGame;
   onClose: () => void;
   onDelete: () => Promise<void>;
-  deleteLoading: boolean;
+  onMove: () => Promise<void>;
+  loading: boolean;
   children: React.ReactNode;
 };
 
@@ -25,7 +26,8 @@ const EditDialog = ({
   game,
   onClose,
   onDelete,
-  deleteLoading,
+  onMove,
+  loading,
   children,
 }: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -35,30 +37,30 @@ const EditDialog = ({
       <StyledDialogTitle>
         {game.id}
         <span>
+          <IconButton onClick={onMove}>
+            <SwapHorizontalCircleIcon color="secondary" />
+          </IconButton>
           <IconButton onClick={() => setDeleteDialogOpen(true)}>
-            <DeleteIcon />
+            <DeleteIcon color="secondary" />
           </IconButton>
           <IconButton onClick={onClose}>
-            <CloseIcon />
+            <CloseIcon color="secondary" />
           </IconButton>
         </span>
       </StyledDialogTitle>
       <DialogContent>{children}</DialogContent>
-      <StyledDialog open={deleteDialogOpen}>
+      <StyledDialog open={deleteDialogOpen && !loading}>
         <StyledDialogContents>
           <p>Are you sure you want to delete this entry?</p>
-          {deleteLoading ? (
-            <Progress />
-          ) : (
-            <span>
-              <Button onClick={onDelete} disabled={deleteLoading}>
-                Yes
-              </Button>
-              <Button onClick={() => setDeleteDialogOpen(false)}>No</Button>{' '}
-            </span>
-          )}
+          <span>
+            <Button onClick={onDelete} disabled={loading}>
+              Yes
+            </Button>
+            <Button onClick={() => setDeleteDialogOpen(false)}>No</Button>{' '}
+          </span>
         </StyledDialogContents>
       </StyledDialog>
+      {loading && <LinearProgress color="primary" />}
     </StyledDialog>
   );
 };

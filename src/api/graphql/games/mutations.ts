@@ -72,7 +72,6 @@ export const addGame = async ({
 }: AddGameArguments): Promise<Game> => {
   const game = await getGameFromInput(gameData);
   const result = await db.collection(list).add(game);
-  console.log(result);
   const snapshot = await result.get();
   const id = snapshot.id;
   return { id, ...(snapshot.data() as GameWithoutId) };
@@ -97,12 +96,7 @@ export const editGame = async ({
   id,
   gameData: { color, ...gameData },
 }: EditGameArguments): Promise<Game> => {
-  const game = await getGameFromInput(gameData, color);
-  const updatedGame: Game = {
-    id,
-    ...game,
-  };
-
+  const updatedGame = await getGameFromInput(gameData, color);
   const doc = await db.collection(list).doc(id);
   await doc.update(updatedGame);
   const result = await doc.get();
@@ -145,4 +139,20 @@ export const updateGameOrder = async ({
 
   await batch.commit();
   return { order };
+};
+
+export type MoveGameArguments = {
+  id: string;
+  fromList: string;
+  toList: string;
+};
+
+export const moveGame = async ({ id, fromList, toList }: MoveGameArguments) => {
+  const data = (await db.collection(fromList).doc(id).get()).data() as Game;
+  console.log(data);
+  const { id: _id, ...gameWithoutId } = data;
+  const result = await db.collection(toList).add(gameWithoutId);
+  await db.collection(fromList).doc(id).delete();
+  const snapshot = await result.get();
+  return { id: snapshot.id, ...(snapshot.data() as GameWithoutId) };
 };

@@ -30,6 +30,7 @@ const AutocompleteInput = ({
     getOptionProps,
     groupedOptions,
     popupOpen,
+    focused,
   } = useAutocomplete({
     options,
     value,
@@ -47,7 +48,7 @@ const AutocompleteInput = ({
     >
       <FormControl value={inputValue} {...FormControlProps}>
         {({ value, onChange, ...formControlContext }) => (
-          <Field {...InputProps} {...formControlContext}>
+          <Field {...InputProps} {...formControlContext} focused={focused}>
             <input
               value={value as string}
               onChange={onChange}
