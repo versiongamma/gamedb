@@ -1,12 +1,16 @@
-import { EditGameFormData } from "@/components/form/edit-game-form";
-import { GraphQLGame, Palette, Platform, Region } from "@/types";
+import { GameFormData } from '@/components/form/game-form';
+import { GraphQLGame, Palette, Platform, Region } from '@/types';
 
 export const YEAR_REGEX = /[0-9]+/;
 
-export const getEditFormInputValuesFromGame = (
-  game: GraphQLGame
-): EditGameFormData => {
-  const { id, __typename, indexInPlatform, colorOptions, ...gameFormFields } =
+export const getFormInputValuesFromGame = (
+  game?: GraphQLGame,
+): Partial<GameFormData> => {
+  if (!game) {
+    return {};
+  }
+
+  const { id, __typename, indexInPlatform, colorOptions, ...gameFormData } =
     game;
   const { color } = game;
   const paletteOption = colorOptions
@@ -19,73 +23,62 @@ export const getEditFormInputValuesFromGame = (
     : Palette.DARK_VIBRANT;
 
   return {
-    ...gameFormFields,
+    ...gameFormData,
     year: game.year.toString(),
-    variant: game?.variant ?? "",
+    variant: game?.variant ?? '',
     color: paletteOption as Palette,
   };
 };
 
 export type EditFormErrorType = {
-  input: keyof EditGameFormData;
+  input: keyof GameFormData;
   message: string;
 };
 
-export const validateEditFormData = (data: Partial<EditGameFormData>) => {
+export const validateEditFormData = (data: Partial<GameFormData>) => {
   const errors: EditFormErrorType[] = [];
 
   if (!data.name) {
-    errors.push({ input: "name", message: "Name must not be empty" });
+    errors.push({ input: 'name', message: 'Name must not be empty' });
   }
 
   if (!data.year) {
-    errors.push({ input: "year", message: "Year must not be empty" });
+    errors.push({ input: 'year', message: 'Year must not be empty' });
   }
 
   if (Number.isNaN(Number(data.year))) {
-    errors.push({ input: "year", message: "Year must be a number value" });
+    errors.push({ input: 'year', message: 'Year must be a number value' });
   }
 
   if (!data.platform) {
-    errors.push({ input: "platform", message: "Platform must not be empty" });
+    errors.push({ input: 'platform', message: 'Platform must not be empty' });
   }
 
   // type assertion is fine, we are specifically checking if the type is bad or not
   if (!Object.values(Platform).includes(data.platform as Platform)) {
     errors.push({
-      input: "platform",
+      input: 'platform',
       message: `${data.platform} is not a valid platform`,
     });
   }
 
-  if (!data.art) {
-    errors.push({ input: "art", message: "Box art must not be empty" });
-  }
-
-  if (!data.color) {
+  if (!!data.color && !Object.values(Palette).includes(data.color as Palette)) {
     errors.push({
-      input: "color",
-      message: "Palette colour selection must not be empty",
-    });
-  }
-
-  if (!Object.values(Palette).includes(data.color as Palette)) {
-    errors.push({
-      input: "color",
+      input: 'color',
       message: `${data.color} is not a valid palette colour`,
     });
   }
 
   if (!data.region) {
     errors.push({
-      input: "region",
-      message: "Region must not be empty",
+      input: 'region',
+      message: 'Region must not be empty',
     });
   }
 
   if (!Object.values(Region).includes(data.region as Region)) {
     errors.push({
-      input: "region",
+      input: 'region',
       message: `${data.region} is not a valid region`,
     });
   }

@@ -1,12 +1,5 @@
-import { styled } from "goober";
-
-export const Form = styled("div")`
-  display: flex;
-  flex-direction: column;
-  width: 500px;
-  overflow-x: hidden;
-
-  @media screen and (max-width: 900px) {
-    width: 70vw;
-  }
-`;
+export const Form = ({ children }: { children: React.ReactNode }) => (
+  <div className="flex w-[500px] flex-col overflow-x-hidden xs:w-[70vw]">
+    {children}
+  </div>
+);

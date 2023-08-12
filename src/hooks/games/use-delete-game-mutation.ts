@@ -1,10 +1,10 @@
-import { gql, useMutation } from "@apollo/client";
-import { DeleteGameArguments } from "@/api/graphql/games";
-import { FETCH_GAMES, FetchGamesResponse } from "@/graphql/fetch-games";
+import { gql, useMutation } from '@apollo/client';
+import { FETCH_GAMES, FetchGamesResponse } from '@/graphql/fetch-games';
+import { DeleteGameArguments } from '@/api/graphql/games/mutations';
 
 const DELETE_GAME = gql`
-  mutation DeleteGame($id: String!) {
-    DeleteGame(id: $id) {
+  mutation DeleteGame($list: String!, $id: String!) {
+    DeleteGame(list: $list, id: $id) {
       id
       success
     }
@@ -22,9 +22,9 @@ const useDeleteGameMutation = () => {
   const [mutationFunc, mutationResult] =
     useMutation<DeleteGameMutationResponse>(DELETE_GAME);
 
-  const deleteGame = async (variables: DeleteGameArguments) => {
+  const deleteGame = async ({ list, id }: DeleteGameArguments) => {
     await mutationFunc({
-      variables,
+      variables: { list, id },
       update: (cache, { data }) => {
         if (!data || !data.DeleteGame.success) {
           return;
@@ -35,14 +35,18 @@ const useDeleteGameMutation = () => {
         const { FetchGames: games } =
           cache.readQuery<FetchGamesResponse>({
             query: FETCH_GAMES,
+            variables: { list },
           }) ?? {};
 
         if (!games) {
           return;
         }
 
+        console.log(games);
+
         cache.writeQuery({
           query: FETCH_GAMES,
+          variables: { list },
           data: { FetchGames: games.filter(({ id }) => id !== deletedGameId) },
         });
       },

@@ -1,4 +1,4 @@
-import { Game, GraphQLGame, GraphQLWishlistItem, Platform } from "@/types";
+import { Game, GraphQLGame, Platform } from '@/types';
 
 const getItemsByPlatform = <T extends { platform: Platform }>(games: T[]) =>
   games.reduce<{ [key: string]: T[] }>((memo, game) => {
@@ -27,9 +27,4 @@ export const sortGamesByYearThenName = (a: Game, b: Game) => {
 export const getGamesByPlatform = (games: GraphQLGame[]) => {
   const sortedGames = games.sort(sortGamesByYearThenName);
   return getItemsByPlatform(sortedGames);
-};
-
-export const getSortedWishlistItems = (games: GraphQLWishlistItem[]) => {
-  const sortedWishlistItems = games.sort(sortItemsByName);
-  return getItemsByPlatform(sortedWishlistItems);
 };

@@ -1,4 +1,4 @@
-import { Html, Head, Main, NextScript } from "next/document";
+import { Html, Head, Main, NextScript } from 'next/document';
 
 export default function Document() {
   return (
@@ -17,7 +17,7 @@ export default function Document() {
         />
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/ios/128.png" />
-        <link rel="icon" href="/favicon.ico?v=2" />
+        <link rel="icon" href="/favicon.ico?v=3" />
       </Head>
       <body>
         <Main />

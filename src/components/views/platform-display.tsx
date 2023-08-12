@@ -7,50 +7,37 @@ import {
   pointerWithin,
   useSensor,
   useSensors,
-} from "@dnd-kit/core";
-import { SortableContext, arrayMove } from "@dnd-kit/sortable";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Chip, Collapse, Divider } from "@mui/material";
-import { styled } from "goober";
-import { useEffect, useState } from "react";
+} from '@dnd-kit/core';
+import { SortableContext, arrayMove } from '@dnd-kit/sortable';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Chip, Collapse, Divider } from '@mui/material';
+import { useEffect, useState } from 'react';
 
-import useGames from "@/hooks/use-games";
-import { GraphQLGame } from "@/types";
-import { getGamesByPlatform } from "@/utils/sort";
-import { PLATFORMS_BY_YEAR } from "@/utils/types";
-import GameEntry, { SortableGameEntry } from "../../entry/game-entry";
-import useUpdateGameOrderMutation from "./use-update-game-order";
+import useUpdateGameOrderMutation from '@/hooks/games/use-update-game-order';
+import { GraphQLGame } from '@/types';
+import GameEntry, { SortableGameEntry } from '../game-entry';
+import { List } from '@/routes';
 
-const StyledDivider = styled(Divider)`
-  &.MuiDivider-root::before {
-    width: 1%;
-  }
-`;
-
-const StyledChip = styled(Chip)``;
-
-type PlatformDisplayProps = {
+type Props = {
   platform: string;
   games: GraphQLGame[];
   handleGameClick: (game: GraphQLGame) => void;
+  list: List;
 };
 
-const PlatformDisplay = ({
-  platform,
-  games,
-  handleGameClick,
-}: PlatformDisplayProps) => {
+const PlatformDisplay = ({ platform, games, handleGameClick, list }: Props) => {
   const [activeGame, setActiveGame] = useState<GraphQLGame | null>(null);
   const [sortedGames, setSortedGames] = useState<GraphQLGame[]>([]);
-  const [open, setOpen] = useState(true);
-  const [updateGameOrder] = useUpdateGameOrderMutation();
 
   useEffect(() => {
     setSortedGames(
-      games.sort((a, b) => (a.indexInPlatform ?? 0) - (b.indexInPlatform ?? 0))
+      games.sort((a, b) => (a.indexInPlatform ?? 0) - (b.indexInPlatform ?? 0)),
     );
   }, [games]);
+
+  const [open, setOpen] = useState(true);
+  const [updateGameOrder] = useUpdateGameOrderMutation();
 
   const sensors = useSensors(useSensor(PointerSensor));
 
@@ -80,21 +67,22 @@ const PlatformDisplay = ({
       id,
       indexInPlatform: index,
     }));
-    updateGameOrder({ order });
+    updateGameOrder({ order, list });
     handleDragCancel();
   };
 
   return (
     <>
       <br />
-      <StyledDivider textAlign="left">
-        <StyledChip
+      <Divider textAlign={'left'} className="before:hidden">
+        <Chip
+          className="button m-3 rounded-full"
           label={platform}
           deleteIcon={open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           onDelete={() => setOpen(!open)}
           onClick={() => setOpen(!open)}
         />
-      </StyledDivider>
+      </Divider>
       <Collapse in={open}>
         <DndContext
           sensors={sensors}
@@ -104,7 +92,7 @@ const PlatformDisplay = ({
           onDragCancel={handleDragCancel}
           collisionDetection={pointerWithin}
         >
-          <div style={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
+          <div className="flex w-full flex-wrap items-center">
             <SortableContext items={sortedGames} strategy={() => null}>
               {sortedGames.map((game) => (
                 <SortableGameEntry
@@ -126,36 +114,4 @@ const PlatformDisplay = ({
   );
 };
 
-type Props = {
-  handleGameClick: (game: GraphQLGame) => void;
-};
-
-const Collection = ({ handleGameClick }: Props) => {
-  const { games: cache } = useGames();
-  const games = [...(cache ?? [])];
-
-  if (!games) {
-    return null;
-  }
-
-  const gamesByPlatform = getGamesByPlatform(games);
-  const shownPlatforms = Object.keys(gamesByPlatform);
-  const platforms = PLATFORMS_BY_YEAR.filter((platform) =>
-    shownPlatforms.includes(platform)
-  );
-
-  return (
-    <>
-      {platforms.map((platform) => (
-        <PlatformDisplay
-          key={platform}
-          platform={platform}
-          games={gamesByPlatform[platform]}
-          handleGameClick={handleGameClick}
-        />
-      ))}
-    </>
-  );
-};
-
-export default Collection;
+export default PlatformDisplay;
