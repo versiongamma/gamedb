@@ -76,9 +76,15 @@ const PlatformDisplay = ({ platform, games, handleGameClick, list }: Props) => {
       <br />
       <Divider textAlign={'left'} className="before:hidden">
         <Chip
-          className="button m-3 rounded-full"
+          className="group m-3 rounded-full bg-transparent font-semibold transition hover:bg-secondary hover:text-primary"
           label={platform}
-          deleteIcon={open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          deleteIcon={
+            open ? (
+              <ExpandLessIcon className="!text-white transition group-hover:!text-primary" />
+            ) : (
+              <ExpandMoreIcon className="!text-white transition group-hover:!text-primary" />
+            )
+          }
           onDelete={() => setOpen(!open)}
           onClick={() => setOpen(!open)}
         />

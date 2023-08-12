@@ -1,14 +1,7 @@
-import {
-  CssBaseline,
-  StyledEngineProvider,
-  ThemeProvider,
-} from '@mui/material';
-import { setup } from 'goober';
-import { shouldForwardProp } from 'goober/should-forward-prop';
-import { SessionProvider } from 'next-auth/react';
-import { Assistant } from 'next/font/google';
-import { createElement } from 'react';
-import '../globals.css';
+import Header from '@/components/header';
+import { PageLoadWrapper } from '@/components/layout';
+import Login from '@/components/login';
+import theme from '@/theme';
 import {
   ApolloClient,
   ApolloProvider,
@@ -17,14 +10,19 @@ import {
   from,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { useSession } from 'next-auth/react';
+import {
+  CssBaseline,
+  StyledEngineProvider,
+  ThemeProvider,
+} from '@mui/material';
+import { setup } from 'goober';
+import { shouldForwardProp } from 'goober/should-forward-prop';
+import { SessionProvider, useSession } from 'next-auth/react';
 import type { AppProps } from 'next/app';
-import { useMemo } from 'react';
-import theme from '@/theme';
+import { Assistant } from 'next/font/google';
 import Head from 'next/head';
-import { PageLoadWrapper } from '@/components/layout';
-import Login from '@/components/login';
-import Header from '@/components/header';
+import { createElement, useMemo } from 'react';
+import '../globals.css';
 
 const DEFAULT_BACKGROUND_IMAGE = 'https://i.imgur.com/5pHkLhw.jpg';
 

@@ -42,8 +42,6 @@ const useDeleteGameMutation = () => {
           return;
         }
 
-        console.log(games);
-
         cache.writeQuery({
           query: FETCH_GAMES,
           variables: { list },

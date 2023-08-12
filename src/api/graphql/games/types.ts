@@ -11,6 +11,7 @@ const mutations = `#graphql
     AddGame(list: String!, gameData: AddGameDataInput!): Game!
     DeleteGame(list: String!, id: String!): DeleteGameResponse!
     UpdateGameOrder(list: String!, order: [GameOrderInput!]!): UpdateGameOrderResponse!
+    MoveGame(id: String!, fromList: String! toList: String!): Game!
   }
 
   input AddGameDataInput {

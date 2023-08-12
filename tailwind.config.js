@@ -9,12 +9,14 @@ module.exports = {
     },
     extend: {
       colors: {
-        primary: {
+        gamma: {
           default: ' #9F3EFF',
           100: '#D9C2FD',
           200: '#9F3EFF',
         },
-        secondary: '#FFAB32',
+        primary: '#9F3EFF',
+        secondary: '#D9C2FD',
+        accent: '#FFAB32',
         white: '#FEFEFE',
       },
     },
