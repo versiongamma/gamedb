@@ -36,9 +36,9 @@ const useAddGameMutation = () => {
   const [mutationFunc, mutationResult] =
     useMutation<AddGameMutationResponse>(ADD_GAME);
 
-  const addGame = async (variables: AddGameArguments) => {
+  const addGame = async ({ list, gameData }: AddGameArguments) => {
     await mutationFunc({
-      variables,
+      variables: { gameData, list },
       update: (cache, { data }) => {
         if (!data) {
           return;
@@ -48,6 +48,7 @@ const useAddGameMutation = () => {
         const { FetchGames: games } =
           cache.readQuery<FetchGamesResponse>({
             query: FETCH_GAMES,
+            variables: { list },
           }) ?? {};
 
         if (!games) {
@@ -56,6 +57,7 @@ const useAddGameMutation = () => {
 
         cache.writeQuery({
           query: FETCH_GAMES,
+          variables: { list },
           data: { FetchGames: [...games, newGame] },
         });
       },

@@ -15,9 +15,6 @@ const DEFAULT_PALETTE = {
   DarkMuted: DEFAULT_ART_COLOR,
 };
 
-const DEFAULT_GAME_COLLECTION_PATH = 'games';
-const { GAME_COLLECTION_PATH = DEFAULT_GAME_COLLECTION_PATH } = process.env;
-
 type GameWithoutId = Omit<Game, 'id'>;
 
 const getArtPalette = async (art?: string): Promise<VibrantPalette | null> => {

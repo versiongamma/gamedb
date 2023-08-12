@@ -47,7 +47,7 @@ const GameEntry = React.forwardRef<HTMLDivElement, Props>(
             {art && (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                className="h-[210px] rounded-md xs:h-auto xs:w-[100px]"
+                className="mx-2 h-[210px] rounded-md xs:h-auto xs:w-[100px]"
                 src={art}
                 alt="art"
               />

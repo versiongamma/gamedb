@@ -49,7 +49,8 @@ const Collection = ({ page }: Props) => {
 
   const onEditGameSubmit = async (data: GameFormData) => {
     if (selectedGame) {
-      await editGame({ id: selectedGame.id, gameData: data, list });
+      // TODO: fix this
+      await editGame({ id: selectedGame.id, gameData: data as any, list });
       onEditGameClose();
     }
   };

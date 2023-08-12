@@ -8,7 +8,7 @@ import TextInput, { Props as TextInputProps } from '../input/text/text-input';
 import Progress from '../progress';
 import {
   EditFormErrorType,
-  getEditFormInputValuesFromGame,
+  getFormInputValuesFromGame,
   validateEditFormData,
 } from './get-values';
 import { Form } from './layout';
@@ -84,7 +84,7 @@ const ControlledAutocompleteInput = ({
         <AutocompleteInput
           className="m-3"
           {...props}
-          value={value}
+          value={value as string}
           onChange={onChange}
         />
       )}
@@ -97,7 +97,7 @@ export type GameFormData = {
   year: string;
   platform: Platform;
   art: string;
-  color: Palette;
+  color?: Palette;
   region: Region;
   variant: string;
 };
@@ -112,9 +112,8 @@ type Props = {
 const GameForm = ({ actionText, game, onSubmit, loading }: Props) => {
   const [errors, setErrors] = useState<EditFormErrorType[]>([]);
 
-  const defaultValues = getEditFormInputValuesFromGame(game);
+  const defaultValues = getFormInputValuesFromGame(game);
   const {
-    register,
     control,
     handleSubmit,
     watch,
@@ -156,6 +155,8 @@ const GameForm = ({ actionText, game, onSubmit, loading }: Props) => {
 
   const disableSave = !isDirty || !!errors.length;
 
+  console.log(errors);
+
   return (
     <Form>
       <ControlledTextInput
@@ -164,13 +165,21 @@ const GameForm = ({ actionText, game, onSubmit, loading }: Props) => {
         error={!!nameErrors.length}
         InputProps={{ label: 'Name', helperText: nameErrors.join(', ') }}
       />
-
+      <ControlledTextInput
+        name="year"
+        control={control}
+        error={!!yearErrors.length}
+        InputProps={{ label: 'Year', helperText: yearErrors.join(', ') }}
+      />
       <ControlledAutocompleteInput
         name="platform"
         control={control}
         options={Object.values(Platform)}
         FormControlProps={{ error: !!platformErrors.length }}
-        InputProps={{ label: 'Year', helperText: platformErrors.join(', ') }}
+        InputProps={{
+          label: 'Platform',
+          helperText: platformErrors.join(', '),
+        }}
       />
       <ControlledTextInput
         name="art"
@@ -178,7 +187,7 @@ const GameForm = ({ actionText, game, onSubmit, loading }: Props) => {
         InputProps={{ label: 'Box Art (URL)' }}
       />
       {/** Input for selecting box art palette color */}
-      {art && colorOptions && (
+      {art && colorOptions && colorWatch && (
         <ControlledAutocompleteInput
           name="color"
           control={control}

@@ -1,11 +1,11 @@
-import { EditGameFormData } from '@/components/form/game-form';
+import { GameFormData } from '@/components/form/game-form';
 import { GraphQLGame, Palette, Platform, Region } from '@/types';
 
 export const YEAR_REGEX = /[0-9]+/;
 
-export const getEditFormInputValuesFromGame = (
+export const getFormInputValuesFromGame = (
   game?: GraphQLGame,
-): Partial<EditGameFormData> => {
+): Partial<GameFormData> => {
   if (!game) {
     return {};
   }
@@ -31,11 +31,11 @@ export const getEditFormInputValuesFromGame = (
 };
 
 export type EditFormErrorType = {
-  input: keyof EditGameFormData;
+  input: keyof GameFormData;
   message: string;
 };
 
-export const validateEditFormData = (data: Partial<EditGameFormData>) => {
+export const validateEditFormData = (data: Partial<GameFormData>) => {
   const errors: EditFormErrorType[] = [];
 
   if (!data.name) {
@@ -62,14 +62,7 @@ export const validateEditFormData = (data: Partial<EditGameFormData>) => {
     });
   }
 
-  if (!data.color) {
-    errors.push({
-      input: 'color',
-      message: 'Palette colour selection must not be empty',
-    });
-  }
-
-  if (!Object.values(Palette).includes(data.color as Palette)) {
+  if (!!data.color && !Object.values(Palette).includes(data.color as Palette)) {
     errors.push({
       input: 'color',
       message: `${data.color} is not a valid palette colour`,

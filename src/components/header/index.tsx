@@ -18,7 +18,7 @@ const Header = () => {
           <NavigationTabs />
         </span>
       ) : (
-        <span />
+        <Image src="/ico.png" alt="logo" height={48} width={48} />
       )}
       <Login />
     </Toolbar>
