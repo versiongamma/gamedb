@@ -30,7 +30,10 @@ export const getGamesByPlatform = (games: GraphQLGame[]) => {
 };
 
 export const getFilteredGames = (games: GraphQLGame[], filter: string) => {
+  const filterTerms = filter.split(' ');
   return games.filter(({ name }) =>
-    name.toLowerCase().includes(filter.toLowerCase()),
+    filterTerms.every((term) =>
+      name.toLowerCase().includes(term.toLowerCase()),
+    ),
   );
 };
