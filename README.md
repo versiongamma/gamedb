@@ -14,7 +14,13 @@ This project is built as both a website and progressive web app (currently only 
 
 <br>
 
-_This project was built by one guy in his spare time, for that one guy in his spare time. Feel free to look around, but currently this platform only supports one user. Me. Might that change? Maybe, but if I'm honest, probably not. This project was built to be secure using Google OAuth, but I have neither the time nor the wherewithal to verify and maintain the level of security required for an open application._
+### Web View
+<img width="1234" alt="Screenshot 2023-08-20 185135" src="https://github.com/versiongamma/gamedb/assets/37131904/732ffac5-dc0e-4a20-87a0-f5c417191f13">
+
+### Mobile View
+<img width="388" alt="Screenshot 2023-08-20 185108" src="https://github.com/versiongamma/gamedb/assets/37131904/a8312fa4-e2c6-4a16-bc41-537d49e8719f">
+
+<br>
 
 ### Build With:
 
@@ -27,3 +33,7 @@ _This project was built by one guy in his spare time, for that one guy in his sp
    <img width="50" src="https://assets.vercel.com/image/upload/front/favicon/vercel/180x180.png" alt="Vercel" title="Vercel"/>
 	<img width="50" src="https://user-images.githubusercontent.com/25181517/189716630-fe6c084c-6c66-43af-aa49-64c8aea4a5c2.png" alt="Material UI" title="Material UI"/>
 </div>
+
+<br>
+
+_This project was built by one guy in his spare time, for that one guy in his spare time. Feel free to look around, but currently this platform only supports one user. Me. Might that change? Maybe, but if I'm honest, probably not. This project was built to be secure using Google OAuth, but I have neither the time nor the energy to verify and maintain the level of security required for an open application. Plus I ain't paying database fees._
