@@ -4,7 +4,7 @@ import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import React from 'react';
 
 import useScreenResolution from '@/hooks/use-screen-resolution';
-import { GraphQLGame, Platform, Region } from '@/types';
+import { GraphQLGame } from '@/types';
 import { REGION_LABEL_MAP } from '@/utils/types';
 import IconButton from './input/icon-button';
 
@@ -27,10 +27,12 @@ const GameEntry = React.forwardRef<HTMLDivElement, Props>(
           onClick={() => onClick(game)}
         >
           <div
-            className={`relative m-4 flex ${
-              art ? 'h-[310px]' : 'h-[100px]'
-            } w-fit min-w-[250px] flex-col items-center space-y-4 rounded-2xl p-3 text-white xs:m-2 xs:h-auto xs:w-[170px] xs:min-w-0 xs:p-1.5`}
-            style={{ backgroundColor: color }}
+            className={`relative m-4 flex w-fit min-w-[250px] flex-col space-y-4 rounded-2xl text-white xs:m-2 xs:h-auto xs:min-w-0  ${
+              art
+                ? 'items-center p-3 xs:w-[170px] xs:p-1.5 md:h-[310px]'
+                : ' w-screen items-start pb-0 pl-10 xs:pb-2 xs:pl-6'
+            }`}
+            style={{ backgroundColor: art ? color : 'transparent' }}
           >
             {/* Header */}
             <div className="flex w-fit flex-col items-center px-2 py-0">
@@ -53,12 +55,19 @@ const GameEntry = React.forwardRef<HTMLDivElement, Props>(
               />
             )}
             {variant && !isMobileResolution && (
-              <span className="flex w-full justify-end text-xs">{variant}</span>
+              <span
+                className={`flex w-full  text-xs ${
+                  art ? 'justify-end' : 'hidden'
+                }`}
+              >
+                {variant}
+              </span>
             )}
 
             <IconButton
               {...props}
-              className="absolute bottom-0 left-0 m-0 text-white xs:bottom-1 xs:left-1 xs:h-5 xs:w-5"
+              className="absolute bottom-0 left-0 m-0 touch-none text-white xs:bottom-1 xs:left-1 xs:h-5 xs:w-5"
+              style={{ backgroundColor: art ? color : 'transparent' }}
             >
               <DragIndicatorIcon className="xs:h-4 xs:w-4" />
             </IconButton>

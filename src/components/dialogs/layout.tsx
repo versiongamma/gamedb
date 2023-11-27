@@ -2,9 +2,22 @@ import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { styled } from 'goober';
 
 export const StyledDialog = styled(Dialog)`
+  .MuiDialog-container {
+    @media screen and (max-width: 900px) {
+      align-items: flex-end;
+    }
+  }
+
   .MuiPaper-root {
-    max-width: 1000px;
+    max-width: 550px;
     display: flex;
+    width: 80vw;
+
+    @media screen and (max-width: 900px) {
+      width: 100vw;
+      height: 80vh;
+      margin: 0;
+    }
   }
 `;
 

@@ -4,7 +4,7 @@ type IconButtonProps = {
   className?: string;
   onClick?: () => void;
   children: React.ReactNode;
-};
+} & React.HTMLProps<HTMLDivElement>;
 
 const IconButton = React.forwardRef<HTMLDivElement, IconButtonProps>(
   ({ className, children, ...props }, ref) => {
