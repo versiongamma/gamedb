@@ -22,7 +22,10 @@ import type { AppProps } from 'next/app';
 import { Assistant } from 'next/font/google';
 import Head from 'next/head';
 import { createElement, useMemo } from 'react';
+
 import '../globals.css';
+import '@uiw/react-md-editor/markdown-editor.css';
+import '@uiw/react-markdown-preview/markdown.css';
 
 const DEFAULT_BACKGROUND_IMAGE = 'https://i.imgur.com/5pHkLhw.jpg';
 

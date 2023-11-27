@@ -37,7 +37,7 @@ const PlatformDisplay = ({ platform, games, handleGameClick, list }: Props) => {
   }, [games]);
 
   const [open, setOpen] = useState(true);
-  const [updateGameOrder] = useUpdateGameOrderMutation();
+  const [updateGameOrder] = useUpdateGameOrderMutation(list);
 
   const sensors = useSensors(useSensor(PointerSensor));
 
@@ -70,6 +70,10 @@ const PlatformDisplay = ({ platform, games, handleGameClick, list }: Props) => {
     updateGameOrder({ order, list });
     handleDragCancel();
   };
+
+  // if (platform === 'SNES') {
+  //   console.log(games);
+  // }
 
   return (
     <>

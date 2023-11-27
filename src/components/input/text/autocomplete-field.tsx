@@ -66,7 +66,7 @@ const AutocompleteField = ({
       >
         <ul
           {...getListboxProps()}
-          className="fixed z-50 m-2 max-h-[500px] w-[450px] overflow-y-auto rounded-xl bg-neutral-600 p-0 xs:w-[250px]"
+          className="fixed z-50 m-2 max-h-[500px] w-[450px] overflow-y-auto rounded-xl bg-neutral-700 p-0 xs:w-[250px]"
         >
           {(groupedOptions as string[]).map((option, index) => {
             const backgroundColor =

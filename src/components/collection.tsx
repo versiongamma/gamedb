@@ -18,6 +18,8 @@ import Progress from './progress';
 import PlatformDisplay from './views/platform-display';
 import useMoveGameMutation from '@/hooks/games/use-move-game-mutation';
 import useFilterStore from '@/hooks/use-filter-store';
+import NotesDialog from './dialogs/notes-dialog';
+import NotesForm from './form/notes-form';
 
 type Props = {
   page: Page;
@@ -32,8 +34,6 @@ const Collection = ({ page }: Props) => {
   });
 
   const filter = useFilterStore((store) => store.filter);
-
-  // useHotkey('a', () => setAddGameDialogOpen(true));
 
   const games = [...(data?.FetchGames ?? [])];
 
@@ -56,7 +56,6 @@ const Collection = ({ page }: Props) => {
 
   const onEditGameSubmit = async (data: GameFormData) => {
     if (selectedGame) {
-      // TODO: fix this
       await editGame({ id: selectedGame.id, gameData: data as any, list });
       onEditGameClose();
     }
@@ -112,20 +111,27 @@ const Collection = ({ page }: Props) => {
         )}
 
         {selectedGame && (
-          <EditDialog
+          // <EditDialog
+          //   game={selectedGame}
+          //   onClose={onEditGameClose}
+          //   onDelete={onDeleteGame}
+          //   onMove={onMoveGame}
+          //   loading={editGameLoading || deleteGameLoading || moveGameLoading}
+          // >
+          //   <GameForm
+          //     actionText="Save"
+          //     game={selectedGame}
+          //     onSubmit={onEditGameSubmit}
+          //     loading={editGameLoading}
+          //   />
+          // </EditDialog>
+          <NotesDialog
             game={selectedGame}
             onClose={onEditGameClose}
-            onDelete={onDeleteGame}
-            onMove={onMoveGame}
             loading={editGameLoading || deleteGameLoading || moveGameLoading}
           >
-            <GameForm
-              actionText="Save"
-              game={selectedGame}
-              onSubmit={onEditGameSubmit}
-              loading={editGameLoading}
-            />
-          </EditDialog>
+            <NotesForm />
+          </NotesDialog>
         )}
         <AddDialog open={addGameDialogOpen} onClose={onAddGameClose}>
           <GameForm
